@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="lib/codemirror.js"></script>
+	<link rel="stylesheet" href="lib/codemirror.css">
+	<script src="mode/javascript/javascript.js"></script>
+</head>
+<body style="background-color: rgb(59, 59, 59);">
+    <div style="height: 25vh; width: 100%;"></div>
+    <textarea id="code" style="height: 25vh;"></textarea>   
+    
+    <div id="game-area">
+        <canvas id="game-canvas" style="background-color: black;"></canvas>
+    </div>
+
+	<script>
+        var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+        lineNumbers: true, //Incluye los numeros de linea
+        theme: "ambiance",
+        lineWrapping: true, //Cuando acabas una linea salta a la siguiente
+        //readOnly: true //Modo de solo lectura
+        //configureMouse: //TODO //Para seleccionar
+        undoDepth: 20
+
+        })
+        editor.setValue("//¿Estás preparado?")
+
+        /*Oculta y muestra el editor*/
+        function ocultar(){
+            let x = editor.getWrapperElement()
+            if(x.style.visibility === "hidden" || x.style.visibility === "initial")
+                x.style.visibility = "visible"
+            else {
+                x.style.visibility = "hidden"
+            }
+        }
+
+        function boton(estado){
+            estado ? console.log("Encendido") : console.log("Apagado")
+        }
+
+
+        let canvas = document.getElementById("game-canvas")
+        if(canvas.getContext){
+            let ctx = canvas.getContext('2d')
+
+            let partes = 6
+            let tam_divisionW = canvas.width/partes
+            let tam_divisionH = canvas.height/partes
+            ctx.setLineDash([2,2])
+
+            for(let i = 1; i < partes; i++){
+                ctx.moveTo(i*tam_divisionW, 0)
+                ctx.lineTo(i*tam_divisionW, canvas.height)
+
+                ctx.moveTo(0, i*tam_divisionH)
+                ctx.lineTo(canvas.width, i*tam_divisionH)
+            }
+            ctx.strokeStyle = 'white'
+            ctx.stroke()
+            /*ctx.moveTo(canvas.width/i, 0)
+            ctx.lineTo(canvas.width/i, canvas.height)
+            ctx.stroke()*/
+            
+        }
+
+	</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-$(document).ready(function (){
-    //Editor de codigo
+document.addEventListener("DOMContentLoaded", function(event) { 
+//Editor de codigo
     var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
         lineNumbers: true,  //Incluye los numeros de linea
         //theme: "ambiance",  //El tema de fondo
@@ -9,16 +9,15 @@ $(document).ready(function (){
     })
     editor.setValue("//¿Estás preparado?")  //Valor que se muestra por defecto 
 
-
+    //Funcion que crea una funcion con el codigo pasado por parametros
+    function createFunction(codigo){
+        return new Function(codigo);
+    }
+    
     //Zona que coge el codigo del editor y lo evalua
-    $("#run").click(function(){
-        $("#chalfunction").remove()
-        let jsx = editor.getValue()
-        let cad = jsx.split('\n')
-        let s = document.createElement('script')
-        s.setAttribute("id", "chalfunction")
-        s.textContent = jsx
-        console.log(cad)
-        document.body.appendChild(s)
-    })
-})
+    document.getElementById("run").onclick = function() {
+        let contenidoEditor = editor.getValue();
+        var ejecutame = createFunction(contenidoEditor);
+        ejecutame();
+    };
+});

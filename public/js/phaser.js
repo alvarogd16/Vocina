@@ -6,9 +6,20 @@ const config = {
     width: widthD,
     height: heightD,
     parent: 'gameContainer',
-    scene: [MainScene, SceneUp, SceneDown]
+    scene: [MainScene, SceneUp, SceneDown],
+    //Set the physics of the game to 'arcade'
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true
+        }
+    }
     
 }
 
 //Create a new game with the config 
-const game = new Phaser.Game(config);
+var game = new Phaser.Game(config);
+
+function create(){
+     game.physics.startSystem(Phaser.Physics.ARCADE);
+}

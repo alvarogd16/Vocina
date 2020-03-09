@@ -21,8 +21,8 @@ class SceneDown extends Phaser.Scene {
             } //The spacing between each frame in the image.
         });
 
-        this.load.image("vocina-tiles", "../public/assets/newMap.png");
-        this.load.image("andy", "../public/assets/andy.png");
+        this.load.image("vocina-tiles", "assets/newMap.png");
+        this.load.image("andy", "assets/andy.png");
         //this.load.image("map", "../public/assets/map.jpg");
     }
 
@@ -42,6 +42,7 @@ class SceneDown extends Phaser.Scene {
         document.getElementById("run").onclick = function () {
             let editorContent = editor.getValue();
             sceneThis.readWritten(editorContent);
+            //console.log(a);
         };
 
         

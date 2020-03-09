@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="lib/codemirror.css">
 
     <!-- Game files -->
+    <script src="js/raspiClient.js"></script>
     <script src="js/Player.js"></script>
     <script src="js/SceneUp.js"></script>
     <script src="js/SceneDown.js"></script>
@@ -27,15 +28,20 @@
     </style>
 </head>
 <body>
+    <script>
+        //raspiWrite('LED', 1);
+    </script>
 
     <!--Editor zone-->
     <div>
         <textarea id="code" style="height: 25vh;"></textarea>
-        <button id="run">RUN</button>
+        <button id="run" onclick="pulsar()">RUN</button>
     </div>
 
     <!--Game zone-->
     <div id="gameContainer" style="height: 75vh; width: 100%;"></div>
+
+
 
 </body> 
 </html>

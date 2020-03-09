@@ -131,13 +131,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveRight(numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
-        if (this.canMove) {
+        if (this.canMove && numberOfMovs) {
             this.target.x = this.x + 16 * numberOfMovs;
             this.target.y = this.y;
 
             //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
             this.scene.physics.moveToObject(this, this.target, 30);
-        }
+        } else if(!numberOfMovs) console.error("Funcion vacia");
     }
 
     moveLeft(numberOfMovs) {
@@ -175,6 +175,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
             this.scene.physics.moveToObject(this, this.target, 30);
         }
+    }
+
+    turnOnLED() {
+        raspiRead('LED')
+        .then(data => console.log("CLIENT: ", data));
+
+        raspiWrite('LED', 1);
+
+        raspiRead('LED')
+        .then(data => console.log("CLIENT: ", data));        
     }
 
     //RIGHT

@@ -19,12 +19,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.previousRoom = null;
         this.roomChange = false;
         this.canMove = true;
+        this.isMoving = false;
         scene.physics.world.enable(this);
         scene.add.existing(this);
 
+        //Set the skins of the sprite
         this.setTexture('player');
         this.setPosition(x, y);
 
+        //Set collisions activation of the sprite (Also the hitbox)
         this.body.setCollideWorldBounds(true);
         this.body.setOffset(7, 16);
         this.body.setCircle(3);
@@ -108,32 +111,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-    //LEFT
-    /*moveLeft(numOfMovs, assign = true) {
-        if (assign) {
-            this.numberMov = numOfMovs;
-        }
-        if (this.canMove && this.numberMov > 0) {
-            this.direction = 'left';
-            this.body.setVelocityX(-this.vel);
-            this.animationName = "walk-right";
-            this.setFlipX(true);
-            //this.lastAnimation();
-            //this.vel = 100;
-            //this.body.velocity.normalize().scale(this.vel);
-        } else {
-            //this.canMove = false;
-            //this.direction = null;
-            //this.numberMov = 0;
-        }
-    }*/
-
-    moveRight(numberOfMovs) {
+    moveRight(numberOfMovs && numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
-        if (this.canMove && numberOfMovs) {
+        while(this.isMoving);
+        this.isMoving = true;
+        if (this.canMove) {
             this.target.x = this.x + 16 * numberOfMovs;
             this.target.y = this.y;
+
+            this.direction = 'right';
+            this.animationName = "walk-up";
+            this.setFlipX(false);
+            this.startAnimation();
 
             //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
             this.scene.physics.moveToObject(this, this.target, 30);
@@ -143,9 +133,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveLeft(numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
+        while(this.isMoving);
+        this.isMoving = true;
         if (this.canMove) {
+            while(this.isMoving){}
             this.target.x = this.x - 16 * numberOfMovs;
             this.target.y = this.y;
+
+            this.direction = 'left';
+            this.animationName = "walk-up";
+            this.setFlipX(true);
+            this.startAnimation();
 
             //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
             this.scene.physics.moveToObject(this, this.target, 30);
@@ -155,10 +153,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveUp(numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
+        while(this.isMoving);
+        this.isMoving = true;
         if (this.canMove) {
             this.target.x = this.x;
             //y coordinate is "reversed", that is: positive y means DOWN and negative y means UP
             this.target.y = this.y - 16 * numberOfMovs;
+
+            this.direction = 'up';
+            this.animationName = 'walk-up';
+            this.startAnimation();
 
             //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
             this.scene.physics.moveToObject(this, this.target, 30);
@@ -168,51 +172,41 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveDown(numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
+        while(this.isMoving);
+        this.isMoving = true;
         if (this.canMove) {
             this.target.x = this.x;
             this.target.y = this.y + 16 * numberOfMovs;
+
+            this.direction = 'down';
+            this.animationName = 'walk-up';
+            this.startAnimation();
 
             //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
             this.scene.physics.moveToObject(this, this.target, 30);
         }
     }
-
+    
     //An example of use raspiClient
     turnOnLED() {
         raspiRead('LED')
         .then(data => console.log("CLIENT: ", data));
-
+                
         raspiWrite('LED', 1);
 
         raspiRead('LED')
         .then(data => console.log("CLIENT: ", data));        
     }
 
-    //RIGHT
-    /*moveRight(numOfMovs, assign = true) {
-        if (assign) {
-            this.numberMov = numOfMovs;
-        }
+    //turn the animation in 'this.animationName' on
+    startAnimation() {
+        this.anims.play(this.animationName, true);
+    }
 
-        if (this.canMove && this.numberMov > 0) {
-            this.direction = 'right';
-            this.body.setVelocityX(this.vel);
-            this.animationName = "walk-right";
-            this.setFlipX(false);
-            // this.lastAnimation();
-        } else {
-            //this.canMove = false;
-            //this.direction = null;
-            //this.numberMov = 0;
-        }
-    }*/
-
-    /*lastAnimation() {
-        if (this.lastAnim !== this.animationName) {
-            this.lastAnim = this.animationName;
-            this.anims.play(this.animationName, true);
-        }
-    }*/
+    stopAnimation() {
+        //  This will just top the animation from running, freezing it at its current frame
+        this.anims.stop();
+    }
 
     /**
      * Called before Update.
@@ -222,8 +216,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
 
-        this.animationName = null;
+        //If the sprite reaches it's destination, it's animation should stop
+        if (this.x == this.target.x && this.y == this.target.y) {
+            this.stopAnimation();
+            this.isMoving = false;
+        }
 
+        //this comparasion is supossed to be done only when the sprite is going to pass from one room to another one
         if (this.canMove) {
             // standing
             let currentDirection = this.direction;
@@ -236,7 +235,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
 
             if (this.body.speed > 0) {
-                console.log(this.body.speed)
                 //  4 is our distance tolerance, i.e. how close the source can get to the target
                 //  before it is considered as being there. The faster it moves, the more tolerance is required.
                 if (distance < 0.5) {

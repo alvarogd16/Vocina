@@ -1,5 +1,5 @@
-const widthD = window.innerWidth;
-const heightD = window.innerHeight;
+const widthD = document.getElementById('gameContainer').clientWidth
+const heightD = document.getElementById('gameContainer').clientHeight
 
 const config = {
     type: Phaser.AUTO,  //Automatically select between Canvas and Webgl
@@ -14,7 +14,6 @@ const config = {
             debug: true
         }
     }
-    
 }
 
 //Create a new game with the config 

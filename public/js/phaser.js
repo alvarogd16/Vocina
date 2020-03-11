@@ -7,6 +7,7 @@ const config = {
     height: heightD,
     parent: 'gameContainer',
     scene: [MainScene, SceneUp, SceneDown],
+    pixelArt: true,
     //Set the physics of the game to 'arcade'
     physics: {
         default: 'arcade',

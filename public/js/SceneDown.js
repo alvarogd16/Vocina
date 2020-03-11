@@ -1,8 +1,10 @@
 class SceneDown extends Phaser.Scene {
     constructor() {
         super("SceneDown");
+
         this.tileSize = 32;
         this.numOfTiles = 6;
+        this.useOfTile = true;
     }
 
     preload() {
@@ -22,7 +24,7 @@ class SceneDown extends Phaser.Scene {
 
         this.load.image("vocina-tiles", "assets/newMap.png");   //Test tile
         //this.load.image("andy", "assets/andy.png");           //Test Andy
-        //this.load.image("map", "../public/assets/map.jpg");   //Artist design 
+        this.load.image("map", "assets/map.jpg");   //Artist design 
     }
 
     create() {
@@ -37,61 +39,61 @@ class SceneDown extends Phaser.Scene {
 
         //Create the button to run the code
         let sceneThis = this;
-        /*document.getElementById("run").onclick = function () {
+        document.getElementById("run").onclick = function () {
             let editorContent = editor.getValue();
             sceneThis.readWritten(editorContent);
-        };*/
-
-        
-        /* MAP */
-        // Load a map from a 2D array of tile indices
-        const level = [
-            [1, 1, 1, 1, 1, 1],
-            [1, 2, 2, 2, 2, 1],
-            [1, 2, 3, 3, 2, 1],
-            [1, 2, 3, 3, 2, 1],
-            [1, 2, 2, 2, 2, 1],
-            [1, 1, 1, 1, 1, 1],
-        ];
-         
-        // Make map of level 1.
-        this.map = this.make.tilemap({
-            data: level,
-            tileWidth: this.tileSize,
-            tileHeight: this.tileSize
-        });
-
-        // Define tiles used in map.
-        this.tileset = this.map.addTilesetImage("vocina-tiles");
-        this.layer = this.map.createStaticLayer(0, this.tileset, 0, 0); 
+        };
 
         /*TODO*/
-        /* CAMERAS */
+        /* MAP AND CAMERAS*/      
+        
+        if(this.useOfTile){     //Use of background tileImage
 
-        this.tamMapOriginal = this.tileSize * this.numOfTiles;
-        this.zoom = widthD / this.tamMapOriginal;          
-        
-        // start camera
-        //this.cameras.main.setZoom(this.zoom);
+            //Some constants to the camera and map positions
+            const sizeMapOriginal = this.tileSize * this.numOfTiles;    //Map size original
+            this.positionStartMap = widthD - (widthD/2 + sizeMapOriginal/2);   //The position to center the map   
+            const zoom = widthD / sizeMapOriginal;                      //Zoom level to adapt the map to the scene 
 
-        // Set camera position and size.
-        this.cameras.main.setSize(this.tamMapOriginal, this.tamMapOriginal);
-        this.cameras.main.setPosition(0, heightD - widthD);
-        //this.cameras.main.setBounds(0, 0, 500, 500, true);
-        
-        /* this.add.image(0, 0, "map").setOrigin(0).setScale(0.3);*/
-        
+            // Load a map from a 2D array of tile indices
+            const level = [
+                [1, 1, 1, 1, 1, 1],
+                [1, 2, 2, 2, 2, 1],
+                [1, 2, 3, 3, 2, 1],
+                [1, 2, 3, 3, 2, 1],
+                [1, 2, 2, 2, 2, 1],
+                [1, 1, 1, 1, 1, 1],
+            ];
+            
+            // Make map of level 1.
+            this.map = this.make.tilemap({
+                data: level,
+                tileWidth: this.tileSize,
+                tileHeight: this.tileSize
+            });
+
+            // Define tiles used in map.
+            this.tileset = this.map.addTilesetImage("vocina-tiles");
+            this.layer = this.map.createDynamicLayer(0, this.tileset, this.positionStartMap, this.positionStartMap);
+
+            // Set camera position and size.
+            this.cameras.main.setSize(widthD, widthD);
+            this.cameras.main.setPosition(0, heightD-widthD);
+            //this.cameras.main.setBounds(0, 0, 500, 500, true);
+            this.cameras.main.setZoom(zoom);
+        } 
+        else{                 //Use of background image
+
+            this.map2 = this.add.image(0, 0, "map").setOrigin(0);
+            this.map2.setDisplaySize(heightD, widthD);
+        }
 
         /* PHYSICS AND PLAYER */    
         
-        // Set physics boundaries from map width and height.
+        // Set physics boundaries from map width and height and create the player
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        
-
-        //this.andy = new Player(this, 8, 8).setScale(0.8);
+        this.andy = new Player(this, this.positionStartMap+16, this.positionStartMap+16).setScale(1.2);
 
         //this.physics.add.collider(this.andy, this.layer);
-
     }
 
 

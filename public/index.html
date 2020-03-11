@@ -18,20 +18,18 @@
         }        
     </style>
 </head>
-<body>
-    <script>
-        //raspiWrite('LED', 1);
-    </script>
+<body style="background-color: rgb(16, 61, 100);">
 
-    <!--Editor zone-->
-    <div>
-        <textarea id="code" style="height: 25vh;"></textarea>
-        <!--<button id="run">RUN</button>-->
+    <div id="principal" style="max-width: 500px; margin:auto;">
+        <!--Editor zone-->
+        <div>
+            <textarea id="code" style="height: 25vh; width: 100%;"></textarea>
+            <button id="run">RUN</button>
+        </div>
+
+        <!--Game zone-->
+        <div id="gameContainer" style="height: 75vh; width: 100%;"></div>
     </div>
-
-    <!--Game zone-->
-    <div id="gameContainer" style="height: 75vh; width: 100%;"></div>
-
     
     <!-- Game files -->
     <script src="js/raspiClient.js"></script>

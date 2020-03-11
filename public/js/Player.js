@@ -56,7 +56,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         while(this.isMoving);
         this.isMoving = true;
         if (this.canMove) {
-            this.target.x = this.x + 16 * numberOfMovs;
+            this.target.x = this.x + 32 * numberOfMovs;
             this.target.y = this.y;
 
             this.direction = 'right';
@@ -137,7 +137,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         .then(data => console.log("CLIENT: ", data));        
     }
 
-
     /*OTHER FUNCTIONS*/
 
     //turn the animation in 'this.animationName' on
@@ -159,7 +158,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta);
 
         //If the sprite reaches it's destination, it's animation should stop
-        if (this.x == this.target.x && this.y == this.target.y) {
+        if (this.x === this.target.x && this.y === this.target.y) {
             this.stopAnimation();
             this.isMoving = false;
         }

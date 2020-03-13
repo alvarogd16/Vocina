@@ -50,18 +50,18 @@ class SceneDown extends Phaser.Scene {
         if(this.useOfTile){     //Use of background tileImage
 
             //Some constants to the camera and map positions
-            const sizeMapOriginal = this.tileSize * this.numOfTiles;    //Map size original
-            this.positionStartMap = widthD - (widthD/2 + sizeMapOriginal/2);   //The position to center the map   
-            const zoom = widthD / sizeMapOriginal;                      //Zoom level to adapt the map to the scene 
+            this.sizeMapOriginal = this.tileSize * this.numOfTiles;    //Map size original
+            this.positionStartMap = widthD - (widthD/2 + this.sizeMapOriginal/2);   //The position to center the map   
+            const zoom = widthD / this.sizeMapOriginal;                      //Zoom level to adapt the map to the scene 
 
             // Load a map from a 2D array of tile indices
             const level = [
-                [1, 1, 1, 1, 1, 1],
-                [1, 2, 2, 2, 2, 1],
-                [1, 2, 3, 3, 2, 1],
-                [1, 2, 3, 3, 2, 1],
-                [1, 2, 2, 2, 2, 1],
-                [1, 1, 1, 1, 1, 1],
+                [1, 2, 2, 2, 2, 2, 1],
+                [1, 2, 2, 2, 2, 2],
+                [1, 2, 1, 1, 2, 2],
+                [1, 2, 2, 2, 2, 2],
+                [1, 2, 2, 2, 2, 2],
+                [1, 0, 2, 1, 1, 1],
             ];
             
             // Make map of level 1.
@@ -88,12 +88,18 @@ class SceneDown extends Phaser.Scene {
         }
 
         /* PHYSICS AND PLAYER */    
+        const andyX = this.positionStartMap+16+32;
+        const andyY = this.positionStartMap+16+32*5;
         
         // Set physics boundaries from map width and height and create the player
-        this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        this.andy = new Player(this, this.positionStartMap+16, this.positionStartMap+16).setScale(1.2);
+        this.physics.world.setBounds(this.positionStartMap, this.positionStartMap, this.positionStartMap+this.sizeMapOriginal, this.positionStartMap+this.sizeMapOriginal);
+        this.andy = new Player(this, andyX, andyY).setScale(1.3);
 
         //this.physics.add.collider(this.andy, this.layer);
+    }
+
+    moveCamera(){
+        this.cameras.main.setPosition(0+10, heightD-widthD);
     }
 
 

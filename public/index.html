@@ -16,15 +16,40 @@
             margin: 0;
             padding: 0;
         }        
+        #codeArea{
+            position: relative;
+        }
+        .but {
+            position: absolute;
+            right: 40px;
+            bottom: 20px;
+            width: 80px;
+            height: 45px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background-color: rgb(19, 102, 158);
+            font-size: 20px;
+            color: white;
+        }
+
+        .but:hover {
+            background-color: rgb(13, 69, 105);
+        }
+
+        .but:active {
+            transform: translateY(4px);
+        }
+
     </style>
 </head>
-<body style="background-color: rgb(16, 61, 100);">
+<body style="background-color: rgb(10, 33, 53);">
 
     <div id="principal" style="max-width: 500px; margin:auto;">
         <!--Editor zone-->
-        <div>
+        <div id="codeArea">
             <textarea id="code" style="height: 25vh; width: 100%;"></textarea>
-            <button id="run">RUN</button>
+            <button id="run" class="but">RUN</button>
         </div>
 
         <!--Game zone-->

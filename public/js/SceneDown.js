@@ -5,6 +5,7 @@ class SceneDown extends Phaser.Scene {
         this.tileSize = 32;
         this.numOfTiles = 6;
         this.useOfTile = true;
+        this.index = 0;
     }
 
     preload() {
@@ -29,34 +30,45 @@ class SceneDown extends Phaser.Scene {
 
     create() {
         /* EDITOR */
-
-        let editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+        
+        this.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
             lineNumbers: true,
             lineWrapping: true, //When finish one line jump to the next
             undoDepth: 20       //Max number of lines to write
         })
-        editor.setValue("//¿Estás preparado?")  //Default value
+
+        this.editor.setValue("//¿Estás preparado?")  //Default value
 
         //Create the button to run the code
         let sceneThis = this;
         document.getElementById("run").onclick = function () {
-            let editorContent = editor.getValue();
+            let editorContent = sceneThis.editor.getValue();
             sceneThis.readWritten(editorContent);
         };
 
-        /*TODO*/
-        /* MAP AND CAMERAS*/      
-        
+        /*KEYBOARD*/
+
+        this.key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR);
+        this.key6 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX);
+        this.key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
+        this.key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE);
+        this.key7 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SEVEN);
+        this.key9 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_NINE);
+        this.keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+
+        /* MAP AND CAMERAS*/ 
+
         if(this.useOfTile){     //Use of background tileImage
 
             //Some constants to the camera and map positions
             this.sizeMapOriginal = this.tileSize * this.numOfTiles;    //Map size original
             this.positionStartMap = widthD - (widthD/2 + this.sizeMapOriginal/2);   //The position to center the map   
-            const zoom = widthD / this.sizeMapOriginal;                      //Zoom level to adapt the map to the scene 
+            //this.zoom = widthD / this.sizeMapOriginal;                      //Zoom level to adapt the map to the scene 
+            this.zoom = 1;
 
             // Load a map from a 2D array of tile indices
             const level = [
-                [1, 2, 2, 2, 2, 2, 1],
+                [1, 2, 2, 2, 2, 2, 3, 2, 3, 2, 3, 2],
                 [1, 2, 2, 2, 2, 2],
                 [1, 2, 1, 1, 2, 2],
                 [1, 2, 2, 2, 2, 2],
@@ -76,10 +88,13 @@ class SceneDown extends Phaser.Scene {
             this.layer = this.map.createDynamicLayer(0, this.tileset, this.positionStartMap, this.positionStartMap);
 
             // Set camera position and size.
+            this.sizeX = widthD;
+            this.mapX = 0;
+            this.mapY = heightD-widthD;
             this.cameras.main.setSize(widthD, widthD);
-            this.cameras.main.setPosition(0, heightD-widthD);
+            this.cameras.main.setPosition(this.mapX, this.mapY);
             //this.cameras.main.setBounds(0, 0, 500, 500, true);
-            this.cameras.main.setZoom(zoom);
+            //this.cameras.main.setZoom(this.zoom);
         } 
         else{                 //Use of background image
 
@@ -98,10 +113,6 @@ class SceneDown extends Phaser.Scene {
         //this.physics.add.collider(this.andy, this.layer);
     }
 
-    moveCamera(){
-        this.cameras.main.setPosition(0+10, heightD-widthD);
-    }
-
 
     /*EJECUTE CODE*/
 
@@ -118,5 +129,31 @@ class SceneDown extends Phaser.Scene {
         let args = 'andy';
         let executeMe = this.createFunction(args, editorContent);
         executeMe(andy);
+    }
+
+    moverDerecha() {
+        if(this.index < this.tileSize) {
+            this.andy.x++;
+            this.index++;
+        };
+    }
+
+    update(){
+        //console.log('updateando...')
+        if(this.keyShift.isDown){
+            if(this.key4.isDown) this.mapX--;
+            if(this.key6.isDown) this.mapX++;
+            if(this.key1.isDown) this.zoom -= 0.05;
+            if(this.key3.isDown) this.zoom += 0.05;
+            if(this.key7.isDown) this.sizeX -= 0.05;
+            if(this.key9.isDown) this.sizeX += 0.05;
+        }
+
+        this.cameras.main.setSize(this.sizeX, widthD);
+        this.cameras.main.setPosition(this.mapX, this.mapY);
+        this.cameras.main.setZoom(this.zoom);
+        this.scene.get('SceneUp').showInformation(this.zoom, this.mapX, this.mapY, this.positionStartMap, this.sizeX);
+
+        //this.moverDerecha();
     }
 }

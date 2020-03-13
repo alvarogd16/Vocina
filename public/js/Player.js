@@ -28,8 +28,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //Set collisions activation of the sprite (Also the hitbox)
         this.body.setCollideWorldBounds(true);
-        this.body.setOffset(7, 16);
-        this.body.setCircle(3);
+        //this.body.setOffset(-7, -16);
+        //this.body.setSquare(10);
 
         this.lastAnim = null;
         this.vel = 200;
@@ -76,7 +76,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.isMoving = true;
         if (this.canMove) {
             while(this.isMoving){}
-            this.target.x = this.x - 16 * numberOfMovs;
+            this.target.x = this.x - 32 * numberOfMovs;
             this.target.y = this.y;
 
             this.direction = 'left';
@@ -97,7 +97,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.canMove) {
             this.target.x = this.x;
             //y coordinate is "reversed", that is: positive y means DOWN and negative y means UP
-            this.target.y = this.y - 16 * numberOfMovs;
+            this.target.y = this.y - 32 * numberOfMovs;
 
             this.direction = 'up';
             this.animationName = 'walk-up';
@@ -115,7 +115,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.isMoving = true;
         if (this.canMove) {
             this.target.x = this.x;
-            this.target.y = this.y + 16 * numberOfMovs;
+            this.target.y = this.y + 32 * numberOfMovs;
 
             this.direction = 'down';
             this.animationName = 'walk-up';
@@ -124,6 +124,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
             this.scene.physics.moveToObject(this, this.target, 30);
         }
+    }
+
+    moveCamera(){
+        this.sceneB = this.scene.get('SceneDown');
+        this.sceneB.moveCamera();
     }
 
     //An example of use raspiClient

@@ -11,7 +11,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            debug: false
         }
     }
     
@@ -20,6 +20,7 @@ const config = {
 //Create a new game with the config 
 var game = new Phaser.Game(config);
 
+//To start the arcade physics system configuration of the world, it seems that if they aren't activated this way aren't working properly
 function create(){
      game.physics.startSystem(Phaser.Physics.ARCADE);
 }

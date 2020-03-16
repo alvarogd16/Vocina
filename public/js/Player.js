@@ -19,7 +19,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.previousRoom = null;
         this.roomChange = false;
         this.canMove = true;
-        this.isMoving = false;
         scene.physics.world.enable(this);
         scene.add.existing(this);
 
@@ -111,12 +110,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-    moveRight(numberOfMovs && numberOfMovs) {
+    moveRight(numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
-        while(this.isMoving);
-        this.isMoving = true;
-        if (this.canMove) {
+        if (this.canMove && numberOfMovs) {
             this.target.x = this.x + 16 * numberOfMovs;
             this.target.y = this.y;
 
@@ -127,14 +124,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
             this.scene.physics.moveToObject(this, this.target, 30);
+            
+            //If the sprite reaches it's destination, it's animation should stop
+            while (this.x == this.target.x && this.y == this.target.y) {
+                this.stopAnimation();
+            }
         } else if(!numberOfMovs) console.error("Funcion vacia");
     }
 
     moveLeft(numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
-        while(this.isMoving);
-        this.isMoving = true;
         if (this.canMove) {
             while(this.isMoving){}
             this.target.x = this.x - 16 * numberOfMovs;
@@ -153,8 +153,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveUp(numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
-        while(this.isMoving);
-        this.isMoving = true;
         if (this.canMove) {
             this.target.x = this.x;
             //y coordinate is "reversed", that is: positive y means DOWN and negative y means UP
@@ -172,8 +170,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveDown(numberOfMovs) {
         //16 is the distance between the center of two tiles, or the distance the sprite has to travel
         //to reach the next tile
-        while(this.isMoving);
-        this.isMoving = true;
         if (this.canMove) {
             this.target.x = this.x;
             this.target.y = this.y + 16 * numberOfMovs;
@@ -219,7 +215,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //If the sprite reaches it's destination, it's animation should stop
         if (this.x == this.target.x && this.y == this.target.y) {
             this.stopAnimation();
-            this.isMoving = false;
         }
 
         //this comparasion is supossed to be done only when the sprite is going to pass from one room to another one

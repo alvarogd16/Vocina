@@ -8,18 +8,13 @@ const config = {
     parent: 'gameContainer',
     scene: [MainScene, SceneUp, SceneDown],
     pixelArt: true,
-    //Set the physics of the game to 'arcade'
     physics: {
         default: 'arcade',
         arcade: {
-            //debug: true
+            debug: false
         }
     }
 }
 
 //Create a new game with the config 
 var game = new Phaser.Game(config);
-
-function create(){
-     game.physics.startSystem(Phaser.Physics.ARCADE);
-}

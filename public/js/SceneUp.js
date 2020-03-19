@@ -8,7 +8,6 @@ class SceneUp extends Phaser.Scene {
     }
     
     create(){
-        //this.text = this.add.text(10, 10, 'Soy Lucas');
         //this.add.image(0, 0, "dialogs").setOrigin(0).setScale(0.625);
         this.zoom = this.add.text(10, 10, 'Zoom: ');
         this.camX = this.add.text(10, 30, 'CamX: ');

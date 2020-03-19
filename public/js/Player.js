@@ -55,9 +55,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //to reach the next tile
         if(isNaN(numberOfMovs)) console.error("Funcion vacia");
         else{
-            while(this.isMoving) console.log("waiting...");
-            this.isMoving = true;
-            if (this.canMove) {
+            if (this.canMove && !this.isMoving) {
+                //console.log("EntroR");
                 this.target.x = this.x + 32 * numberOfMovs;
                 this.target.y = this.y;
     
@@ -68,6 +67,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     
                 //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
                 this.scene.physics.moveToObject(this, this.target, 30);
+                //console.log("SalgoR");
             } 
         }
     }
@@ -77,8 +77,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //to reach the next tile
         if(!numberOfMovs) console.error("Funcion vacia");
         else{
-            while(this.isMoving);
-            this.isMoving = true;
             if (this.canMove) {
                 while(this.isMoving){}
                 this.target.x = this.x - 32 * numberOfMovs;
@@ -88,6 +86,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.animationName = "walk-up";
                 this.setFlipX(true);
                 this.startAnimation();
+
     
                 //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
                 this.scene.physics.moveToObject(this, this.target, 30);
@@ -100,9 +99,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //to reach the next tile
         if(!numberOfMovs) console.error("Funcion vacia");
         else{
-            while(this.isMoving);
-            this.isMoving = true;
-            if (this.canMove) {
+            if (this.canMove && !this.isMoving) {
+                //console.log("EntroU");
                 this.target.x = this.x;
                 //y coordinate is "reversed", that is: positive y means DOWN and negative y means UP
                 this.target.y = this.y - 32 * numberOfMovs;
@@ -113,6 +111,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     
                 //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
                 this.scene.physics.moveToObject(this, this.target, 30);
+                //console.log("SagloU");
             }
         }
     }
@@ -151,13 +150,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     /*OTHER FUNCTIONS*/
 
-    //turn the animation in 'this.animationName' on
+    //Turn the animation in 'this.animationName' on
     startAnimation() {
         this.anims.play(this.animationName, true);
     }
 
+    //Stop the animation from running, freezing it at its current frame
     stopAnimation() {
-        //  This will just top the animation from running, freezing it at its current frame
         this.anims.stop();
     }
 
@@ -165,12 +164,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
 
+        //Test with andy move /* TODO */
+        /*if(this.contX < this.pasos && this.moveR === true){
+            this.x++;
+            this.contX++;
+        }*/
+
+        
         //If the sprite reaches it's destination, it's animation should stop
         if (this.x === this.target.x && this.y === this.target.y) {
             this.stopAnimation();
             this.isMoving = false;
-            console.log("Ha llegado");
+            //console.log("Ha llegado");
         }
+        //console.log("TargetX: " + this.target.x);
+        //console.log("TargetY: " + this.target.y);
 
         if (this.canMove) {
             // standing

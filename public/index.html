@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Vocina Game</title>
+    
 
     <!-- Libraries -->
     <script src="lib/phaser.js"></script>
     <script src="lib/codemirror.js"></script>
-    <link rel="stylesheet" href="lib/codemirror.css">
+    <script src="mode/javascript/javascript.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/codemirror.css">
 
     <style>
+        /*TODO FILE CSS*/
         * {
             margin: 0;
             padding: 0;
@@ -44,6 +47,8 @@
     </style>
 </head>
 <body style="background-color: rgb(10, 33, 53);">
+    <!--Button to test transition scenes-->
+    <button id="hide">HIDE</button>
 
     <div id="principal" style="max-width: 500px; margin:auto;">
         <!--Editor zone-->

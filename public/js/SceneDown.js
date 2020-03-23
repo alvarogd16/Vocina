@@ -41,7 +41,7 @@ class SceneDown extends Phaser.Scene {
                 lineNumbers: true,
                 lineWrapping: true, //When finish one line jump to the next
                 undoDepth: 20,       //Max number of lines to write
-                mode: "javascript"
+                theme: "blackboard",
             })
             this.editor.setValue("//¿Estás preparado?")  //Default value
     

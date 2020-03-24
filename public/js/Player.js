@@ -1,283 +1,241 @@
-/**
- * Class representing the player.
- * @extends Phaser.GameObjects.Sprite
- */
-class Player extends Phaser.Physics.Arcade.Sprite {
+ /** Class representing the player.
+  * @extends Phaser.GameObjects.Sprite
+  */
+ class Player extends Phaser.Physics.Arcade.Sprite {
 
-    /**
-     * Create the player.
-     * @param {object} scene - scene creating the player.
-     * @param {number} x - Start location x value.
-     * @param {number} y - Start location y value.
-     * @param {number} [frame] -
-     */
-    constructor(scene, x, y, frame) {
-        super(scene, x, y, frame);
+     /**
+      * Create the player.
+      * @param {object} scene - scene creating the player.
+      * @param {number} x - Start location x value.
+      * @param {number} y - Start location y value.
+      * @param {number} [frame] -
+      */
+     constructor(scene, x, y, frame) {
+         super(scene, x, y, frame);
 
-        this.scene = scene;
-        this.currentRoom = 1; // Set start room so room change flag doens't fire.
-        this.previousRoom = null;
-        this.roomChange = false;
-        this.canMove = true;
-        scene.physics.world.enable(this);
-        scene.add.existing(this);
+         this.scene = scene;
+         this.currentRoom = 1; // Set start room so room change flag doens't fire.
+         this.previousRoom = null;
+         this.roomChange = false;
+         this.canMove = true;
+         scene.physics.world.enable(this);
+         scene.add.existing(this);
 
-        //Set the skins of the sprite
-        this.setTexture('player');
-        this.setPosition(x, y);
+         //Set the skins of the sprite
+         this.setTexture('player');
+         this.setPosition(x, y);
 
-        //Set collisions activation of the sprite (Also the hitbox)
-        this.body.setCollideWorldBounds(true);
-        this.body.setOffset(7, 16);
-        this.body.setCircle(3);
+         //Set collisions activation of the sprite
+         this.body.setCollideWorldBounds(true);
+         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
+         this.body.setSize(scene.tileSize, scene.tileSize, x, y);
+         //this.body.setSquare(10);
 
-        this.lastAnim = null;
-        this.vel = 200;
-        this.onStairs = false;
-        this.direction = null;
-        this.target = new Phaser.Math.Vector2();
+         this.lastAnim = null;
+         this.vel = 200;
+         this.onStairs = false;
+         this.direction = null;
+         this.target = new Phaser.Math.Vector2();
 
-        // Boolean to control if the player cant move
-        this.movement = true;
-        this.numberMov = 0;
-
-        config = {
-            key: 'stand-down',
-            frames: scene.anims.generateFrameNumbers('player', {
-                start: 0,
-                end: 0
-            }),
-            frameRate: 15,
-            repeat: -1
-        };
-        scene.anims.create(config);
-
-        config = {
-            key: 'stand-right',
-            frames: scene.anims.generateFrameNumbers('player', {
-                start: 4,
-                end: 4
-            }),
-            frameRate: 15,
-            repeat: -1
-        };
-        scene.anims.create(config);
-
-        config = {
-            key: 'stand-up',
-            frames: scene.anims.generateFrameNumbers('player', {
-                start: 8,
-                end: 8
-            }),
-            frameRate: 15,
-            repeat: -1
-        };
-        scene.anims.create(config);
+         // Boolean to control if the player cant move
+         this.andyIsMoving = false;
+         this.numberMov = 0;
 
 
-        var config = {
-            key: 'walk-down',
-            frames: scene.anims.generateFrameNumbers('player', {
-                start: 0,
-                end: 3
-            }),
-            frameRate: 15,
-            repeat: -1
-        };
-        scene.anims.create(config);
+         /*ANIMATIONS*/
 
-        var config = {
-            key: 'walk-right',
-            frames: scene.anims.generateFrameNumbers('player', {
-                start: 4,
-                end: 7
-            }),
-            frameRate: 15,
-            repeat: -1
-        };
-        scene.anims.create(config);
-
-        var config = {
-            key: 'walk-up',
-            frames: scene.anims.generateFrameNumbers('player', {
-                start: 8,
-                end: 11
-            }),
-            frameRate: 15,
-            repeat: -1
-        };
-        scene.anims.create(config);
-
-    }
-
-    moveRight(numberOfMovs) {
-        //16 is the distance between the center of two tiles, or the distance the sprite has to travel
-        //to reach the next tile
-        if (this.canMove && numberOfMovs) {
-            this.target.x = this.x + 16 * numberOfMovs;
-            this.target.y = this.y;
-
-            this.direction = 'right';
-            this.animationName = "walk-up";
-            this.setFlipX(false);
-            this.startAnimation();
-
-            //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-            this.scene.physics.moveToObject(this, this.target, 30);
-            
-            //If the sprite reaches it's destination, it's animation should stop
-            while (this.x == this.target.x && this.y == this.target.y) {
-                this.stopAnimation();
-            }
-        } else if(!numberOfMovs) console.error("Funcion vacia");
-    }
-
-    moveLeft(numberOfMovs) {
-        //16 is the distance between the center of two tiles, or the distance the sprite has to travel
-        //to reach the next tile
-        if (this.canMove) {
-            while(this.isMoving){}
-            this.target.x = this.x - 16 * numberOfMovs;
-            this.target.y = this.y;
-
-            this.direction = 'left';
-            this.animationName = "walk-up";
-            this.setFlipX(true);
-            this.startAnimation();
-
-            //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-            this.scene.physics.moveToObject(this, this.target, 30);
-        }
-    }
-
-    moveUp(numberOfMovs) {
-        //16 is the distance between the center of two tiles, or the distance the sprite has to travel
-        //to reach the next tile
-        if (this.canMove) {
-            this.target.x = this.x;
-            //y coordinate is "reversed", that is: positive y means DOWN and negative y means UP
-            this.target.y = this.y - 16 * numberOfMovs;
-
-            this.direction = 'up';
-            this.animationName = 'walk-up';
-            this.startAnimation();
-
-            //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-            this.scene.physics.moveToObject(this, this.target, 30);
-        }
-    }
-
-    moveDown(numberOfMovs) {
-        //16 is the distance between the center of two tiles, or the distance the sprite has to travel
-        //to reach the next tile
-        if (this.canMove) {
-            this.target.x = this.x;
-            this.target.y = this.y + 16 * numberOfMovs;
-
-            this.direction = 'down';
-            this.animationName = 'walk-up';
-            this.startAnimation();
-
-            //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-            this.scene.physics.moveToObject(this, this.target, 30);
-        }
-    }
-    
-    //An example of use raspiClient
-    turnOnLED() {
-        raspiRead('LED')
-        .then(data => console.log("CLIENT: ", data));
-                
-        raspiWrite('LED', 1);
-
-        raspiRead('LED')
-        .then(data => console.log("CLIENT: ", data));        
-    }
-
-    //turn the animation in 'this.animationName' on
-    startAnimation() {
-        this.anims.play(this.animationName, true);
-    }
-
-    stopAnimation() {
-        //  This will just top the animation from running, freezing it at its current frame
-        this.anims.stop();
-    }
-
-    /**
-     * Called before Update.
-     * @param {object} time
-     * @param {number} delta
-     */
-    preUpdate(time, delta) {
-        super.preUpdate(time, delta);
-
-        //If the sprite reaches it's destination, it's animation should stop
-        if (this.x == this.target.x && this.y == this.target.y) {
-            this.stopAnimation();
-        }
-
-        //this comparasion is supossed to be done only when the sprite is going to pass from one room to another one
-        if (this.canMove) {
-            // standing
-            let currentDirection = this.direction;
-            if (this.direction === 'left') {
-                currentDirection = 'right';
-            } //account for flipped sprite
-            this.animationName = 'stand-' + currentDirection;
-
-            //Distance between andy and the point will reach
-            let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
-
-            if (this.body.speed > 0) {
-                //  4 is our distance tolerance, i.e. how close the source can get to the target
-                //  before it is considered as being there. The faster it moves, the more tolerance is required.
-                if (distance < 0.5) {
-                    this.body.reset(this.target.x, this.target.y);
-                }
-            }
-
-            // Check for room change.
-            this.getRoom();
-        }
-    }
+         createAnimations(scene);
+         this.andyMovesQueue = new Queue();
+     }
 
 
-    /** Returns player's current and previous room, flags rooms player has entered. */
-    getRoom() {
+     /*FUNCTIONS TO USE BY USER*/
 
-        // place holder for current room.
-        let roomNumber;
+     //An example of use raspiClient
+     turnOnLED() {
+         raspiRead('LED')
+             .then(data => console.log("CLIENT: ", data));
 
-        // loop through rooms in this level.
-        for (let room in this.scene.rooms) {
-            let roomLeft = this.scene.rooms[room].x;
-            let roomRight = this.scene.rooms[room].x + this.scene.rooms[room].width;
-            let roomTop = this.scene.rooms[room].y;
-            let roomBottom = this.scene.rooms[room].y + this.scene.rooms[room].height;
+         raspiWrite('LED', 1);
 
-            // Player is within the boundaries of this room.
-            if (this.x > roomLeft && this.x < roomRight &&
-                this.y > roomTop && this.y < roomBottom) {
+         raspiRead('LED')
+             .then(data => console.log("CLIENT: ", data));
+     }
 
-                roomNumber = room;
+     /*OTHER FUNCTIONS*/
 
-                // Set this room as visited by player.
-                let visited = this.scene.rooms[room].properties.find(function (property) {
-                    return property.name === 'visited';
-                });
+     //turn the animation in 'this.animationName' on
+     startAnimation() {
+         this.anims.play(this.animationName, true);
+     }
 
-                visited.value = true
-            }
-        }
+     stopAnimation() {
+         //  This will just top the animation from running, freezing it at its current frame
+         this.anims.stop();
+     }
 
-        // Update player room variables.
-        if (roomNumber != this.currentRoom) {
-            this.previousRoom = this.currentRoom;
-            this.currentRoom = roomNumber;
-            this.roomChange = true;
-        } else {
-            this.roomChange = false;
-        }
-    }
-}
+     //Console method to put the values of a new target (To the right) into the queue
+     moveRight(numberOfMovs) {
+         this.targetAux = new Phaser.Math.Vector2();
+         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+             this.targetAux.x = this.x + 32 * numberOfMovs;
+             this.targetAux.y = this.y;
+         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+             this.targetAux.x = this.andyMovesQueue.last().x + 32 * numberOfMovs;
+             this.targetAux.y = this.andyMovesQueue.last().y;
+         }
+         this.targetAux.dir = 'right';
+         this.andyMovesQueue.enqueue(this.targetAux);
+     }
+
+     //Method to finally move the player to the right
+     movingRight(numberOfMovs) {
+         //Take the first target in the queue
+         this.targetAux = this.andyMovesQueue.first();
+         this.target.x = this.targetAux.x;
+         this.target.y = this.targetAux.y;
+
+         this.direction = 'right';
+         this.animationName = "walk-up";
+         this.setFlipX(true);
+         this.startAnimation();
+
+         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
+         this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 30);
+     }
+
+     //Console method to put the values of a new target (To the left) into the queue
+     moveLeft(numberOfMovs) {
+         this.targetAux = new Phaser.Math.Vector2();
+         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+             this.targetAux.x = this.x - 32 * numberOfMovs;
+             this.targetAux.y = this.y;
+         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+             this.targetAux.x = this.andyMovesQueue.last().x - 32 * numberOfMovs;
+             this.targetAux.y = this.andyMovesQueue.last().y;
+         }
+         this.targetAux.dir = 'left';
+         this.andyMovesQueue.enqueue(this.targetAux);
+     }
+
+     //Method to finally move the player to the left
+     movingLeft(numberOfMovs) {
+         //Take the first target in the queue
+         this.targetAux = this.andyMovesQueue.first();
+         this.target.x = this.targetAux.x;
+         this.target.y = this.targetAux.y;
+
+         this.direction = 'left';
+         this.animationName = "walk-up";
+         this.setFlipX(true);
+         this.startAnimation();
+
+         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
+         this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 30);
+     }
+
+     //Console method to put the values of a new target (To move it up) into the queue
+     moveUp(numberOfMovs) {
+         this.targetAux = new Phaser.Math.Vector2();
+         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+             this.targetAux.x = this.x;
+             this.targetAux.y = this.y - 32 * numberOfMovs;
+         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+             this.targetAux.x = this.andyMovesQueue.last().x;
+             this.targetAux.y = this.andyMovesQueue.last().y - 32 * numberOfMovs;
+         }
+         this.targetAux.dir = 'up';
+         this.andyMovesQueue.enqueue(this.targetAux);
+     }
+
+     //Method to finally move the player up
+     movingUp(numberOfMovs) {
+         //Take the first target in the queue
+         this.targetAux = this.andyMovesQueue.first();
+         this.target.x = this.targetAux.x;
+         this.target.y = this.targetAux.y;
+
+         this.direction = 'up';
+         this.animationName = "walk-up";
+         this.setFlipX(false);
+         this.startAnimation();
+
+         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
+         this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 30);
+     }
+
+     //Console method to put the values of a new target (To move it down) into the queue
+     moveDown(numberOfMovs) {
+         this.targetAux = new Phaser.Math.Vector2();
+         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+             this.targetAux.x = this.x;
+             this.targetAux.y = this.y + 32 * numberOfMovs;
+         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+             this.targetAux.x = this.andyMovesQueue.last().x;
+             this.targetAux.y = this.andyMovesQueue.last().y + 32 * numberOfMovs;
+         }
+         this.targetAux.dir = 'down';
+         this.andyMovesQueue.enqueue(this.targetAux);
+     }
+
+     //Method to finally move the player down
+     movingDown(numberOfMovs) {
+         //Take the first target in the queue
+         this.targetAux = this.andyMovesQueue.first();
+         this.target.x = this.targetAux.x;
+         this.target.y = this.targetAux.y;
+
+         this.direction = 'down';
+         this.animationName = "walk-up";
+         this.setFlipX(false);
+         this.startAnimation();
+
+         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
+         this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 30);
+     }
+
+     //Before scene update
+     preUpdate(time, delta) {
+         super.preUpdate(time, delta);
+
+         if (this.canMove) {
+
+             // Player movement control, when condition it's true, player is moving and condition can't be trespassed
+             if (!this.andyMovesQueue.isEmpty() && !this.andyIsMoving) {
+                 this.andyIsMoving = true;
+                 //Check the direction variable in the last queue element
+                 if (this.andyMovesQueue.first().dir == 'right')
+                     this.movingRight();
+                 else if (this.andyMovesQueue.first().dir == 'left')
+                     this.movingLeft();
+                 else if (this.andyMovesQueue.first().dir == 'up')
+                     this.movingUp();
+                 else if (this.andyMovesQueue.first().dir == 'down')
+                     this.movingDown();
+             }
+
+             // standing
+             let currentDirection = this.direction;
+             if (this.direction === 'left') {
+                 currentDirection = 'right';
+             } //account for flipped sprite
+             this.animationName = 'stand-' + currentDirection;
+
+             //Distance between andy and the point will reach
+             let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
+
+             if (this.body.speed > 0) {
+                 //  4 is our distance tolerance, i.e. how close the source can get to the target
+                 //  before it is considered as being there. The faster it moves, the more tolerance is required.
+                 //If the sprite reaches it's destination or it touches one of the walls stabilished in the map, it's animation should stop
+                 if (distance < 0.3 /*MAP // BOUNDS*/ ) {
+                     this.body.reset(this.target.x, this.target.y);
+                     this.stopAnimation();
+
+                     //Restart the movement control
+                     this.andyIsMoving = false;
+                 }
+             }
+         }
+     }
+ }

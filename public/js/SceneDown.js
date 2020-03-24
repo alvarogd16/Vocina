@@ -8,8 +8,8 @@ class SceneDown extends Phaser.Scene {
     }
 
     //Map data
-    init(level) {
-        this.level = level;
+    init(numLevel) {
+        this.numLevel = numLevel;
     }
 
     preload() {
@@ -27,9 +27,25 @@ class SceneDown extends Phaser.Scene {
             } 
         });
 
+        // Zombie sprite.
+        this.load.spritesheet({
+            key: 'zombie',
+            url: "assets/zombie.png",
+            frameConfig: {
+                frameWidth: 21,  
+                frameHeight: 26,
+                startFrame: 0,
+                endFrame: 0,
+                margin: 0,
+                spacing: 0
+            } 
+        });
+
         this.load.image("vocina-tiles", "assets/newMap.png");   //Test tile
-        //this.load.image("andy", "assets/andy.png");           //Test Andy
         this.load.image("map", "assets/map.jpg");   //Artist design 
+
+        this.nomLevel = "Level" + this.numLevel.toString();     //The name of the level is Level follow by the number ej. Level1
+        this.load.tilemapTiledJSON(this.nomLevel, "assets/" + this.nomLevel + ".json");
     }
 
     create() {
@@ -73,18 +89,14 @@ class SceneDown extends Phaser.Scene {
             this.sizeMapOriginal = this.tileSize * this.numOfTiles;                 //Map size original
             this.positionStartMap = widthD - (widthD/2 + this.sizeMapOriginal/2);   //The position to center the map   
             this.zoom = widthD / this.sizeMapOriginal;                              //Zoom level to adapt the map to the scene 
-            //this.zoom = 1;
             
-            // Make maps with data
-            this.map = this.make.tilemap({
-                data: this.level,
-                tileWidth: this.tileSize,
-                tileHeight: this.tileSize
-            });
 
             // Define tiles used in map.
-            this.tileset = this.map.addTilesetImage("vocina-tiles");
-            this.layer = this.map.createDynamicLayer(0, this.tileset, this.positionStartMap, this.positionStartMap);
+            this.Level = this.add.tilemap(this.nomLevel);
+            let colors = this.Level.addTilesetImage("colors", "vocina-tiles");
+
+            let layer = this.Level.createStaticLayer("layer", [colors], this.positionStartMap, this.positionStartMap);   
+
 
             // Set camera position and size.
             this.sizeX = widthD;
@@ -92,7 +104,6 @@ class SceneDown extends Phaser.Scene {
             this.mapY = heightD-widthD;
             this.cameras.main.setSize(widthD, widthD);
             this.cameras.main.setPosition(this.mapX, this.mapY);
-            //this.cameras.main.setBounds(0, 0, 500, 500, true);
             this.cameras.main.setZoom(this.zoom);
         } 
         else{                 //Use of background image /* TODO OR DELETE */
@@ -108,12 +119,12 @@ class SceneDown extends Phaser.Scene {
         
         // Set physics boundaries from map width and height and create the player
         this.physics.world.setBounds(this.positionStartMap, this.positionStartMap, 
-            this.positionStartMap + this.sizeMapOriginal, 
-            this.positionStartMap + this.sizeMapOriginal);
+            this.sizeMapOriginal, 
+            this.sizeMapOriginal);
 
-        this.andy = new Player(this, andyX, andyY).setScale(1.3);
-
-        //this.physics.add.collider(this.andy, this.layer);
+        this.andy = new Player(this, andyX, andyY);
+        // this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
+        // this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
     }
 
 
@@ -126,12 +137,18 @@ class SceneDown extends Phaser.Scene {
 
     //Process the text in the texteditor
     readWritten(editorContent) {
-        //Call other scene
-        //this.sceneB = this.scene.get('SceneDown');
         let andy = this.andy;
         let args = 'andy';
         let executeMe = this.createFunction(args, editorContent);
         executeMe(andy);
+    }
+
+    zombiesReachedAndy(){
+        this.cameras.main.shake(500);
+
+        this.time.delayedCall(500, function() {
+            this.scene.restart();
+        }, [], this);
     }
 
 

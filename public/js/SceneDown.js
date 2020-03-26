@@ -95,7 +95,7 @@ class SceneDown extends Phaser.Scene {
             this.Level = this.add.tilemap(this.nomLevel);
             let colors = this.Level.addTilesetImage("colors", "vocina-tiles");
 
-            let layer = this.Level.createStaticLayer("layer", [colors], this.positionStartMap, this.positionStartMap);   
+            this.layer = this.Level.createStaticLayer("layer", [colors], this.positionStartMap, this.positionStartMap);   
 
 
             // Set camera position and size.
@@ -125,6 +125,13 @@ class SceneDown extends Phaser.Scene {
         this.andy = new Player(this, andyX, andyY);
         // this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         // this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
+
+        this.physics.add.collider(this.andy, this.layer, () => console.log("Collision"));
+        this.layer.setCollisionByProperty({collision:true});
+        this.layer.setTileIndexCallback([4], () => {
+            console.log("Has llegado");
+            this.layer.setTileIndexCallback([4], () => {return undefined});
+        });
     }
 
 
@@ -166,6 +173,6 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setSize(this.sizeX, widthD);
         this.cameras.main.setPosition(this.mapX, this.mapY);
         this.cameras.main.setZoom(this.zoom);
-        this.scene.get('SceneUp').showInformation(this.zoom, this.mapX, this.mapY, this.positionStartMap, this.sizeX);
+        //this.scene.get('SceneUp').showInformation(this.zoom, this.mapX, this.mapY, this.positionStartMap, this.sizeX);
     }
 }

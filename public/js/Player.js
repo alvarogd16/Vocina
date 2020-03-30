@@ -24,6 +24,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //Set collisions activation of the sprite
         this.body.setCollideWorldBounds(true);
+
+        //On world bounds 
+        this.body.onWorldBounds = true;
+        this.scene.physics.world.on('worldbounds', this.onWorldBounds, this);
+        this.collidingWorldBounds = false;
+
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
         this.body.setSize(scene.tileSize, scene.tileSize, x, y);
 
@@ -58,6 +64,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             .then(data => console.log("CLIENT: ", data));
     }
 
+    // MOVE FROM CODEMIRROR
+
     //Console method to put the values of a new target (To the right) into the queue
     moveRight(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
@@ -71,23 +79,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.targetAux.dir = 'right';
         this.andyMovesQueue.enqueue(this.targetAux);
     }
-
-    //Method to finally move the player to the right
-    movingRight(numberOfMovs) {
-        //Take the first target in the queue
-        this.targetAux = this.andyMovesQueue.first();
-        this.target.x = this.targetAux.x;
-        this.target.y = this.targetAux.y;
-
-        this.direction = 'right';
-        this.animationName = "walk-up";
-        this.setFlipX(true);
-        this.startAnimation();
-
-        //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-        this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 30);
-    }
-
+    
     //Console method to put the values of a new target (To the left) into the queue
     moveLeft(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
@@ -100,52 +92,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         this.targetAux.dir = 'left';
         this.andyMovesQueue.enqueue(this.targetAux);
-    }
-
-    //Method to finally move the player to the left
-    movingLeft(numberOfMovs) {
-        //Take the first target in the queue
-        this.targetAux = this.andyMovesQueue.first();
-        this.target.x = this.targetAux.x;
-        this.target.y = this.targetAux.y;
-
-        this.direction = 'left';
-        this.animationName = "walk-up";
-        this.setFlipX(true);
-        this.startAnimation();
-
-        //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-        this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 30);
-    }
-
-    //Console method to put the values of a new target (To move it up) into the queue
-    moveUp(numberOfMovs) {
-        this.targetAux = new Phaser.Math.Vector2();
-        if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x;
-            this.targetAux.y = this.y - 32 * numberOfMovs;
-        } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x;
-            this.targetAux.y = this.andyMovesQueue.last().y - 32 * numberOfMovs;
-        }
-        this.targetAux.dir = 'up';
-        this.andyMovesQueue.enqueue(this.targetAux);
-    }
-
-    //Method to finally move the player up
-    movingUp(numberOfMovs) {
-        //Take the first target in the queue
-        this.targetAux = this.andyMovesQueue.first();
-        this.target.x = this.targetAux.x;
-        this.target.y = this.targetAux.y;
-
-        this.direction = 'up';
-        this.animationName = "walk-up";
-        this.setFlipX(false);
-        this.startAnimation();
-
-        //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-        this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 30);
     }
 
     //Console method to put the values of a new target (To move it down) into the queue
@@ -162,16 +108,31 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.andyMovesQueue.enqueue(this.targetAux);
     }
 
-    //Method to finally move the player down
-    movingDown(numberOfMovs) {
+    //Console method to put the values of a new target (To move it up) into the queue
+    moveUp(numberOfMovs) {
+        this.targetAux = new Phaser.Math.Vector2();
+        if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+            this.targetAux.x = this.x;
+            this.targetAux.y = this.y - 32 * numberOfMovs;
+        } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+            this.targetAux.x = this.andyMovesQueue.last().x;
+            this.targetAux.y = this.andyMovesQueue.last().y - 32 * numberOfMovs;
+        }
+        this.targetAux.dir = 'up';
+        this.andyMovesQueue.enqueue(this.targetAux);
+    }
+
+    // MOVING
+
+    //Method to finally move the player
+    moving(dir) {
         //Take the first target in the queue
         this.targetAux = this.andyMovesQueue.first();
         this.target.x = this.targetAux.x;
         this.target.y = this.targetAux.y;
 
-        this.direction = 'down';
+        this.direction = dir;
         this.animationName = "walk-up";
-        this.setFlipX(false);
         this.startAnimation();
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
@@ -179,6 +140,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     /*OTHER FUNCTIONS*/
+    //Change the level. Only use by teachers
+    level (password, level){
+        if(password == 1234)
+            this.scene.scene.get('MainScene').nextLevel(level);
+    }
 
     //turn the animation in 'this.animationName' on
     startAnimation() {
@@ -188,6 +154,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     stopAnimation() {
         //  This will just top the animation from running, freezing it at its current frame
         this.anims.stop();
+    }
+
+    onWorldBounds() {
+        this.collidingWorldBounds = true;
     }
 
     //Before scene update
@@ -200,14 +170,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (!this.andyMovesQueue.isEmpty() && !this.andyIsMoving) {
                 this.andyIsMoving = true;
                 //Check the direction variable in the last queue element
-                if (this.andyMovesQueue.first().dir == 'right')
-                    this.movingRight();
-                else if (this.andyMovesQueue.first().dir == 'left')
-                    this.movingLeft();
-                else if (this.andyMovesQueue.first().dir == 'up')
-                    this.movingUp();
-                else if (this.andyMovesQueue.first().dir == 'down')
-                    this.movingDown();
+                let dir = this.andyMovesQueue.first().dir;
+                this.moving(dir);
             }
 
             // standing
@@ -228,6 +192,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                     //Restart the movement control
                     this.andyIsMoving = false;
+                } else if (this.collidingWorldBounds) { //Reset the queue
+                    this.stopAnimation();
+                    //Set collidingWorldBounds to false
+                    this.collidingWorldBounds = false;
+
+                    //Restart the movement control
+                    this.andyIsMoving = false;
+                    this.andyMovesQueue = new Queue();
                 }
             }
         }

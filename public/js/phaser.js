@@ -2,7 +2,7 @@ const widthD = document.getElementById('gameContainer').clientWidth
 const heightD = document.getElementById('gameContainer').clientHeight
 
 const config = {
-    type: Phaser.CANVAS,  //Automatically select between Canvas and Webgl
+    type: Phaser.WEBGL,  //Automatically select between Canvas and Webgl
     width: widthD,
     height: heightD,
     parent: 'gameContainer',

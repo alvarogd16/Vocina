@@ -13,6 +13,8 @@ class SceneDown extends Phaser.Scene {
     }
 
     preload() {
+        this.mainScene = this.scene.get('MainScene');
+
         // Player sprite.
         this.load.spritesheet({
             key: 'player',
@@ -41,7 +43,7 @@ class SceneDown extends Phaser.Scene {
             } 
         });
 
-        this.load.image("vocina-tiles", "assets/newMap.png");   //Test tile
+        this.load.image("vocina-tiles", "assets/newMapExtruder.png");   //Test tile
         this.load.image("map", "assets/map.jpg");   //Artist design 
 
         this.nomLevel = "Level" + this.numLevel.toString();     //The name of the level is Level follow by the number ej. Level1
@@ -49,7 +51,6 @@ class SceneDown extends Phaser.Scene {
     }
 
     create() {
-
         /* EDITOR */
         //Check that it is not already created
         if(document.getElementsByClassName('CodeMirror').length === 0){
@@ -80,6 +81,7 @@ class SceneDown extends Phaser.Scene {
         this.key7 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SEVEN);
         this.key9 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_NINE);
         this.keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        this.key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FIVE);
 
         /* MAP AND CAMERAS*/ 
 
@@ -93,7 +95,7 @@ class SceneDown extends Phaser.Scene {
 
             // Define tiles used in map.
             this.Level = this.add.tilemap(this.nomLevel);
-            let colors = this.Level.addTilesetImage("colors", "vocina-tiles");
+            let colors = this.Level.addTilesetImage("colors", "vocina-tiles", 32, 32, 1, 2);
 
             this.layer = this.Level.createStaticLayer("layer", [colors], this.positionStartMap, this.positionStartMap);   
 
@@ -168,6 +170,7 @@ class SceneDown extends Phaser.Scene {
             if(this.key3.isDown) this.zoom += 0.05;
             if(this.key7.isDown) this.sizeX --;
             if(this.key9.isDown) this.sizeX ++;
+            if(this.key5.isDown) this.mainScene.nextLevel(); 
         }
 
         this.cameras.main.setSize(this.sizeX, widthD);

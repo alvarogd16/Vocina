@@ -1,3 +1,4 @@
+var lightOn = false;
 class SceneDown extends Phaser.Scene {
     constructor() {
         super("SceneDown");
@@ -124,6 +125,11 @@ class SceneDown extends Phaser.Scene {
             this.sizeMapOriginal, 
             this.sizeMapOriginal);
 
+		/* ILLUMINATION */
+        this.layer.setPipeline('Light2D');
+        var light = this.lights.addLight(0, 0, 200).setScrollFactor(0.0);
+		this.lights.enable().setAmbientColor(0x555555);	
+			
         this.andy = new Player(this, andyX, andyY);
         // this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         // this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
@@ -177,5 +183,10 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setPosition(this.mapX, this.mapY);
         this.cameras.main.setZoom(this.zoom);
         //this.scene.get('SceneUp').showInformation(this.zoom, this.mapX, this.mapY, this.positionStartMap, this.sizeX);
+		
+		if(lightOn){
+            this.lights.disable();
+            this.layer.resetPipeline();
+        }
     }
 }

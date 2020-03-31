@@ -62,6 +62,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         raspiRead('LED')
             .then(data => console.log("CLIENT: ", data));
+		lightOn = true;
     }
 
     // MOVE FROM CODEMIRROR

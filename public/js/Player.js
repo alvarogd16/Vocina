@@ -55,14 +55,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     //An example of use raspiClient
     turnOnLED() {
-        raspiRead('LED')
-            .then(data => console.log("CLIENT: ", data));
-
         raspiWrite('LED', 1);
-
-        raspiRead('LED')
-            .then(data => console.log("CLIENT: ", data));
-		lightOn = true;
+		this.scene.lightOn = true;
     }
 
     // MOVE FROM CODEMIRROR

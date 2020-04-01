@@ -1,4 +1,3 @@
-var lightOn = false;
 class SceneDown extends Phaser.Scene {
     constructor() {
         super("SceneDown");
@@ -6,6 +5,7 @@ class SceneDown extends Phaser.Scene {
         this.tileSize = 32;
         this.numOfTiles = 6;
         this.useOfTile = true;
+        this.lightOn = false;
     }
 
     //Map data
@@ -184,7 +184,7 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setZoom(this.zoom);
         //this.scene.get('SceneUp').showInformation(this.zoom, this.mapX, this.mapY, this.positionStartMap, this.sizeX);
 		
-		if(lightOn){
+		if(this.lightOn){
             this.lights.disable();
             this.layer.resetPipeline();
         }

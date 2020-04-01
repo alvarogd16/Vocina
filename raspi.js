@@ -27,6 +27,7 @@ if(isPi()){
 }
 
 const raspiWrite = (component, value) => {
+    console.log(value);
     if(component === 'LED')
         isPi() ? LEDR.writeSync(value) : valLED = value;
 };

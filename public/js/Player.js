@@ -55,8 +55,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     //An example of use raspiClient
     turnOnLED() {
+        raspiRead('LED')
+            .then(data => console.log("CLIENT: ", data));
+
         raspiWrite('LED', 1);
-		this.scene.lightOn = true;
+
+        raspiRead('LED')
+            .then(data => console.log("CLIENT: ", data));
+		lightOn = true;
     }
 
     // MOVE FROM CODEMIRROR
@@ -180,21 +186,29 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
 
             if (this.body.speed > 0) {
-                //If the sprite reaches it's destination or it touches one of the walls stabilished in the map, it's animation should stop
-                if (distance < 0.3) {
+                //If the sprite reaches one point stored in the queue means that didn't reach the goal tile (checked in a
+                //event in the 'SceneDown' class)
+                if (distance < 0.1) {
                     this.body.reset(this.target.x, this.target.y);
                     this.stopAnimation();
 
                     //Restart the movement control
                     this.andyIsMoving = false;
-                } else if (this.collidingWorldBounds) { //Reset the queue
-                    this.stopAnimation();
+                    
+                    //If the sprite reaches the last point in the queue then reset
+                    if (this.andyMovesQueue.isEmpty()) {
+                        this.scene.andyNollegadoAlObjetivo();
+                    }
+                }
+                else if (this.collidingWorldBounds) { //Reset the queue
+                    this.scene.andyNollegadoAlObjetivo();
+                    /*this.stopAnimation();
                     //Set collidingWorldBounds to false
                     this.collidingWorldBounds = false;
 
                     //Restart the movement control
                     this.andyIsMoving = false;
-                    this.andyMovesQueue = new Queue();
+                    this.andyMovesQueue = new Queue();*/
                 }
             }
         }

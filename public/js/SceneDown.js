@@ -1,3 +1,4 @@
+var lightOn = false;
 class SceneDown extends Phaser.Scene {
     constructor() {
         super("SceneDown");
@@ -5,7 +6,6 @@ class SceneDown extends Phaser.Scene {
         this.tileSize = 32;
         this.numOfTiles = 6;
         this.useOfTile = true;
-        this.lightOn = false;
     }
 
     //Map data
@@ -68,6 +68,7 @@ class SceneDown extends Phaser.Scene {
             document.getElementById("run").onclick = function () {
                 let editorContent = sceneThis.editor.getValue();
                 sceneThis.readWritten(editorContent);
+                this.disabled = true;
             };
         }
 
@@ -133,13 +134,29 @@ class SceneDown extends Phaser.Scene {
         this.andy = new Player(this, andyX, andyY);
         // this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         // this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
-
-        this.physics.add.collider(this.andy, this.layer, () => console.log("Collision"));
-        this.layer.setCollisionByProperty({collision:true});
+		
+		this.physics.add.collider(this.andy, this.layer);
+        this.layer.setCollisionByProperty({
+            collision: true
+        });								
+        //If touches the goal tile then stop
         this.layer.setTileIndexCallback([4], () => {
-            console.log("Has llegado");
-            this.layer.setTileIndexCallback([4], () => {return undefined});
+            let sceneUp = this.scene.get('SceneUp');
+            let mainScene = this.scene.get('MainScene');
+            sceneUp.write('Llegaste andy, enhorabuena!');
+            mainScene.closeScenes();
+            this.layer.setTileIndexCallback([4], () => {
+                return undefined
+            });
         });
+        //If touches a wall then stop as well, but checked here instead
+        //of in the player because here are collider events, better to use than other thing
+        this.layer.setTileIndexCallback([2], () => {
+            this.andyNollegadoAlObjetivo();
+            this.layer.setTileIndexCallback([2], () => {
+                return undefined
+            });
+        })
     }
 
 
@@ -158,6 +175,12 @@ class SceneDown extends Phaser.Scene {
         executeMe(andy);
     }
 
+	andyNollegadoAlObjetivo() {
+        let sceneUp = this.scene.get('SceneUp');
+        let mainScene = this.scene.get('MainScene');
+        sceneUp.write('No has llegado andy :(, pero a la próxima podrás conseguirlo :)');
+        mainScene.closeScenes();
+    }					   											
     zombiesReachedAndy(){
         this.cameras.main.shake(500);
 
@@ -184,7 +207,7 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setZoom(this.zoom);
         //this.scene.get('SceneUp').showInformation(this.zoom, this.mapX, this.mapY, this.positionStartMap, this.sizeX);
 		
-		if(this.lightOn){
+		if(lightOn){
             this.lights.disable();
             this.layer.resetPipeline();
         }

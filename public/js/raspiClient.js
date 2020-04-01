@@ -15,9 +15,7 @@ function raspiWrite(component, value){
 		}
 	}
 	fetch('/raspi/' + component, option)
-	.then(res => res.json())
-	.catch(error => console.error('Error:', error))
-	.then(response => console.log('Success:', response));
+	.then(console.log("LED actualizado"));
 }
 
 //Get a promise with the value of the component

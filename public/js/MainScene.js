@@ -52,7 +52,7 @@ class MainScene extends Phaser.Scene {
 
     //Stop all and adapt de screen for the transition of scenes
     closeScenes() {
-        this.scene.stop('SceneUp');
+        //this.scene.stop('SceneUp');
         this.scene.stop('SceneDown');
         this.cm.style.display = 'none';
         this.game.style.height = "100vh";
@@ -61,7 +61,7 @@ class MainScene extends Phaser.Scene {
 
     //Resume all and adapt de screen for the transition of scenes
     launchScenes() {
-        this.scene.launch("SceneUp");
+        //this.scene.launch("SceneUp");
         this.scene.launch("SceneDown", this.level);
         this.cm.style.display = 'block';
         this.game.style.height = "75vh";

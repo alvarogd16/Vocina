@@ -62,7 +62,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         raspiRead('LED')
             .then(data => console.log("CLIENT: ", data));
-		lightOn = true;
+        lightOn = true;
+    }
+
+    //An example of use raspiClient
+    OffLED() {
+        raspiRead('LED')
+            .then(data => console.log("CLIENT: ", data));
+
+        raspiWrite('LED', 0);
+
+        raspiRead('LED')
+            .then(data => console.log("CLIENT: ", data));
+        lightOn = false;
     }
 
     // MOVE FROM CODEMIRROR
@@ -80,7 +92,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.targetAux.dir = 'right';
         this.andyMovesQueue.enqueue(this.targetAux);
     }
-    
+
     //Console method to put the values of a new target (To the left) into the queue
     moveLeft(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
@@ -142,8 +154,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     /*OTHER FUNCTIONS*/
     //Change the level. Only use by teachers
-    level (password, level){
-        if(password == 1234)
+    level(password, level) {
+        if (password == 1234)
             this.scene.scene.get('MainScene').nextLevel(level);
     }
 
@@ -194,21 +206,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                     //Restart the movement control
                     this.andyIsMoving = false;
-                    
-                    //If the sprite reaches the last point in the queue then reset
-                    if (this.andyMovesQueue.isEmpty()) {
-                        this.scene.andyNollegadoAlObjetivo();
+
+                    //If the sprite reaches the last point in the queue and that point isn't the GOAL then reset
+                    if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
+                        this.scene.andyNoHallegadoAlObjetivo();
                     }
-                }
-                else if (this.collidingWorldBounds) { //Reset the queue
-                    this.scene.andyNollegadoAlObjetivo();
-                    /*this.stopAnimation();
-                    //Set collidingWorldBounds to false
-                    this.collidingWorldBounds = false;
+                } else if (this.collidingWorldBounds) { //If collides a bound then didn't reach the GOAL
+                    this.stopAnimation();
 
                     //Restart the movement control
                     this.andyIsMoving = false;
-                    this.andyMovesQueue = new Queue();*/
+                    this.scene.andyNoHallegadoAlObjetivo();
                 }
             }
         }

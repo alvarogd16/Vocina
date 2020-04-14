@@ -1,7 +1,7 @@
 /** Class representing the zombie.
   * @extends Phaser.GameObjects.Sprite
   */
- class Zombie extends Phaser.Physics.Arcade.Sprite {
+class Zombie extends Phaser.Physics.Arcade.Sprite {
 
 	/**
 	 * Create the zombie.

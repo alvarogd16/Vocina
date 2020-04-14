@@ -2,7 +2,7 @@ const widthD = document.getElementById('gameContainer').clientWidth
 const heightD = document.getElementById('gameContainer').clientHeight
 
 const config = {
-    type: Phaser.WEBGL,  //Automatically select between Canvas and Webgl
+    type: Phaser.WEBGL,
     width: widthD,
     height: heightD,
     parent: 'gameContainer',
@@ -11,7 +11,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false
+            debug: true
         }
     }
 }

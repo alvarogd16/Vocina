@@ -14,6 +14,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, frame);
 
         this.scene = scene;
+        this.tileSize = this.scene.tileSize;
+        this.scale = this.scene.andyScale;
         this.canMove = true;
         scene.physics.world.enable(this);
         scene.add.existing(this);
@@ -31,11 +33,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.collidingWorldBounds = false;
 
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-        this.body.setSize(scene.tileSize, scene.tileSize, x, y);
+        this.body.setSize(scene.tileSize/this.scale, scene.tileSize/this.scale, x, y);
 
-        this.lastAnim = null;
         this.vel = 200;
-        this.onStairs = false;
         this.direction = null;
         this.target = new Phaser.Math.Vector2();
 
@@ -53,28 +53,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     /*FUNCTIONS TO USE BY USER*/
 
-    //An example of use raspiClient
+    //Turn on game light and raspberry LED
     turnOnLED() {
-        raspiRead('LED')
-            .then(data => console.log("CLIENT: ", data));
-
         raspiWrite('LED', 1);
-
-        raspiRead('LED')
-            .then(data => console.log("CLIENT: ", data));
-        lightOn = true;
+        this.scene.setLight(true);
     }
 
-    //An example of use raspiClient
-    OffLED() {
-        raspiRead('LED')
-            .then(data => console.log("CLIENT: ", data));
-
+    //Turn off game light and raspberry LED
+    turnOffLED() {
         raspiWrite('LED', 0);
-
-        raspiRead('LED')
-            .then(data => console.log("CLIENT: ", data));
-        lightOn = false;
+        this.scene.setLight(false);
     }
 
     // MOVE FROM CODEMIRROR
@@ -83,10 +71,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveRight(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x + 32 * numberOfMovs;
+            this.targetAux.x = this.x + this.tileSize * numberOfMovs;
             this.targetAux.y = this.y;
         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x + 32 * numberOfMovs;
+            this.targetAux.x = this.andyMovesQueue.last().x + this.tileSize * numberOfMovs;
             this.targetAux.y = this.andyMovesQueue.last().y;
         }
         this.targetAux.dir = 'right';
@@ -97,10 +85,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveLeft(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x - 32 * numberOfMovs;
+            this.targetAux.x = this.x - this.tileSize * numberOfMovs;
             this.targetAux.y = this.y;
         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x - 32 * numberOfMovs;
+            this.targetAux.x = this.andyMovesQueue.last().x - this.tileSize * numberOfMovs;
             this.targetAux.y = this.andyMovesQueue.last().y;
         }
         this.targetAux.dir = 'left';
@@ -112,10 +100,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
             this.targetAux.x = this.x;
-            this.targetAux.y = this.y + 32 * numberOfMovs;
+            this.targetAux.y = this.y + this.tileSize * numberOfMovs;
         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
             this.targetAux.x = this.andyMovesQueue.last().x;
-            this.targetAux.y = this.andyMovesQueue.last().y + 32 * numberOfMovs;
+            this.targetAux.y = this.andyMovesQueue.last().y + this.tileSize * numberOfMovs;
         }
         this.targetAux.dir = 'down';
         this.andyMovesQueue.enqueue(this.targetAux);
@@ -126,10 +114,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
             this.targetAux.x = this.x;
-            this.targetAux.y = this.y - 32 * numberOfMovs;
+            this.targetAux.y = this.y - this.tileSize * numberOfMovs;
         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
             this.targetAux.x = this.andyMovesQueue.last().x;
-            this.targetAux.y = this.andyMovesQueue.last().y - 32 * numberOfMovs;
+            this.targetAux.y = this.andyMovesQueue.last().y - this.tileSize * numberOfMovs;
         }
         this.targetAux.dir = 'up';
         this.andyMovesQueue.enqueue(this.targetAux);
@@ -149,7 +137,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.startAnimation();
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-        this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 30);
+        this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 60);
     }
 
     /*OTHER FUNCTIONS*/

@@ -14,69 +14,33 @@
     <script src="lib/codemirror.js"></script>
     <script src="vocinaSyntax/javascript.js"></script>
     <link rel="stylesheet" href="lib/codemirrorChange.css">
-
-    <style>
-        /*TODO FILE CSS*/
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        #codeArea {
-            position: relative;
-        }
-
-        .but {
-            position: absolute;
-            right: 40px;
-            bottom: 20px;
-            width: 80px;
-            height: 45px;
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-            background-color: rgb(19, 102, 158);
-            font-size: 20px;
-            color: white;
-        }
-
-        .but:hover {
-            background-color: rgb(13, 69, 105);
-        }
-
-        .but:active {
-            transform: translateY(4px);
-        }
-    </style>
+    <link rel="stylesheet" href="lib/main.css">
 </head>
 
-<body style="background-color: rgb(10, 33, 53);">
-    <!--Button to test transition scenes-->
-    <!--<button id="hide">HIDE</button>-->
-
-    <div id="principal" style="max-width: 500px; margin:auto;">
+<body>
+    <div id="principal">
         <!--Editor zone-->
         <div id="codeArea">
-            <textarea id="code" style="height: 25vh; width: 100%;"></textarea>
+            <textarea id="code"></textarea>
             <button id="run" class="but">RUN</button>
         </div>
 
         <!--Game zone-->
-        <div id="gameContainer" style="height: 75vh; width: 100%;"></div>
+        <div id="gameContainer"></div>
     </div>
 
     <!-- Game files -->
+    <script src="js/debugInfo.js"></script>
     <script src="js/raspiClient.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/Queue.js"></script>
-    <script src="js/Player.js"></script>
-    <script src="js/Zombie.js"></script>
+    <script src="js/sprites/Player.js"></script>
+    <script src="js/sprites/Zombie.js"></script>
     <script src="js/DialogPlayer.js"></script>
-    <script src="js/animationsPruebaSceneUp.js"></script>
-    <script src="js/SceneUp.js"></script>
-    <script src="js/SceneDown.js"></script>
-    <script src="js/MainScene.js"></script>
-    <script src="js/phaser.js"></script>
+    <script src="js/scenes/SceneUp.js"></script>
+    <script src="js/scenes/SceneDown.js"></script>
+    <script src="js/scenes/MainScene.js"></script>
+    <script src="js/phaser.js" type="module"></script>
 </body>
 
 </html>

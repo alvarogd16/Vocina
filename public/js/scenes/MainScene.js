@@ -1,13 +1,14 @@
 class MainScene extends Phaser.Scene {
     constructor() {
         super("MainScene");
+
+        this.debugMode = true;  //Show information and alllow you to move the camera
+        this.level = 1;         //Each level has a .json file
+        this.maxLevels = 2;
     }
 
     create() {
         console.log("Creating game");
-
-        this.level = 1;
-        this.maxLevels = 2;
 
         //Call the scenes
         this.scene.launch("SceneUp");
@@ -16,6 +17,10 @@ class MainScene extends Phaser.Scene {
         //Variables to hide function
         this.cm = document.getElementById('codeArea');
         this.game = document.getElementById('gameContainer');
+
+        //Keyboards        
+        this.keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        this.key8 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT);
     }
 
     //Chenge to the next level
@@ -68,5 +73,11 @@ class MainScene extends Phaser.Scene {
         this.cm.style.display = 'block';
         this.game.style.height = "75vh";
         this.scale.resize(document.getElementById('gameContainer').clientWidth, document.getElementById('gameContainer').clientHeight);
+    }
+
+    update(time){
+        //To enable or disable debugMode 
+        if(this.keyShift.isDown && this.key8.isDown)
+            this.debugMode = !this.debugMode;
     }
 }

@@ -2,8 +2,7 @@ class SceneDown extends Phaser.Scene {
     constructor() {
         super("SceneDown");
 
-        this.tileSize = 225; //32
-        this.numOfTiles = 5; //6
+        this.mapSize = 1125;
         this.arrivedGoal = false; //This is used for the player (update snippet in which it's checked whether the player reached a target or not) to know how to distinguish between reaching a target (means didn't reach the GOAL) and reaching the GOAL
         this.lightOn = true;
         this.widthD = document.getElementById('gameContainer').clientWidth
@@ -47,13 +46,8 @@ class SceneDown extends Phaser.Scene {
             }
         });
 
-        this.load.image("vocina-tiles", "assets/newMapExtruder.png"); //Test tile
+        //this.load.image("vocina-tiles", "assets/newMapExtruder.png"); //Test tile
         this.load.image("map", "assets/PruebasArtista/Salon.png"); //Artist design 
-
-        // this.nomLevel = "Level" + this.numLevel.toString(); //The name of the level is Level follow by the number ej. Level1
-        // this.load.tilemapTiledJSON(this.nomLevel, "assets/" + this.nomLevel + ".json");
-
-        this.load.tilemapTiledJSON("PruebaVocina", "assets/PruebasArtista/PruebaVocina2.json");
     }
 
     create() {
@@ -85,8 +79,6 @@ class SceneDown extends Phaser.Scene {
         this.key6 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX);
         this.key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
         this.key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE);
-        this.key7 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SEVEN);
-        this.key9 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_NINE);
         this.keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         this.key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FIVE);
 
@@ -94,89 +86,49 @@ class SceneDown extends Phaser.Scene {
 
         
         //Some constants to the camera and map positions
-        this.sizeMapOriginal = this.tileSize * this.numOfTiles; //Map size original
-        //this.positionStartMap = widthD - ((widthD/2) + (this.sizeMapOriginal/2)); //The position to center the map   
-        this.zoom = this.widthD / this.sizeMapOriginal; //Zoom level to adapt the map to the scene 
-
-
-        // Define tiles used in map.
-        // this.Level = this.add.tilemap(this.nomLevel);
-        // let colors = this.Level.addTilesetImage("colors", "vocina-tiles", 32, 32, 1, 2);
-
-        // this.layer = this.Level.createStaticLayer("layer", [colors], this.positionStartMap, this.positionStartMap);
-
-        this.Level = this.add.tilemap("PruebaVocina");
-        let colors = this.Level.addTilesetImage("Salon", "map", this.tileSize, this.tileSize, 0, 0);
-        this.layer = this.Level.createStaticLayer("Capa de patrones 1", [colors], 0, 0); //this.positionStartMap
-
-
-        // Set camera position and size.
-        this.size = this.widthD;
+        this.zoom = this.widthD / this.mapSize; //Zoom level to adapt the map to the scene 
+        // this.size = this.widthD;
         this.mapX = 0;
         this.mapY = this.heightD - this.widthD;
-        this.center = this.sizeMapOriginal/2;
-        this.cameras.main.setSize(this.size, this.size);
+        //this.center = this.mapSize/2;
+        this.cameras.main.setSize(this.mapSize, this.mapSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
-        this.cameras.main.centerOn(this.center, this.center);
-        this.cameras.main.setZoom(this.zoom);
+        // this.cameras.main.centerOn(this.center, this.center);
+        // this.cameras.main.setZoom(this.zoom);
         
+        this.sprite = this.add.image(0, 0, 'map').setOrigin(0);
+        this.sprite.setScale(this.zoom);
 
+        this.mapNewSize = this.mapSize * this.zoom;
         /* ILLUMINATION */
-        this.layer.setPipeline('Light2D');
-        let light = this.lights.addLight(0, 0, 200).setScrollFactor(0.0);
-        this.lights.enable().setAmbientColor(0x555555);
+        // this.layer.setPipeline('Light2D');
+        // let light = this.lights.addLight(0, 0, 200).setScrollFactor(0.0);
+        // this.lights.enable().setAmbientColor(0x555555);
 
 
         /* PHYSICS AND PLAYER */
         //Set position [1, 5]
-        this.andyX = this.tileSize / 2;
-        this.andyY = this.tileSize / 2;
-        this.andyScale = 1;
+        this.andyX = this.mapNewSize / 3;
+        this.andyY = this.mapNewSize / 3;
+        this.andyScale = 4;
 
         // Set physics boundaries from map width and height and create the player
         this.physics.world.setBounds(0, 0,
-            this.sizeMapOriginal,
-            this.sizeMapOriginal);
+            this.mapNewSize,
+            this.mapNewSize);
 
         this.andy = new Player(this, this.andyX, this.andyY).setScale(this.andyScale);
         //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
 
-        //this.physics.add.collider(this.andy, this.layer);
-        // this.layer.setCollisionByProperty({
-        //     collision: true
-        // });
-
-        // //If touches the GOAL tile then stop
-        // this.layer.setTileIndexCallback([4], () => {
-        //     this.andyHaLLegadoAlObjetivo();
-        //     this.layer.setTileIndexCallback([4], () => {
-        //         return undefined
-        //     });
-
-        // });
         
-
-        // //If touches a wall then stop as well, but checked here instead
-        // //of in the player because here are collider events, better to use than other thing
-        // this.layer.setTileIndexCallback([2], () => {
-        //     //This has to be done here because in the player class can't be considered, because of there isn't any wall detection and can't reset those variable there, directly when andy reaches a wall comes here
-        //     this.andy.stopAnimation();
-        //     this.andy.andyIsMoving = false;
-            
-        //     this.andyNoHallegadoAlObjetivo();
-        //     this.layer.setTileIndexCallback([2], () => {
-        //         return undefined
-        //     })
-        // });
-
         /* DEBUG INFO */
-        if(this.debugMode){
-            showInfoCameras(this.size, this.mapX, this.mapY, this.center, this.zoom, false);
-            showInfoTile(this.tileSize,this.numOfTiles, this.sizeMapOriginal, this.numLevel, false);
-            showInfoAndy(this.andyX, this.andyY, this.andyScale, false);
-            showInfoRaspi(false);
-        }
+        // if(this.debugMode){
+        //     showInfoCameras(this.size, this.mapX, this.mapY, this.center, this.zoom, false);
+        //     showInfoTile(this.tileSize,this.numOfTiles, this.sizeMapOriginal, this.numLevel, false);
+        //     showInfoAndy(this.andyX, this.andyY, this.andyScale, false);
+        //     showInfoRaspi(false);
+        // }
     }
 
     /*EJECUTE CODE*/
@@ -246,19 +198,16 @@ class SceneDown extends Phaser.Scene {
                 if (this.key6.isDown) this.mapX++;
                 if (this.key1.isDown) this.zoom -= 0.05;
                 if (this.key3.isDown) this.zoom += 0.05;
-                if (this.key7.isDown) this.size--;
-                if (this.key9.isDown) this.size++;
                 if (this.key5.isDown) this.mainScene.nextLevel();
             }
 
             this.cameras.main.setSize(this.size, this.widthD);
             this.cameras.main.setPosition(this.mapX, this.mapY);
-            this.cameras.main.setZoom(this.zoom);
         }
 
-        if (this.lightOn) {
-            this.lights.disable();
-            this.layer.resetPipeline();
-        }
+        // if (this.lightOn) {
+        //     this.lights.disable();
+        //     this.layer.resetPipeline();
+        // }
     }
 }

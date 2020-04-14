@@ -32,7 +32,7 @@ class SceneUp extends Phaser.Scene {
 
     create() {
         //this.add.image(0, 0, "dialogs").setOrigin(0).setScale(0.625);
-        this.dialogPlayer = new DialogPlayer(this, 32, 32);
+        //this.dialogPlayer = new DialogPlayer(this, 32, 32);
 
         let textGameObject = this.add.text(80, 20, '', {wordWrap: {width: 310}});
         this.typing = this.plugins.get('rextexttypingplugin').add(textGameObject, {

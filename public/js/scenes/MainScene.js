@@ -2,7 +2,7 @@ class MainScene extends Phaser.Scene {
     constructor() {
         super("MainScene");
 
-        this.debugMode = true;  //Show information and alllow you to move the camera
+        this.debugMode = false;  //Show information and alllow you to move the camera
         this.level = 1;         //Each level has a .json file
         this.maxLevels = 2;
     }

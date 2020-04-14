@@ -14,8 +14,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, frame);
 
         this.scene = scene;
-        this.tileSize = this.scene.tileSize;
-        this.scale = this.scene.andyScale;
+        this.tileSize = 80;
         this.canMove = true;
         scene.physics.world.enable(this);
         scene.add.existing(this);
@@ -33,8 +32,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.collidingWorldBounds = false;
 
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-        this.body.setSize(scene.tileSize/this.scale, scene.tileSize/this.scale, x, y);
+        this.body.setSize(15, 15, x, y);
 
+        this.lastAnim = null;
         this.vel = 200;
         this.direction = null;
         this.target = new Phaser.Math.Vector2();

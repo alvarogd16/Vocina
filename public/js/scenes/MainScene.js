@@ -3,6 +3,7 @@ class MainScene extends Phaser.Scene {
         super("MainScene");
 
         this.debugMode = false;  //Show information and alllow you to move the camera
+        this.keysForDebugAreDown = false;
         this.level = 1;         //Each level has a .json file
         this.maxLevels = 2;
     }
@@ -77,7 +78,14 @@ class MainScene extends Phaser.Scene {
 
     update(time){
         //To enable or disable debugMode 
-        if(this.keyShift.isDown && this.key8.isDown)
+        if(this.keyShift.isDown && this.key8.isDown){
             this.debugMode = !this.debugMode;
+            if(this.debugMode)
+                console.log('Debug ACTIVATED')
+            else
+                console.log('Debug DISABLED')
+        }
+        
+        
     }
 }

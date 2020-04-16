@@ -66,8 +66,9 @@ class SceneDown extends Phaser.Scene {
             let sceneThis = this;
             document.getElementById("run").onclick = function () {
                 let editorContent = sceneThis.editor.getValue();
-                sceneThis.readWritten(editorContent);
-                this.disabled = true;
+                sceneThis.readWritten(editorContent);        
+                if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
+                    this.disabled = true;
             };
         }
 
@@ -84,7 +85,7 @@ class SceneDown extends Phaser.Scene {
 
         /* MAP AND CAMERAS*/
 
-        
+
         //Some constants to the camera and map positions
         this.zoom = this.widthD / this.mapSize; //Zoom level to adapt the map to the scene 
         // this.size = this.widthD;
@@ -95,7 +96,7 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setPosition(this.mapX, this.mapY);
         // this.cameras.main.centerOn(this.center, this.center);
         // this.cameras.main.setZoom(this.zoom);
-        
+
         this.sprite = this.add.image(0, 0, 'map').setOrigin(0);
         this.sprite.setScale(this.zoom);
 
@@ -121,7 +122,7 @@ class SceneDown extends Phaser.Scene {
         //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
 
-        
+
         /* DEBUG INFO */
         // if(this.debugMode){
         //     showInfoCameras(this.size, this.mapX, this.mapY, this.center, this.zoom, false);
@@ -147,35 +148,37 @@ class SceneDown extends Phaser.Scene {
     }
 
     andyHaLLegadoAlObjetivo() {
-        this.arrivedGoal = true;
-        let sceneUp = this.scene.get('SceneUp');
-        let mainScene = this.scene.get('MainScene');
-        sceneUp.write('Llegaste andy, enhorabuena!');
-        this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
-            this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
+        if (!this.mainScene.debugMode) { //Only if debugMode of the mainScene is not activated
+            this.arrivedGoal = true;
+            let sceneUp = this.scene.get('SceneUp');
+            sceneUp.write('Llegaste andy, enhorabuena!');
+            this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
+                this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
 
-            this.editor.setValue(""); //Clear codemirror field
-            this.editor.clearHistory();
+                this.editor.setValue(""); //Clear codemirror field
+                this.editor.clearHistory();
 
-            this.andy.OffLED(); //Also LED (Lantern light in level 1) must be reset
+                this.andy.OffLED(); //Also LED (Lantern light in level 1) must be reset
 
-            mainScene.closeScenes();
+                this.mainScene.closeScenes();
 
-        }, [], this);
+            }, [], this);
+        }
     }
 
     andyNoHallegadoAlObjetivo() {
-        let sceneUp = this.scene.get('SceneUp');
-        let mainScene = this.scene.get('MainScene');
-        sceneUp.write('No has llegado andy :(, pero a la próxima podrás conseguirlo :)');
-        this.time.delayedCall(14000, function () { //Just to wait until the sceneUp showed the whole message
-            this.editor.setValue(""); //Clear codemirror field
-            this.editor.clearHistory();
+        if (!this.mainScene.debugMode) { //Only if debugMode of the mainScene is not activated
+            let sceneUp = this.scene.get('SceneUp');
+            sceneUp.write('No has llegado andy :(, pero a la próxima podrás conseguirlo :)');
+            this.time.delayedCall(14000, function () { //Just to wait until the sceneUp showed the whole message
+                this.editor.setValue(""); //Clear codemirror field
+                this.editor.clearHistory();
 
-            this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
+                this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
 
-            mainScene.closeScenes();
-        }, [], this);
+                this.mainScene.closeScenes();
+            }, [], this);
+        }
     }
 
     zombiesReachedAndy() {
@@ -186,13 +189,13 @@ class SceneDown extends Phaser.Scene {
         }, [], this);
     }
 
-    setLight(value){
+    setLight(value) {
         this.lightOn = value;
     }
 
     update() {
         //Camera debug
-        if(this.debugMode){
+        if (this.debugMode) {
             if (this.keyShift.isDown) {
                 if (this.key4.isDown) this.mapX--;
                 if (this.key6.isDown) this.mapX++;

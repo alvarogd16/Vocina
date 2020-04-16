@@ -32,7 +32,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.collidingWorldBounds = false;
 
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-        this.body.setSize(15, 15, x, y);
+        this.body.setSize(225, 225, x, y);
 
         this.lastAnim = null;
         this.vel = 200;
@@ -46,7 +46,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         /*ANIMATIONS*/
 
-        createAnimations(scene);
+        createAnimationsPlayer(scene);
         this.andyMovesQueue = new Queue();
     }
 
@@ -133,7 +133,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.target.y = this.targetAux.y;
 
         this.direction = dir;
-        this.animationName = "walk-up";
+        this.animationName = "LateralDerecho";
         this.startAnimation();
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)

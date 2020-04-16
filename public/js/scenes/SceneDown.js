@@ -21,10 +21,10 @@ class SceneDown extends Phaser.Scene {
         // Player sprite.
         this.load.spritesheet({
             key: 'player',
-            url: "assets/player.png",
+            url: "assets/LateralDerecho.png",
             frameConfig: {
-                frameWidth: 21, //The width of the frame in pixels.
-                frameHeight: 26, //The height of the frame in pixels. Uses the frameWidth value if not provided.
+                frameWidth: 225, //The width of the frame in pixels.
+                frameHeight: 225, //The height of the frame in pixels. Uses the frameWidth value if not provided.
                 startFrame: 0, //The first frame to start parsing from.
                 endFrame: 12, //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
                 margin: 0, //The margin in the image. This is the space around the edge of the frames.
@@ -110,7 +110,7 @@ class SceneDown extends Phaser.Scene {
         //Set position [1, 5]
         this.andyX = this.mapNewSize / 3;
         this.andyY = this.mapNewSize / 3;
-        this.andyScale = 4;
+        this.andyScale = 0.5;
 
         // Set physics boundaries from map width and height and create the player
         this.physics.world.setBounds(0, 0,

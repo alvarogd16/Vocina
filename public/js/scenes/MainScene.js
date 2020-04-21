@@ -78,12 +78,25 @@ class MainScene extends Phaser.Scene {
 
     update(time){
         //To enable or disable debugMode 
-        if(this.keyShift.isDown && this.key8.isDown){
+        if(this.keyShift.isDown && this.key8.isDown && !this.keysForDebugAreDown){
             this.debugMode = !this.debugMode;
-            if(this.debugMode)
+            this.keysForDebugAreDown = true;//This is just to avoid the keys enabling and disabling the debugMode a lot of times, so they'll do it just once
+            
+            //    console.log('JAJLASDJFASSKJAJKAJKSDJKLFAJKLS');
+            if(this.debugMode){
                 console.log('Debug ACTIVATED')
+                showInfoCameras();
+                showInfoTile();
+                showInfoAndy();
+                let player = this.scene.get('Player');
+                this.scene.debug.body(player);
+                //showInfoRaspi();  //for the moment let it like this, because it seems that is causing problems when the raspi isn't connected
+            }
             else
                 console.log('Debug DISABLED')
+        }
+        else if(!this.keyShift.isDown && !this.key8.isDown){
+            this.keysForDebugAreDown = false;
         }
         
         

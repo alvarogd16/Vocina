@@ -1,4 +1,10 @@
+/** Main class
+ * @extends Phaser.Scene
+ */
 class MainScene extends Phaser.Scene {
+    /**
+     * Create the scene
+     */
     constructor() {
         super("MainScene");
 
@@ -8,6 +14,9 @@ class MainScene extends Phaser.Scene {
         this.maxLevels = 2;
     }
 
+    /**
+     * Make the scene
+     */
     create() {
         console.log("Creating game");
 
@@ -24,7 +33,9 @@ class MainScene extends Phaser.Scene {
         this.key8 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT);
     }
 
-    //Chenge to the next level
+    /**
+     * Change to the next level
+     */
     nextLevel() {
         this.closeScenes();
         this.level++;
@@ -38,7 +49,10 @@ class MainScene extends Phaser.Scene {
         }
     }
 
-    //Change to specific level
+    /**
+     * Change to specific level
+     * @param {number} level - The level to change
+     */
     nextLevel(level) {
         this.closeScenes();
         this.level = level;
@@ -52,11 +66,16 @@ class MainScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * When the game ends
+     */
     endGame() {
         this.add.text(10, 10, 'GAME OVER');
     }
 
-    //Stop all and adapt de screen for the transition of scenes
+    /**
+     * Stop all and adapt de screen for the transition of scenes
+     */
     closeScenes() {
         this.scene.stop('SceneUp');
         this.scene.stop('SceneDown');
@@ -67,7 +86,9 @@ class MainScene extends Phaser.Scene {
         this.launchScenes();
     }
 
-    //Resume all and adapt de screen for the transition of scenes
+    /**
+     * Resume all and adapt de screen for the transition of scenes
+     */
     launchScenes() {
         this.scene.launch("SceneUp");
         this.scene.launch("SceneDown", this.level);
@@ -76,29 +97,25 @@ class MainScene extends Phaser.Scene {
         this.scale.resize(document.getElementById('gameContainer').clientWidth, document.getElementById('gameContainer').clientHeight);
     }
 
-    update(time){
+    /**
+     * Resume all and adapt de screen for the transition of scenes
+     */
+    update(){
         //To enable or disable debugMode 
         if(this.keyShift.isDown && this.key8.isDown && !this.keysForDebugAreDown){
             this.debugMode = !this.debugMode;
             this.keysForDebugAreDown = true;//This is just to avoid the keys enabling and disabling the debugMode a lot of times, so they'll do it just once
-            
-            //    console.log('JAJLASDJFASSKJAJKAJKSDJKLFAJKLS');
             if(this.debugMode){
                 console.log('Debug ACTIVATED')
                 showInfoCameras();
                 showInfoTile();
                 showInfoAndy();
-                let player = this.scene.get('Player');
-                this.scene.debug.body(player);
                 //showInfoRaspi();  //for the moment let it like this, because it seems that is causing problems when the raspi isn't connected
             }
             else
                 console.log('Debug DISABLED')
         }
-        else if(!this.keyShift.isDown && !this.key8.isDown){
+        else if(!this.keyShift.isDown && !this.key8.isDown)
             this.keysForDebugAreDown = false;
-        }
-        
-        
     }
 }

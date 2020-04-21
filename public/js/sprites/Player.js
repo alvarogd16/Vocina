@@ -53,13 +53,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     /*FUNCTIONS TO USE BY USER*/
 
-    //Turn on game light and raspberry LED
+    /**Turn on game light and raspberry LED*/
     turnOnLED() {
         raspiWrite('LED', 1);
         this.scene.setLight(true);
     }
 
-    //Turn off game light and raspberry LED
+    /**Turn off game light and raspberry LED*/
     turnOffLED() {
         raspiWrite('LED', 0);
         this.scene.setLight(false);
@@ -67,7 +67,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // MOVE FROM CODEMIRROR
 
-    //Console method to put the values of a new target (To the right) into the queue
+    /**
+     * Console method to put the values of a new target (To the right) into the queue
+     * @param {number} numberOfMovs - The number of right moves
+     */
     moveRight(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
@@ -81,7 +84,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.andyMovesQueue.enqueue(this.targetAux);
     }
 
-    //Console method to put the values of a new target (To the left) into the queue
+    /**
+     * Console method to put the values of a new target (To the left) into the queue
+     * @param {number} numberOfMovs - The number of left moves
+     */
     moveLeft(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
@@ -95,7 +101,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.andyMovesQueue.enqueue(this.targetAux);
     }
 
-    //Console method to put the values of a new target (To move it down) into the queue
+    /**
+     * Console method to put the values of a new target (To move it down) into the queue
+     * @param {number} numberOfMovs - The number of down moves
+     */
     moveDown(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
@@ -109,7 +118,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.andyMovesQueue.enqueue(this.targetAux);
     }
 
-    //Console method to put the values of a new target (To move it up) into the queue
+    /**
+     * Console method to put the values of a new target (To move it up) into the queue
+     * @param {number} numberOfMovs - The number of up moves
+     */
     moveUp(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
@@ -125,7 +137,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     // MOVING
 
-    //Method to finally move the player
+    /**
+     * Method to finally move the player
+     * @param {string} dir - The move's direction
+     */
     moving(dir) {
         //Take the first target in the queue
         this.targetAux = this.andyMovesQueue.first();
@@ -141,27 +156,43 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     /*OTHER FUNCTIONS*/
-    //Change the level. Only use by teachers
+
+    /**
+     * Change the level. Only use by teachers
+     * @param {number} password - Password to go to the next level 
+     * @param {number} level - What level are you going to change
+     */
     level(password, level) {
         if (password == 1234)
             this.scene.scene.get('MainScene').nextLevel(level);
     }
 
-    //turn the animation in 'this.animationName' on
+    /**
+     * Turn the animation in 'this.animationName' on
+     */
     startAnimation() {
         this.anims.play(this.animationName, true);
     }
 
+    /**
+     * Stop the animation from running, freezing it at its current frame
+     */
     stopAnimation() {
-        //  This will just top the animation from running, freezing it at its current frame
         this.anims.stop();
     }
 
+    /**
+     * TODO
+     */
     onWorldBounds() {
         this.collidingWorldBounds = true;
     }
 
-    //Before scene update
+    /**
+     * Before scene update. All player logic
+     * @param {number} time 
+     * @param {number} delta 
+     */
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
 

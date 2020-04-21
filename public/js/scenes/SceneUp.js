@@ -1,8 +1,17 @@
+/** Class for the info game
+ * @extends Phaser.Scene
+ */
 class SceneUp extends Phaser.Scene {
+    /**
+     * Create the scene
+     */
     constructor() {
         super("SceneUp");
     }
 
+    /**
+     * Load all assets in cache
+     */
     preload() {
         this.mainScene = this.scene.get('MainScene');
         this.debugMode = this.mainScene.debugMode;
@@ -29,7 +38,9 @@ class SceneUp extends Phaser.Scene {
         });
         
     }
-
+    /**
+     * Make the scene
+     */
     create() {
         //this.add.image(0, 0, "dialogs").setOrigin(0).setScale(0.625);
         //this.dialogPlayer = new DialogPlayer(this, 32, 32);
@@ -45,6 +56,10 @@ class SceneUp extends Phaser.Scene {
         this.typing.start('Venga andy amigo, estamos esperando a que te muevas anda');
     }
     
+    /**
+     * Write text in the scene like typing
+     * @param {string} sentence 
+     */
     write(sentence){
         this.typing.start(sentence);
     }

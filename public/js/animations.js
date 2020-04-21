@@ -83,12 +83,12 @@ function createAnimationsSceneUp(scene) {
 
 function createAnimationsPlayer(scene) {
     let config = {
-        key: 'LateralDerecho',
+        key: 'chicoCamina',
         frames: scene.anims.generateFrameNumbers('player', {
             start: 0,
-            end: 2
+            end: 5
         }),
-        frameRate: 15,
+        frameRate: 10,
         repeat: -1
     };
     scene.anims.create(config);

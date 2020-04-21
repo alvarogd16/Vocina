@@ -1,4 +1,10 @@
+/** Class where the game action occurs
+ *  @extends Phaser.Scene
+ */
 class SceneDown extends Phaser.Scene {
+    /**
+     * Create the scene
+     */
     constructor() {
         super("SceneDown");
 
@@ -7,17 +13,23 @@ class SceneDown extends Phaser.Scene {
         this.lightOn = true;
         this.widthD = document.getElementById('gameContainer').clientWidth
         this.heightD = document.getElementById('gameContainer').clientHeight
+
+        this.mainScene = this.scene.get('MainScene');
+        this.debugMode = this.mainScene.debugMode;
     }
 
-    //Map data
+    /**
+     * Map data from MainScene
+     * @param {number} numLevel - The level's number
+     */
     init(numLevel) {
         this.numLevel = numLevel;
     }
 
+    /**
+     * Load all assets in cache
+     */
     preload() {
-        this.mainScene = this.scene.get('MainScene');
-        this.debugMode = this.mainScene.debugMode;
-
         // Player sprite.
         this.load.spritesheet({
             key: 'player',
@@ -46,12 +58,16 @@ class SceneDown extends Phaser.Scene {
             }
         });
 
-        //this.load.image("vocina-tiles", "assets/newMapExtruder.png"); //Test tile
-        this.load.image("map", "assets/PruebasArtista/Salon.png"); //Artist design 
+        //Artist design
+        this.load.image("map", "assets/PruebasArtista/Salon.png");  
     }
 
+    /**
+     * Make the scene 
+     */
     create() {
         /* EDITOR */
+
         //Check that it is not already created
         if (document.getElementsByClassName('CodeMirror').length === 0) {
             this.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
@@ -72,7 +88,6 @@ class SceneDown extends Phaser.Scene {
             };
         }
 
-
         /*KEYBOARD*/
 
         //To debug camera
@@ -83,8 +98,8 @@ class SceneDown extends Phaser.Scene {
         this.keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         this.key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FIVE);
 
-        /* MAP AND CAMERAS*/
 
+        /* MAP AND CAMERAS*/
 
         //Some constants to the camera and map positions
         this.zoom = this.widthD / this.mapSize; //Zoom level to adapt the map to the scene 
@@ -101,13 +116,17 @@ class SceneDown extends Phaser.Scene {
         this.sprite.setScale(this.zoom);
 
         this.mapNewSize = this.mapSize * this.zoom;
+
+
         /* ILLUMINATION */
+
         // this.layer.setPipeline('Light2D');
         // let light = this.lights.addLight(0, 0, 200).setScrollFactor(0.0);
         // this.lights.enable().setAmbientColor(0x555555);
 
 
         /* PHYSICS AND PLAYER */
+
         //Set position [1, 5]
         this.andyX = this.mapNewSize / 3;
         this.andyY = this.mapNewSize / 3;
@@ -124,6 +143,7 @@ class SceneDown extends Phaser.Scene {
 
 
         /* DEBUG INFO */
+
         // if(this.debugMode){
         //     showInfoCameras(this.size, this.mapX, this.mapY, this.center, this.zoom, false);
         //     showInfoTile(this.tileSize,this.numOfTiles, this.sizeMapOriginal, this.numLevel, false);
@@ -134,12 +154,19 @@ class SceneDown extends Phaser.Scene {
 
     /*EJECUTE CODE*/
 
-    //Create a new function with the code passed by parameter
+    /**
+     * Create a new function with the code passed by parameter
+     * @param {string} args - Arguments for the now function
+     * @param {string} code - Code for the new function
+     */
     createFunction(args, code) {
         return new Function(args, code);
     }
 
-    //Process the text in the texteditor
+    /**
+     * Process the text in the texteditor
+     * @param {string} editorContent 
+     */
     readWritten(editorContent) {
         let andy = this.andy;
         let args = 'andy';
@@ -147,6 +174,9 @@ class SceneDown extends Phaser.Scene {
         executeMe(andy);
     }
 
+    /**
+     * When andy has reached the goal
+     */
     andyHaLLegadoAlObjetivo() {
         if (!this.mainScene.debugMode) { //Only if debugMode of the mainScene is not activated
             this.arrivedGoal = true;
@@ -166,6 +196,9 @@ class SceneDown extends Phaser.Scene {
         }
     }
 
+    /**
+     * When andy has not reached the goal
+     */
     andyNoHallegadoAlObjetivo() {
         if (!this.mainScene.debugMode) { //Only if debugMode of the mainScene is not activated
             let sceneUp = this.scene.get('SceneUp');
@@ -181,6 +214,9 @@ class SceneDown extends Phaser.Scene {
         }
     }
 
+    /**
+     * When zombies reached andy
+     */
     zombiesReachedAndy() {
         this.cameras.main.shake(500);
 
@@ -189,10 +225,17 @@ class SceneDown extends Phaser.Scene {
         }, [], this);
     }
 
+    /**
+     * Set light on or off
+     * @param {boolean} value 
+     */
     setLight(value) {
         this.lightOn = value;
     }
 
+    /**
+     * Update the scene
+     */
     update() {
         //Camera debug
         if (this.debugMode) {

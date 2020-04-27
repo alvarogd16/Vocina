@@ -70,14 +70,14 @@ function createAnimations(scene) {
 function createAnimationsSceneUp(scene) {
     let config = {
         key: 'talk',
-        frames: scene.anims.generateFrameNumbers('player', {
-            start: 0,
-            end: 2
+        frames: scene.anims.generateFrameNumbers('talk', {
+            start: 5,
+            end: 6
         }),
-        frameRate: 15,
+        frameRate: 10,
         repeat: -1
     };
-    scene.anims.create(config);
+    console.log('asdfasd');
 }
 
 

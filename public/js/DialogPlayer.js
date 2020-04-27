@@ -18,7 +18,7 @@
 		scene.add.existing(this);
 
 		//Set the skins of the sprite
-		this.setTexture('player2');
+		this.setTexture('talk');
 		this.setPosition(x, y);
 
 		//Set collisions activation of the sprite
@@ -26,7 +26,7 @@
 
 		//the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
 		this.body.setSize(scene.tileSize, scene.tileSize, x, y);        
-        this.setScale(3);
+        this.setScale(1);
 
         createAnimationsSceneUp(scene);
         this.anims.play('talk', true);

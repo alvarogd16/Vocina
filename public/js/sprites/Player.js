@@ -13,8 +13,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, frame) {
         super(scene, x, y, frame);
 
+        this.tileSize = Math.trunc(scene.mapNewSize / 9);//10 Is the number of tiles thar are more or less on the map
+        this.andyScale = scene.mapNewSize / 1125;
+        this.setScale(this.andyScale);
+        
         this.scene = scene;
-        this.tileSize = 80;
+        
         this.canMove = true;
         scene.physics.world.enable(this);
         scene.add.existing(this);
@@ -32,7 +36,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.collidingWorldBounds = false;
 
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-        this.body.setSize(512, 512, x, y);
+        this.body.setSize(this.tileSize/this.andyScale, this.tileSize/this.andyScale, x, y);
 
         this.lastAnim = null;
         this.vel = 200;
@@ -131,6 +135,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.targetAux.x = this.andyMovesQueue.last().x;
             this.targetAux.y = this.andyMovesQueue.last().y - this.tileSize * numberOfMovs;
         }
+        console.log(this.x+' '+this.y);
+        console.log(this.y - this.tileSize * numberOfMovs);
         this.targetAux.dir = 'up';
         this.andyMovesQueue.enqueue(this.targetAux);
     }

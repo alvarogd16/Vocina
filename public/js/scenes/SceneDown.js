@@ -114,18 +114,14 @@ class SceneDown extends Phaser.Scene {
         // this.cameras.main.centerOn(this.center, this.center);
         // this.cameras.main.setZoom(this.zoom);
 
+        
         this.sprite = this.add.image(0, 0, 'map').setOrigin(0);
+        this.sprite.setTint(0x000033);
         this.sprite.setScale(this.zoom);
 
         this.mapNewSize = this.mapSize * this.zoom;
-
-
-        /* ILLUMINATION */
-
-        // this.layer.setPipeline('Light2D');
-        // let light = this.lights.addLight(0, 0, 200).setScrollFactor(0.0);
-        // this.lights.enable().setAmbientColor(0x555555);
-
+        
+        
 
         /* PHYSICS AND PLAYER */
 
@@ -142,6 +138,11 @@ class SceneDown extends Phaser.Scene {
             this.mapNewSize);
 
         this.andy = new Player(this, this.andyX, this.andyY);
+        
+        /* ILLUMINATION */
+        this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
+        this.light.visible = true
+        
         //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
 
@@ -211,7 +212,7 @@ class SceneDown extends Phaser.Scene {
                 this.editor.setValue(""); //Clear codemirror field
                 this.editor.clearHistory();
 
-                this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
+                //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
 
                 this.mainScene.closeScenes();
             }, [], this);
@@ -235,6 +236,7 @@ class SceneDown extends Phaser.Scene {
      */
     setLight(value) {
         this.lightOn = value;
+        this.sprite.setTint(0xffffff);
     }
 
     /**
@@ -254,10 +256,5 @@ class SceneDown extends Phaser.Scene {
             this.cameras.main.setSize(this.size, this.widthD);
             this.cameras.main.setPosition(this.mapX, this.mapY);
         }
-
-        // if (this.lightOn) {
-        //     this.lights.disable();
-        //     this.layer.resetPipeline();
-        // }
     }
 }

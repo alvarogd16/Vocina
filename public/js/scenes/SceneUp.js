@@ -70,6 +70,7 @@ class SceneUp extends Phaser.Scene {
             }, // callback before set-text
             setTextCallbackScope: null
         });
+        console.log(' -- Loaded typing plugin');
 
         this.typing.start('Andy por favor, tienes que venir a rescatarme!');
         this.time.delayedCall(4000, function () {

@@ -237,6 +237,7 @@ class SceneDown extends Phaser.Scene {
     setLight(value) {
         this.lightOn = value;
         this.sprite.setTint(0xffffff);
+        this.light.visible = false;
     }
 
     /**

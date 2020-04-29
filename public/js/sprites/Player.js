@@ -12,16 +12,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     constructor(scene, x, y, frame) {
         super(scene, x, y, frame);
-
-        this.tileSize = Math.trunc(scene.mapNewSize / 9);//10 Is the number of tiles thar are more or less on the map
-        this.andyScale = scene.mapNewSize / 1125;
-        this.setScale(this.andyScale);
         
         this.scene = scene;
+
+        //Calculated with photoshop
+        this.tileSize = 103;
+        
+        //The scale of the player is relative to the map, and an extra substraction to make it a little bit smaller
+        this.andyScale = (this.scene.mapNewSize / 1125);
+        
+        //The scale of the pixels the player has to go trhough have to be calculated based on the tileSize and on the andyScale, it has to be relative to the map.
+        //Also, a one has to be added up to the result, just to ensure more exact positioning when moving the player
+        this.tileSizeOfTheMovement = Math.trunc(this.tileSize * this.andyScale)+1;
+        
+        this.setScale(this.andyScale);
         
         this.canMove = true;
-        scene.physics.world.enable(this);
-        scene.add.existing(this);
+        this.scene.physics.world.enable(this);
+        this.scene.add.existing(this);
 
         //Set the skins of the sprite
         this.setTexture('player');
@@ -36,7 +44,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.collidingWorldBounds = false;
 
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-        this.body.setSize(this.tileSize/this.andyScale, this.tileSize/this.andyScale, x, y);
+        this.body.setSize(this.tileSize, this.tileSize);
+        
+        //With this offset calculation the hitbox is situtated right on the center of the sprite
+        let bodyOffset = Math.trunc(this.tileSize/2);
+        this.body.setOffset(bodyOffset, bodyOffset);
 
         this.lastAnim = null;
         this.vel = 200;
@@ -46,14 +58,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Boolean to control if the player cant move
         this.andyIsMoving = false;
         this.numberMov = 0;
-
-
+        
+        /* Load rotateTo plugin from SceneDown */
+        this.rotateTo = this.scene.plugins.get('rexrotatetoplugin').add(this, {
+            speed: 360
+        });
+        console.log(' -- Loaded rotateTo plugin');
+        
         /*ANIMATIONS*/
 
         createAnimationsPlayer(scene);
         this.andyMovesQueue = new Queue();
     }
-
+    
 
     /*FUNCTIONS TO USE BY USER*/
 
@@ -76,12 +93,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of right moves
      */
     moveRight(numberOfMovs) {
-        this.targetAux = new Phaser.Math.Vector2();
+        this.targetAux = new Phaser.Math.Vector2();       
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x + this.tileSize * numberOfMovs;
+            this.targetAux.x = this.x + this.tileSizeOfTheMovement * numberOfMovs;
             this.targetAux.y = this.y;
         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x + this.tileSize * numberOfMovs;
+            this.targetAux.x = this.andyMovesQueue.last().x + this.tileSizeOfTheMovement * numberOfMovs;
             this.targetAux.y = this.andyMovesQueue.last().y;
         }
         this.targetAux.dir = 'right';
@@ -95,10 +112,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveLeft(numberOfMovs) {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x - this.tileSize * numberOfMovs;
+            this.targetAux.x = this.x - this.tileSizeOfTheMovement * numberOfMovs;
             this.targetAux.y = this.y;
         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x - this.tileSize * numberOfMovs;
+            this.targetAux.x = this.andyMovesQueue.last().x - this.tileSizeOfTheMovement * numberOfMovs;
             this.targetAux.y = this.andyMovesQueue.last().y;
         }
         this.targetAux.dir = 'left';
@@ -110,13 +127,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of down moves
      */
     moveDown(numberOfMovs) {
-        this.targetAux = new Phaser.Math.Vector2();
+        this.targetAux = new Phaser.Math.Vector2(); 
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
             this.targetAux.x = this.x;
-            this.targetAux.y = this.y + this.tileSize * numberOfMovs;
+            this.targetAux.y = this.y + this.tileSizeOfTheMovement * numberOfMovs;
         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
             this.targetAux.x = this.andyMovesQueue.last().x;
-            this.targetAux.y = this.andyMovesQueue.last().y + this.tileSize * numberOfMovs;
+            this.targetAux.y = this.andyMovesQueue.last().y + this.tileSizeOfTheMovement * numberOfMovs;
         }
         this.targetAux.dir = 'down';
         this.andyMovesQueue.enqueue(this.targetAux);
@@ -130,13 +147,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
             this.targetAux.x = this.x;
-            this.targetAux.y = this.y - this.tileSize * numberOfMovs;
+            this.targetAux.y = this.y - this.tileSizeOfTheMovement * numberOfMovs;
         } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
             this.targetAux.x = this.andyMovesQueue.last().x;
-            this.targetAux.y = this.andyMovesQueue.last().y - this.tileSize * numberOfMovs;
+            this.targetAux.y = this.andyMovesQueue.last().y - this.tileSizeOfTheMovement * numberOfMovs;
         }
-        console.log(this.x+' '+this.y);
-        console.log(this.y - this.tileSize * numberOfMovs);
         this.targetAux.dir = 'up';
         this.andyMovesQueue.enqueue(this.targetAux);
     }
@@ -156,6 +171,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.direction = dir;
         this.animationName = "chicoCamina";
         this.startAnimation();
+        
+        //Rotate the player before moving
+        switch(this.direction){
+            case 'right': this.rotateTo.rotateTo(270);
+                break;
+            case 'left': this.rotateTo.rotateTo(90);
+                break;
+            case 'down': this.rotateTo.rotateTo(360);
+                break;
+            case 'up': this.rotateTo.rotateTo(180);
+                break;    
+        }
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
         this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 60);

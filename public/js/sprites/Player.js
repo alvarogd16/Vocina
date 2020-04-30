@@ -50,8 +50,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let bodyOffset = Math.trunc(this.tileSize/2);
         this.body.setOffset(bodyOffset, bodyOffset);
 
-        this.lastAnim = null;
-        this.vel = 200;
         this.direction = null;
         this.target = new Phaser.Math.Vector2();
 

@@ -69,6 +69,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         createAnimationsPlayer(scene);
         this.andyMovesQueue = new Queue();
+
+        this.light = this.scene.light;
     }
     
 
@@ -230,6 +232,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta);
 
         if (this.canMove) {
+            this.light.setPosition(this.x, this.y);
 
             // Player movement control, when condition it's true, player is moving and condition can't be trespassed
             if (!this.andyMovesQueue.isEmpty() && !this.andyIsMoving) {

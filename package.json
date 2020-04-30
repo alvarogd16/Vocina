@@ -14,6 +14,7 @@
     "phaser3-rex-plugins": "^1.1.11"
   },
   "devDependencies": {
+    "jsdox": "^0.4.10",
     "nodemon": "^2.0.2"
   },
   "scripts": {

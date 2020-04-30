@@ -108,24 +108,19 @@ class SceneDown extends Phaser.Scene {
         /* MAP AND CAMERAS*/
 
         //Some constants to the camera and map positions
-        this.zoom = this.widthD / this.mapSize; //Zoom level to adapt the map to the scene 
-        // this.size = this.widthD;
+        this.zoom = this.widthD / this.mapSize; //Zoom level to adapt the map to the scene
+        this.mapNewSize = this.widthD;
         this.mapX = 0;
         this.mapY = this.heightD - this.widthD;
-        //this.center = this.mapSize/2;
-        this.cameras.main.setSize(this.mapSize, this.mapSize);
+        
+        this.cameras.main.setSize(this.mapNewSize, this.mapNewSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
-        // this.cameras.main.centerOn(this.center, this.center);
-        // this.cameras.main.setZoom(this.zoom);
 
         
-        this.sprite = this.add.image(0, 0, 'map').setOrigin(0);
-        this.sprite.setTint(0x000033);
-        this.sprite.setScale(this.zoom);
+        this.map = this.add.image(0, 0, 'map').setOrigin(0);
+        this.map.setTint(0x000033);
+        this.map.setScale(this.zoom);
 
-        this.mapNewSize = this.mapSize * this.zoom;
-        
-        
 
         /* PHYSICS AND PLAYER */
 
@@ -138,7 +133,7 @@ class SceneDown extends Phaser.Scene {
             this.mapNewSize,
             this.mapNewSize);
 
-        this.andy = new Player(this, this.andyX, this.andyY);
+        
         //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
         
@@ -146,6 +141,9 @@ class SceneDown extends Phaser.Scene {
         /* ILLUMINATION */
         this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
         this.light.visible = true
+        //this.light.setPosition(200, 200);
+
+        this.andy = new Player(this, this.andyX, this.andyY);
         
         
         /* DEBUG INFO */
@@ -156,6 +154,8 @@ class SceneDown extends Phaser.Scene {
         //     showInfoAndy(this.andyX, this.andyY, this.andyScale, false);
         //     showInfoRaspi(false);
         // }
+
+        //this.setLight(true);
     }
 
     /*EJECUTE CODE*/
@@ -237,7 +237,7 @@ class SceneDown extends Phaser.Scene {
      */
     setLight(value) {
         this.lightOn = value;
-        this.sprite.setTint(0xffffff);
+        this.map.setTint(0xffffff);
         this.light.visible = false;
     }
 
@@ -245,6 +245,8 @@ class SceneDown extends Phaser.Scene {
      * Update the scene
      */
     update() {
+        //this.light.setPosition(this.andyX, this.andyY);
+
         //Camera debug
         if (this.debugMode) {
             if (this.keyShift.isDown) {

@@ -110,7 +110,7 @@ class MainScene extends Phaser.Scene {
                 showInfoCameras();
                 showInfoTile();
                 showInfoAndy();
-                //showInfoRaspi();  //for the moment let it like this, because it seems that is causing problems when the raspi isn't connected
+                showInfoRaspi();  //for the moment let it like this, because it seems that is causing problems when the raspi isn't connected
             }
             else
                 console.log('Debug DISABLED')

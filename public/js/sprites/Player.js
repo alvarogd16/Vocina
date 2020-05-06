@@ -27,6 +27,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setScale(this.andyScale);
         
         this.canMove = true;
+        this.collision = false;
         this.scene.physics.world.enable(this);
         this.scene.add.existing(this);
 
@@ -92,18 +93,32 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of right moves
      */
     moveRight(numberOfMovs) {
-        this.posMatrix[0] += numberOfMovs;
+        if(!this.collision){
+            for(let i = 0; i < numberOfMovs; i++){
+                this.posMatrix[0]++;
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1]*10]
+                if(this.actualPos === 0){
+                    numberOfMovs = i;
+                    this.collision = true;
+                    break;
+                } else if(this.actualPos === 3){
+                    console.log("Olee");
+                }
+            }
 
-        this.targetAux = new Phaser.Math.Vector2();       
-        if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x + this.tileSizeOfTheMovement * numberOfMovs;
-            this.targetAux.y = this.y;
-        } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x + this.tileSizeOfTheMovement * numberOfMovs;
-            this.targetAux.y = this.andyMovesQueue.last().y;
+            if(numberOfMovs != 0){
+                this.targetAux = new Phaser.Math.Vector2();       
+                if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+                    this.targetAux.x = this.x + this.tileSizeOfTheMovement * numberOfMovs;
+                    this.targetAux.y = this.y;
+                } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+                    this.targetAux.x = this.andyMovesQueue.last().x + this.tileSizeOfTheMovement * numberOfMovs;
+                    this.targetAux.y = this.andyMovesQueue.last().y;
+                }
+                this.targetAux.dir = 'right';
+                this.andyMovesQueue.enqueue(this.targetAux);
+            }
         }
-        this.targetAux.dir = 'right';
-        this.andyMovesQueue.enqueue(this.targetAux);
     }
 
     /**
@@ -111,18 +126,33 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of left moves
      */
     moveLeft(numberOfMovs) {
-        this.posMatrix[0] -= numberOfMovs;
+        if(!this.collision){
+            for(let i = 0; i < numberOfMovs; i++){
+                this.posMatrix[0]--;
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1]*10]
+                if(this.actualPos === 0){
+                    numberOfMovs = i;
+                    this.collision = true;
+                    break;
+                } else if(this.actualPos === 3){
+                    console.log("Olee");
+                }
+                
+            }
 
-        this.targetAux = new Phaser.Math.Vector2();
-        if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x - this.tileSizeOfTheMovement * numberOfMovs;
-            this.targetAux.y = this.y;
-        } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x - this.tileSizeOfTheMovement * numberOfMovs;
-            this.targetAux.y = this.andyMovesQueue.last().y;
+            if(numberOfMovs != 0){
+                this.targetAux = new Phaser.Math.Vector2();
+                if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+                    this.targetAux.x = this.x - this.tileSizeOfTheMovement * numberOfMovs;
+                    this.targetAux.y = this.y;
+                } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+                    this.targetAux.x = this.andyMovesQueue.last().x - this.tileSizeOfTheMovement * numberOfMovs;
+                    this.targetAux.y = this.andyMovesQueue.last().y;
+                }
+                this.targetAux.dir = 'left';
+                this.andyMovesQueue.enqueue(this.targetAux);
+            }
         }
-        this.targetAux.dir = 'left';
-        this.andyMovesQueue.enqueue(this.targetAux);
     }
 
     /**
@@ -130,18 +160,32 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of down moves
      */
     moveDown(numberOfMovs) {
-        this.posMatrix[1] += numberOfMovs;
+        if(!this.collision){
+            for(let i = 0; i < numberOfMovs; i++){
+                this.posMatrix[1]++;
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1]*10]
+                if(this.actualPos === 0){
+                    numberOfMovs = i;
+                    this.collision = true;
+                    break;
+                } else if(this.actualPos === 3){
+                    console.log("Olee");
+                }
+            }
 
-        this.targetAux = new Phaser.Math.Vector2(); 
-        if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x;
-            this.targetAux.y = this.y + this.tileSizeOfTheMovement * numberOfMovs;
-        } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x;
-            this.targetAux.y = this.andyMovesQueue.last().y + this.tileSizeOfTheMovement * numberOfMovs;
+            if(numberOfMovs != 0){
+                this.targetAux = new Phaser.Math.Vector2(); 
+                if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+                    this.targetAux.x = this.x;
+                    this.targetAux.y = this.y + this.tileSizeOfTheMovement * numberOfMovs;
+                } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+                    this.targetAux.x = this.andyMovesQueue.last().x;
+                    this.targetAux.y = this.andyMovesQueue.last().y + this.tileSizeOfTheMovement * numberOfMovs;
+                }
+                this.targetAux.dir = 'down';
+                this.andyMovesQueue.enqueue(this.targetAux);
+            }
         }
-        this.targetAux.dir = 'down';
-        this.andyMovesQueue.enqueue(this.targetAux);
     }
 
     /**
@@ -149,18 +193,32 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of up moves
      */
     moveUp(numberOfMovs) {
-        this.posMatrix[1] -= numberOfMovs;
+        if(!this.collision){
+            for(let i = 0; i < numberOfMovs; i++){
+                this.posMatrix[1]--;
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1]*10]
+                if(this.actualPos === 0){
+                    numberOfMovs = i;
+                    this.collision = true;
+                    break;
+                } else if(this.actualPos === 3){
+                    console.log("Olee");
+                }
+            }
 
-        this.targetAux = new Phaser.Math.Vector2();
-        if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
-            this.targetAux.x = this.x;
-            this.targetAux.y = this.y - this.tileSizeOfTheMovement * numberOfMovs;
-        } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-            this.targetAux.x = this.andyMovesQueue.last().x;
-            this.targetAux.y = this.andyMovesQueue.last().y - this.tileSizeOfTheMovement * numberOfMovs;
+            if(numberOfMovs != 0){
+                this.targetAux = new Phaser.Math.Vector2();
+                if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
+                    this.targetAux.x = this.x;
+                    this.targetAux.y = this.y - this.tileSizeOfTheMovement * numberOfMovs;
+                } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+                    this.targetAux.x = this.andyMovesQueue.last().x;
+                    this.targetAux.y = this.andyMovesQueue.last().y - this.tileSizeOfTheMovement * numberOfMovs;
+                }
+                this.targetAux.dir = 'up';
+                this.andyMovesQueue.enqueue(this.targetAux);
+            }
         }
-        this.targetAux.dir = 'up';
-        this.andyMovesQueue.enqueue(this.targetAux);
     }
 
     // MOVING
@@ -193,7 +251,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
         this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 60);
-        console.log(this.posMatrix);
     }
 
     /*OTHER FUNCTIONS*/
@@ -270,15 +327,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     this.andyIsMoving = false;
 
                     //If the sprite reaches the last point in the queue and that point isn't the GOAL then reset
-                    if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
-                        this.scene.andyNoHallegadoAlObjetivo();
-                    }
+                    // if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
+                    //     this.scene.andyNoHallegadoAlObjetivo();
+                    // }
                 } else if (this.collidingWorldBounds) { //If collides a bound then didn't reach the GOAL
                     this.stopAnimation();
 
                     //Restart the movement control
                     this.andyIsMoving = false;
-                    this.scene.andyNoHallegadoAlObjetivo();
+                    //this.scene.andyNoHallegadoAlObjetivo();
                 }
             }
         }

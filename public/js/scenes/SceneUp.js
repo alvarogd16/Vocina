@@ -28,36 +28,40 @@ class SceneUp extends Phaser.Scene {
         var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexttypingplugin.min.js';
         this.load.plugin('rextexttypingplugin', url, true);
 
-        /* // Player sprite.
-         this.load.spritesheet({
+        // Player sprite.
+        /*this.load.spritesheet({
              key: 'talk',
-             url: "assets/marioRetro.png",
+             url: "assets/dialogPlayer/PantallaNarradorSized.png",
              frameConfig: {
-                 frameWidth: 38,     //The width of the frame in pixels.
-                 frameHeight: 40,    //The height of the frame in pixels. Uses the frameWidth value if not provided.
-                 startFrame: 5,      //The first frame to start parsing from.
-                 endFrame: 6,       //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
+                 frameWidth: 400,     //The width of the frame in pixels.
+                 frameHeight: 867,    //The height of the frame in pixels. Uses the frameWidth value if not provided.
+                 startFrame: 0,      //The first frame to start parsing from.
+                 endFrame: 1,       //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
                  margin: 0,          //The margin in the image. This is the space around the edge of the frames.
                  spacing: 0          //The spacing between each frame in the image.
              } 
-         });
-         */
-        this.load.image("mapUp", "assets/garaje.png");
+         });*/
+        
+        this.load.image("mapUp", "assets/dialogPlayer/PantallaBackground.png");
+        
+        this.load.image("talkPlayer", "assets/dialogPlayer/PantallaNarradorSized.png");  
 
     }
     /**
      * Make the scene
      */
     create() {
-        //this.add.image(0, 0, "dialogs").setOrigin(0).setScale(0.625);
+        
         //this.dialogPlayer = new DialogPlayer(this, 32, 32);
 
         this.zoom = this.widthCodeArea / this.dialogSize;
 
-        this.sprite = this.add.image(0, -70, 'mapUp').setOrigin(0);
+        this.sprite = this.add.image(0, 0, 'mapUp').setOrigin(0);
         this.sprite.setScale(this.zoom);
 
-        let textGameObject = this.add.text(170, 30, '', {
+        this.add.image(100, 100, 'talkPlayer').setScale(0.35);
+        
+        let textGameObject = this.add.text(200, 30, '', {
             wordWrap: {
                 width: 240
             }

@@ -9,7 +9,9 @@ class SceneDown extends Phaser.Scene {
         super("SceneDown");
         console.log('Creating SceneDown...');
         
-        this.mapSize = 1125;
+        this.mapSize = 1125;//Original map sizes
+        this.tileSize = 103;//Measured with photoshop
+        this.wallSize = 44; //Measured with photoshop
         this.arrivedGoal = false; //This is used for the player (update snippet in which it's checked whether the player reached a target or not) to know how to distinguish between reaching a target (means didn't reach the GOAL) and reaching the GOAL
         this.lightOn = true;
         this.widthD = document.getElementById('gameContainer').clientWidth
@@ -125,8 +127,8 @@ class SceneDown extends Phaser.Scene {
         /* PHYSICS AND PLAYER */
 
         //Set position [1, 5]
-        this.andyX = this.mapNewSize / 3 + 15;
-        this.andyY = this.mapNewSize / 3 + 15;
+        this.andyX = Math.trunc((this.wallSize + (this.tileSize * 2.5)) * this.zoom);//Bottom door X position, calculated with the wall size, plus two tiles and a half, because the positioning of the sprite has it's origin on the center
+        this.andyY = this.mapNewSize - this.wallSize;//Bottom door Y position
 
         // Set physics boundaries from map width and height and create the player
         this.physics.world.setBounds(0, 0,

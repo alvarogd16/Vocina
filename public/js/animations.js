@@ -77,7 +77,6 @@ function createAnimationsSceneUp(scene) {
         frameRate: 10,
         repeat: -1
     };
-    console.log('asdfasd');
 }
 
 

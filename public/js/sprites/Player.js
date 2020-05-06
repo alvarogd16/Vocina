@@ -14,16 +14,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, frame);
         
         this.scene = scene;
-
-        //Calculated with photoshop
-        this.tileSize = 103;
         
         //The scale of the player is relative to the map, and an extra substraction to make it a little bit smaller
-        this.andyScale = (this.scene.mapNewSize / 1125);
+        this.andyScale = this.scene.zoom;
         
         //The scale of the pixels the player has to go trhough have to be calculated based on the tileSize and on the andyScale, it has to be relative to the map.
         //Also, a one has to be added up to the result, just to ensure more exact positioning when moving the player
-        this.tileSizeOfTheMovement = Math.trunc(this.tileSize * this.andyScale)+1;
+        this.tileSizeOfTheMovement = Math.trunc(this.scene.tileSize * this.andyScale)+1;
         
         this.setScale(this.andyScale);
         
@@ -44,10 +41,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.collidingWorldBounds = false;
 
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-        this.body.setSize(this.tileSize, this.tileSize);
+        this.body.setSize(this.scene.tileSize, this.scene.tileSize);
         
         //With this offset calculation the hitbox is situtated right on the center of the sprite
-        let bodyOffset = Math.trunc(this.tileSize/2);
+        let bodyOffset = Math.trunc(this.scene.tileSize/2);
         this.body.setOffset(bodyOffset, bodyOffset);
 
         this.direction = null;
@@ -174,13 +171,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         
         //Rotate the player before moving
         switch(this.direction){
-            case 'right': this.rotateTo.rotateTo(270);
+            case 'right': this.rotateTo.rotateTo(90);
                 break;
-            case 'left': this.rotateTo.rotateTo(90);
+            case 'left': this.rotateTo.rotateTo(270);
                 break;
-            case 'down': this.rotateTo.rotateTo(360);
+            case 'down': this.rotateTo.rotateTo(180);
                 break;
-            case 'up': this.rotateTo.rotateTo(180);
+            case 'up': this.rotateTo.rotateTo(360);
                 break;    
         }
 

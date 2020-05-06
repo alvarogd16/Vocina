@@ -9,10 +9,10 @@ class SceneDown extends Phaser.Scene {
         super("SceneDown");
         console.log('Creating SceneDown...');
         
-        this.mapSize = 1125;
+        this.mapSize = 1125;    //Pixels
         this.arrivedGoal = false; //This is used for the player (update snippet in which it's checked whether the player reached a target or not) to know how to distinguish between reaching a target (means didn't reach the GOAL) and reaching the GOAL
         this.lightOn = true;
-        this.widthD = document.getElementById('gameContainer').clientWidth
+        this.widthD  = document.getElementById('gameContainer').clientWidth
         this.heightD = document.getElementById('gameContainer').clientHeight      
     }
 
@@ -33,12 +33,12 @@ class SceneDown extends Phaser.Scene {
             key: 'player',
             url: "assets/andy/chico.png",
             frameConfig: {
-                frameWidth: 207, //The width of the frame in pixels.
+                frameWidth: 207,  //The width of the frame in pixels.
                 frameHeight: 207, //The height of the frame in pixels. Uses the frameWidth value if not provided.
-                startFrame: 0, //The first frame to start parsing from.
-                endFrame: 12, //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
-                margin: 0, //The margin in the image. This is the space around the edge of the frames.
-                spacing: 0 //The spacing between each frame in the image.
+                startFrame: 0,    //The first frame to start parsing from.
+                endFrame: 12,     //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
+                margin: 0,        //The margin in the image. This is the space around the edge of the frames.
+                spacing: 0        //The spacing between each frame in the image.
             }
         });
 
@@ -56,8 +56,9 @@ class SceneDown extends Phaser.Scene {
             }
         });
 
-        //Artist design
-        this.load.image("map", "assets/maps/Salon3.jpg");  
+        //Load json and image map
+        this.load.json("json", "json/level" + this.numLevel + ".json");
+        this.load.image("map", "assets/maps/level" + this.numLevel + ".jpg");
         
         /* ROTATE TO FOR THE PLAYER */
         var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
@@ -72,6 +73,13 @@ class SceneDown extends Phaser.Scene {
         this.mainScene = this.scene.get('MainScene');
         this.debugMode = this.mainScene.debugMode;
 
+        /* MAP DATA */
+        this.mapName = this.cache.json.get("json").name;
+        this.playerStartPosition = this.cache.json.get("json").position;
+        this.mapMatrix = this.cache.json.get("json").map;
+
+        console.log(this.mapName, this.playerStartPosition, this.mapMatrix);
+
         /* EDITOR */
 
         //Check that it is not already created
@@ -79,7 +87,7 @@ class SceneDown extends Phaser.Scene {
             this.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
                 lineNumbers: true,
                 lineWrapping: true, //When finish one line jump to the next
-                undoDepth: 20, //Max number of lines to write
+                undoDepth: 20,      //Max number of lines to write
                 theme: "blackboard",
             })
             this.editor.setValue("//¿Estás preparado?") //Default value
@@ -125,8 +133,8 @@ class SceneDown extends Phaser.Scene {
         /* PHYSICS AND PLAYER */
 
         //Set position [1, 5]
-        this.andyX = this.mapNewSize / 3 + 15;
-        this.andyY = this.mapNewSize / 3 + 15;
+        this.andyX = 80; //this.mapNewSize / 3 + 15
+        this.andyY = 95;
 
         // Set physics boundaries from map width and height and create the player
         this.physics.world.setBounds(0, 0,
@@ -141,7 +149,6 @@ class SceneDown extends Phaser.Scene {
         /* ILLUMINATION */
         this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
         this.light.visible = true
-        //this.light.setPosition(200, 200);
 
         this.andy = new Player(this, this.andyX, this.andyY);
         
@@ -155,7 +162,7 @@ class SceneDown extends Phaser.Scene {
         //     showInfoRaspi(false);
         // }
 
-        //this.setLight(true);
+        this.setLight(true);
     }
 
     /*EJECUTE CODE*/

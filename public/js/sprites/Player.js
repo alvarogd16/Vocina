@@ -14,6 +14,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, frame);
         
         this.scene = scene;
+        this.matrix = this.scene.mapMatrix;
+        this.posMatrix = this.scene.playerStartPosition;
         
         //The scale of the player is relative to the map, and an extra substraction to make it a little bit smaller
         this.andyScale = this.scene.zoom;
@@ -90,6 +92,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of right moves
      */
     moveRight(numberOfMovs) {
+        this.posMatrix[0] += numberOfMovs;
+
         this.targetAux = new Phaser.Math.Vector2();       
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
             this.targetAux.x = this.x + this.tileSizeOfTheMovement * numberOfMovs;
@@ -107,6 +111,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of left moves
      */
     moveLeft(numberOfMovs) {
+        this.posMatrix[0] -= numberOfMovs;
+
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
             this.targetAux.x = this.x - this.tileSizeOfTheMovement * numberOfMovs;
@@ -124,6 +130,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of down moves
      */
     moveDown(numberOfMovs) {
+        this.posMatrix[1] += numberOfMovs;
+
         this.targetAux = new Phaser.Math.Vector2(); 
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
             this.targetAux.x = this.x;
@@ -141,6 +149,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of up moves
      */
     moveUp(numberOfMovs) {
+        this.posMatrix[1] -= numberOfMovs;
+
         this.targetAux = new Phaser.Math.Vector2();
         if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
             this.targetAux.x = this.x;
@@ -183,6 +193,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
         this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 60);
+        console.log(this.posMatrix);
     }
 
     /*OTHER FUNCTIONS*/
@@ -227,6 +238,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta);
 
         if (this.canMove) {
+            //Light follow the player
             this.light.setPosition(this.x, this.y);
 
             // Player movement control, when condition it's true, player is moving and condition can't be trespassed

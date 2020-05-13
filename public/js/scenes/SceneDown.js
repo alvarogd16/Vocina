@@ -81,7 +81,7 @@ class SceneDown extends Phaser.Scene {
         this.playerStartPosition = this.cache.json.get("json").position; //[x, y]
         this.mapMatrix = this.cache.json.get("json").map;
         //console.log(this.mapMatrix[2+9*10]);
-
+        console.log(this.playerStartPosition);
         /* EDITOR */
 
         //Check that it is not already created
@@ -131,22 +131,17 @@ class SceneDown extends Phaser.Scene {
         this.map.setTint(0x000033);
         this.map.setScale(this.zoom);
 
-
         /* PHYSICS AND PLAYER */
-
-        //Set player position
-        this.andyX = (this.wallSize + this.tileSize/2 + this.tileSize * this.playerStartPosition[0]) * this.zoom;
-        this.andyY = (this.wallSize + this.tileSize/2 + this.tileSize * this.playerStartPosition[1]) * this.zoom;
 
         // Set physics boundaries from map width and height and create the player
         this.physics.world.setBounds(0, 0,
             this.mapNewSize,
             this.mapNewSize);
 
-        
+        this.setPlayerStartLevelPosition();
+
         //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
-        
         
         /* ILLUMINATION */
         this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
@@ -165,6 +160,12 @@ class SceneDown extends Phaser.Scene {
         // }
 
         this.setLight(true);
+    }
+    
+    setPlayerStartLevelPosition(){
+        //Set player position
+        this.andyX = (this.wallSize + this.tileSize/2 + this.tileSize * this.playerStartPosition[0]) * this.zoom;
+        this.andyY = (this.wallSize + this.tileSize/2 + this.tileSize * this.playerStartPosition[1]) * this.zoom;
     }
 
     /*EJECUTE CODE*/
@@ -199,11 +200,11 @@ class SceneDown extends Phaser.Scene {
             sceneUp.write('Llegaste andy, enhorabuena!');
             this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
                 this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
-
+                
                 this.editor.setValue(""); //Clear codemirror field
                 this.editor.clearHistory();
 
-                this.andy.OffLED(); //Also LED (Lantern light in level 1) must be reset
+                //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
 
                 this.mainScene.closeScenes();
 
@@ -225,6 +226,7 @@ class SceneDown extends Phaser.Scene {
                 //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
 
                 this.mainScene.closeScenes();
+
             }, [], this);
         }
     }

@@ -77,7 +77,7 @@ class SceneUp extends Phaser.Scene {
         console.log(' -- Loaded typing plugin');
 
         this.typing.start('Andy por favor, tienes que venir a rescatarme!');
-        this.time.delayedCall(4000, function () {
+        /*this.time.delayedCall(4000, function () {
             this.typing.start('He descubierto que esta casa tiene demasiadas habitaciones');
             this.time.delayedCall(5000, function () {
                 this.typing.start('Tendrás que ir pasando por ellas una a una hasta encontrar el garaje');
@@ -91,7 +91,7 @@ class SceneUp extends Phaser.Scene {
                     }, [], this);
                 }, [], this);
             }, [], this);
-        }, [], this);     
+        }, [], this);*/   
     }
 
     /**

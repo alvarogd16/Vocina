@@ -14,19 +14,19 @@
 		super(scene, x, y, frame);
 
 		this.scene = scene;
-		scene.physics.world.enable(this);
+		//scene.physics.world.enable(this);
 		scene.add.existing(this);
 
 		//Set the skins of the sprite
-		this.setTexture('talk');
+		this.setTexture('talkSprite');
 		this.setPosition(x, y);
 
 		//Set collisions activation of the sprite
-		this.body.setCollideWorldBounds(true);
+		//this.body.setCollideWorldBounds(true);
 
 		//the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-		this.body.setSize(scene.tileSize, scene.tileSize, x, y);        
-        this.setScale(1);
+		//this.body.setSize(scene.tileSize, scene.tileSize, x, y);       
+        this.setScale(0.35);
 
         createAnimationsSceneUp(scene);
         this.anims.play('talk', true);

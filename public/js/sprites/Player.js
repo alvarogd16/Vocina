@@ -12,20 +12,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     constructor(scene, x, y, frame) {
         super(scene, x, y, frame);
-        
+
         this.scene = scene;
         this.matrix = this.scene.mapMatrix;
         this.posMatrix = this.scene.playerStartPosition;
-        
+
         //The scale of the player is relative to the map, and an extra substraction to make it a little bit smaller
         this.andyScale = this.scene.zoom;
-        
+
         //The scale of the pixels the player has to go trhough have to be calculated based on the tileSize and on the andyScale, it has to be relative to the map.
         //Also, a one has to be added up to the result, just to ensure more exact positioning when moving the player
-        this.tileSizeOfTheMovement = Math.trunc(this.scene.tileSize * this.andyScale)+1;
-        
+        this.tileSizeOfTheMovement = Math.trunc(this.scene.tileSize * this.andyScale) + 1;
+
         this.setScale(this.andyScale);
-        
+
         this.canMove = true;
         this.collision = false;
         this.scene.physics.world.enable(this);
@@ -45,9 +45,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
         this.body.setSize(this.scene.tileSize, this.scene.tileSize);
-        
+
         //With this offset calculation the hitbox is situtated right on the center of the sprite
-        let bodyOffset = Math.trunc(this.scene.tileSize/2);
+        let bodyOffset = Math.trunc(this.scene.tileSize / 2);
         this.body.setOffset(bodyOffset, bodyOffset);
 
         this.direction = null;
@@ -56,13 +56,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // Boolean to control if the player cant move
         this.andyIsMoving = false;
         this.numberMov = 0;
-        
+
         /* Load rotateTo plugin from SceneDown */
         this.rotateTo = this.scene.plugins.get('rexrotatetoplugin').add(this, {
             speed: 360
         });
         console.log(' -- Loaded rotateTo plugin');
-        
+
         /*ANIMATIONS*/
 
         createAnimationsPlayer(scene);
@@ -70,7 +70,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.light = this.scene.light;
     }
-    
+
 
     /*FUNCTIONS TO USE BY USER*/
 
@@ -93,26 +93,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of right moves
      */
     moveRight(numberOfMovs) {
-        if(!this.collision){
-            for(let i = 0; i < numberOfMovs; i++){
+        if (!this.collision) {
+            for (let i = 0; i < numberOfMovs; i++) {
                 this.posMatrix[0]++;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1]*10];
-                if(this.actualPos === -1){
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
+                if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
                     break;
-                } else if(this.actualPos === 0 || this.actualPos === 1){
+                } else if (this.actualPos === 0 || this.actualPos === 1) {
                     this.scene.arrivedGoal = false;
-                } else if(this.actualPos === 3){
-                    console.log("Subnivel conseguido");
-                } else if(this.actualPos === 2){
+                } else if (this.actualPos === 2) {
                     this.scene.arrivedGoal = true;
-                    console.log("Has llegado al final del nivel!")
+                    console.log("Has llegado al final del nivel!");
+                } else if (this.actualPos >= 3) {
+                    this.scene.arrivedSublevel = true;
+                    console.log("Subnivel conseguido");
                 }
             }
 
-            if(numberOfMovs != 0){
-                this.targetAux = new Phaser.Math.Vector2();       
+            if (numberOfMovs != 0) {
+                this.targetAux = new Phaser.Math.Vector2();
                 if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
                     this.targetAux.x = this.x + this.tileSizeOfTheMovement * numberOfMovs;
                     this.targetAux.y = this.y;
@@ -131,23 +132,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of left moves
      */
     moveLeft(numberOfMovs) {
-        if(!this.collision){
-            for(let i = 0; i < numberOfMovs; i++){
+        if (!this.collision) {
+            for (let i = 0; i < numberOfMovs; i++) {
                 this.posMatrix[0]--;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1]*10]
-                if(this.actualPos === -1){
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10]
+                if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
                     break;
-                } else if(this.actualPos === 3){
-                    console.log("Subnivel conseguido");
-                } else if(this.actualPos === 2){
+                } else if (this.actualPos === 0 || this.actualPos === 1) {
+                    this.scene.arrivedGoal = false;
+                } else if (this.actualPos === 2) {
+                    this.scene.arrivedGoal = true;
                     console.log("Has llegado al final del nivel!")
+                } else if (this.actualPos >= 3) {
+                    this.scene.arrivedSublevel = true;
+                    console.log("Subnivel conseguido");
                 }
-                
+
             }
 
-            if(numberOfMovs != 0){
+            if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
                 if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
                     this.targetAux.x = this.x - this.tileSizeOfTheMovement * numberOfMovs;
@@ -167,23 +172,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of down moves
      */
     moveDown(numberOfMovs) {
-        if(!this.collision){
-            for(let i = 0; i < numberOfMovs; i++){
+        if (!this.collision) {
+            for (let i = 0; i < numberOfMovs; i++) {
                 this.posMatrix[1]++;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1]*10]
-                if(this.actualPos === -1){
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10]
+                if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
                     break;
-                } else if(this.actualPos === 3){
-                    console.log("Subnivel conseguido");
-                } else if(this.actualPos === 2){
+                } else if (this.actualPos === 0 || this.actualPos === 1) {
+                    this.scene.arrivedGoal = false;
+                } else if (this.actualPos === 2) {
+                    this.scene.arrivedGoal = true;
                     console.log("Has llegado al final del nivel!")
+                } else if (this.actualPos >= 3) {
+                    this.scene.arrivedSublevel = true;
+                    console.log("Subnivel conseguido");
                 }
             }
 
-            if(numberOfMovs != 0){
-                this.targetAux = new Phaser.Math.Vector2(); 
+            if (numberOfMovs != 0) {
+                this.targetAux = new Phaser.Math.Vector2();
                 if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
                     this.targetAux.x = this.x;
                     this.targetAux.y = this.y + this.tileSizeOfTheMovement * numberOfMovs;
@@ -202,22 +211,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} numberOfMovs - The number of up moves
      */
     moveUp(numberOfMovs) {
-        if(!this.collision){
-            for(let i = 0; i < numberOfMovs; i++){
+        if (!this.collision) {
+            for (let i = 0; i < numberOfMovs; i++) {
                 this.posMatrix[1]--;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1]*10]
-                if(this.actualPos === -1){
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10]
+                if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
                     break;
-                } else if(this.actualPos === 3){
-                    console.log("Subnivel conseguido");
-                } else if(this.actualPos === 2){
+                } else if (this.actualPos === 0 || this.actualPos === 1) {
+                    this.scene.arrivedGoal = false;
+                } else if (this.actualPos === 2) {
+                    this.scene.arrivedGoal = true;
                     console.log("Has llegado al final del nivel!")
+                } else if (this.actualPos >= 3) {
+                    this.scene.arrivedSublevel = true;
+                    console.log("Subnivel conseguido");
                 }
             }
 
-            if(numberOfMovs != 0){
+            if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
                 if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
                     this.targetAux.x = this.x;
@@ -247,17 +260,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.direction = dir;
         this.animationName = "chicoCamina";
         this.startAnimation();
-        
+
         //Rotate the player before moving
-        switch(this.direction){
-            case 'right': this.rotateTo.rotateTo(90);
+        switch (this.direction) {
+            case 'right':
+                this.rotateTo.rotateTo(90);
                 break;
-            case 'left': this.rotateTo.rotateTo(270);
+            case 'left':
+                this.rotateTo.rotateTo(270);
                 break;
-            case 'down': this.rotateTo.rotateTo(180);
+            case 'down':
+                this.rotateTo.rotateTo(180);
                 break;
-            case 'up': this.rotateTo.rotateTo(360);
-                break;    
+            case 'up':
+                this.rotateTo.rotateTo(360);
+                break;
         }
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
@@ -337,19 +354,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     //Restart the movement control
                     this.andyIsMoving = false;
 
+                    if (this.andyMovesQueue.isEmpty() && this.scene.arrivedSublevel) {
+                        this.scene.andyCompletaSubnivel(1, this.actualPos);
+                        this.scene.arrivedSublevel = false;
+                    } 
                     //If the sprite reaches the last point in the queue and that point isn't the GOAL then reset that andy has NOT reached
-                    if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
-                         this.scene.andyNoHallegadoAlObjetivo();
-                    }//If the sprite reaches the last point in the queue and that point is the GOAL then reset that andy HAS reached
-                    else if(this.andyMovesQueue.isEmpty() && this.scene.arrivedGoal) {
-                         this.scene.andyHaLLegadoAlObjetivo();
+                    else if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
+                        this.scene.andyNoHallegadoAlObjetivo();
+                    } //If the sprite reaches the last point in the queue and that point is the GOAL then reset that andy HAS reached
+                    else if (this.andyMovesQueue.isEmpty() && this.scene.arrivedGoal) {
+                        //this.scene.andyHaLLegadoAlObjetivo();
+                        this.scene.pasarDeNivel(this.scene.scene.get('MainScene').level);
+                    } 
+                    else if (this.andyMovesQueue.isEmpty() && this.collision) { //If reaches the last point in the queue and collides a bound then didn't reach the GOAL
+                        this.stopAnimation();
+                        //Restart the movement control
+                        this.andyIsMoving = false;
+                        this.scene.andyNoHallegadoAlObjetivo();
                     }
-                } else if (this.andyMovesQueue.isEmpty() && this.collision) { //If collides a bound then didn't reach the GOAL
-                    this.stopAnimation();
-
-                    //Restart the movement control
-                    this.andyIsMoving = false;
-                    this.scene.andyNoHallegadoAlObjetivo();
                 }
             }
         }

@@ -53,7 +53,7 @@ class MainScene extends Phaser.Scene {
      * Change to specific level
      * @param {number} level - The level to change
      */
-    nextLevel(level) {
+     /*nextLevel(level) {
         this.closeScenes();
         this.level = level;
         if (this.level > this.maxLevels)
@@ -63,8 +63,8 @@ class MainScene extends Phaser.Scene {
             /*TODO TIME INTERVAL*/
             //console.log(this.time.now)
             //this.time.delayedCall(this.time.now+2000, this.launchScenes(), [], this);
-        }
-    }
+       /* }
+    }*/
 
     /**
      * When the game ends

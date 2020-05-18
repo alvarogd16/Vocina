@@ -92,14 +92,14 @@ class SceneDown extends Phaser.Scene {
                 undoDepth: 20,      //Max number of lines to write
                 theme: "blackboard",
             })
-            this.editor.setValue("//¿Estás preparado?") //Default value
+            this.editor.setValue("//¿Estás") //Default value
 
             //Create the button to run the code
             let sceneThis = this;
             document.getElementById("run").onclick = function () {
                 let editorContent = sceneThis.editor.getValue();
                 sceneThis.readWritten(editorContent);        
-                if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
+                if (sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                     this.disabled = true;
             };
         }

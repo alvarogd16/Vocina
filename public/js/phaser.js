@@ -2,7 +2,7 @@ const widthD = document.getElementById('gameContainer').clientWidth
 const heightD = document.getElementById('gameContainer').clientHeight
 
 const config = {
-    type: Phaser.WEBGL,
+    type: Phaser.AUTO,
     width: widthD,
     height: heightD,
     parent: 'gameContainer',

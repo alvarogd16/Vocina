@@ -8,15 +8,16 @@ class SceneDown extends Phaser.Scene {
     constructor() {
         super("SceneDown");
         console.log('Creating SceneDown...');
-        
-        this.mapSize  = 1125;   //Original map sizes
-        this.tileSize = 103;    //Measured with photoshop
-        this.wallSize = 44;     //Measured with photoshop
+
+        this.mapSize = 1125; //Original map sizes
+        this.tileSize = 103; //Measured with photoshop
+        this.wallSize = 44; //Measured with photoshop
 
         this.arrivedGoal = false; //This is used for the player (update snippet in which it's checked whether the player reached a target or not) to know how to distinguish between reaching a target (means didn't reach the GOAL) and reaching the GOAL
+        this.arrivedSublevel = false;
         this.lightOn = true;
-        this.widthD  = document.getElementById('gameContainer').clientWidth
-        this.heightD = document.getElementById('gameContainer').clientHeight      
+        this.widthD = document.getElementById('gameContainer').clientWidth
+        this.heightD = document.getElementById('gameContainer').clientHeight
     }
 
     /**
@@ -36,12 +37,12 @@ class SceneDown extends Phaser.Scene {
             key: 'player',
             url: "assets/andy/chico.png",
             frameConfig: {
-                frameWidth: 207,  //The width of the frame in pixels.
+                frameWidth: 207, //The width of the frame in pixels.
                 frameHeight: 207, //The height of the frame in pixels. Uses the frameWidth value if not provided.
-                startFrame: 0,    //The first frame to start parsing from.
-                endFrame: 12,     //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
-                margin: 0,        //The margin in the image. This is the space around the edge of the frames.
-                spacing: 0        //The spacing between each frame in the image.
+                startFrame: 0, //The first frame to start parsing from.
+                endFrame: 12, //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
+                margin: 0, //The margin in the image. This is the space around the edge of the frames.
+                spacing: 0 //The spacing between each frame in the image.
             }
         });
 
@@ -61,27 +62,27 @@ class SceneDown extends Phaser.Scene {
 
         //Load json and image map
         this.load.json("json", "json/level" + this.numLevel + ".json");
-        this.load.image("map", "assets/maps/level" + this.numLevel + ".jpg");
-        
+        this.load.image("map", "assets/maps/level" + this.numLevel + ".jpg", true);
+
         /* ROTATE TO FOR THE PLAYER */
         var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
         this.load.plugin('rexrotatetoplugin', url, true);
-    
+
     }
 
     /**
      * Make the scene 
      */
-    create() {  
+    create() {
         this.mainScene = this.scene.get('MainScene');
         this.debugMode = this.mainScene.debugMode;
 
         /* MAP DATA */
         this.mapName = this.cache.json.get("json").name;
         this.playerStartPosition = this.cache.json.get("json").position; //[x, y]
+        this.sublevels = this.cache.json.get("json").sublevels; //[x, x1, ...]
         this.mapMatrix = this.cache.json.get("json").map;
         //console.log(this.mapMatrix[2+9*10]);
-        console.log(this.playerStartPosition);
         /* EDITOR */
 
         //Check that it is not already created
@@ -89,7 +90,7 @@ class SceneDown extends Phaser.Scene {
             this.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
                 lineNumbers: true,
                 lineWrapping: true, //When finish one line jump to the next
-                undoDepth: 20,      //Max number of lines to write
+                undoDepth: 20, //Max number of lines to write
                 theme: "blackboard",
             })
             this.editor.setValue("//¿Estás") //Default value
@@ -98,8 +99,13 @@ class SceneDown extends Phaser.Scene {
             let sceneThis = this;
             document.getElementById("run").onclick = function () {
                 let editorContent = sceneThis.editor.getValue();
+<<<<<<< HEAD
                 sceneThis.readWritten(editorContent);        
                 if (sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
+=======
+                sceneThis.readWritten(editorContent);
+                if (!sceneThis.mainScene.debugMode && !sceneThis.arrivedSublevel) //Only if debugMode of the mainScene is not activated
+>>>>>>> b7e4b6655b3bd661be34a28196ee4690c295b473
                     this.disabled = true;
             };
         }
@@ -122,11 +128,11 @@ class SceneDown extends Phaser.Scene {
         this.mapNewSize = this.widthD;
         this.mapX = 0;
         this.mapY = this.heightD - this.widthD;
-        
+
         this.cameras.main.setSize(this.mapNewSize, this.mapNewSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
 
-        
+
         this.map = this.add.image(0, 0, 'map').setOrigin(0);
         this.map.setTint(0x000033);
         this.map.setScale(this.zoom);
@@ -142,14 +148,14 @@ class SceneDown extends Phaser.Scene {
 
         //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
-        
+
         /* ILLUMINATION */
         this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
         this.light.visible = true
 
         this.andy = new Player(this, this.andyX, this.andyY);
-        
-        
+
+
         /* DEBUG INFO */
 
         // if(this.debugMode){
@@ -161,11 +167,11 @@ class SceneDown extends Phaser.Scene {
 
         this.setLight(true);
     }
-    
-    setPlayerStartLevelPosition(){
+
+    setPlayerStartLevelPosition() {
         //Set player position
-        this.andyX = (this.wallSize + this.tileSize/2 + this.tileSize * this.playerStartPosition[0]) * this.zoom;
-        this.andyY = (this.wallSize + this.tileSize/2 + this.tileSize * this.playerStartPosition[1]) * this.zoom;
+        this.andyX = (this.wallSize + this.tileSize / 2 + this.tileSize * this.playerStartPosition[0]) * this.zoom;
+        this.andyY = (this.wallSize + this.tileSize / 2 + this.tileSize * this.playerStartPosition[1]) * this.zoom;
     }
 
     /*EJECUTE CODE*/
@@ -200,7 +206,7 @@ class SceneDown extends Phaser.Scene {
             sceneUp.write('Llegaste andy, enhorabuena!');
             this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
                 this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
-                
+
                 this.editor.setValue(""); //Clear codemirror field
                 this.editor.clearHistory();
 
@@ -231,6 +237,70 @@ class SceneDown extends Phaser.Scene {
             }, [], this);
         }
     }
+
+    /**
+     * To the next level, calling the method in mainScene
+     */
+    pasarDeNivel(level) {
+        let sceneUp = this.scene.get('SceneUp');
+        if (this.todosSubnivelesCompletados(level)) {  
+            sceneUp.write('Has encontrado la siguiente habitación!');
+            this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
+                this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
+                this.editor.setValue(""); //Clear codemirror field
+                this.editor.clearHistory();
+                this.cache.json.remove('json');//The next json should be loaded
+                this.mainScene.nextLevel();
+            }, [], this);
+        }
+        else
+            sceneUp.write('Primero has de completar los demás subniveles andy!');
+    }
+
+    /**
+     * If any sublevel is not completed, then should return false, if all completed then true
+     */
+    todosSubnivelesCompletados(level) {
+        let enc = true;
+        for (let i = 0;
+            (i < this.sublevels.length) && enc; i++) {
+            if (this.sublevels[i] !== -1)
+                enc = false;
+        }
+        return enc;
+    }
+
+    /**
+     * This function is called when a sublevel is completed by andy
+     */
+    andyCompletaSubnivel(level, subnivelCompletado) {
+        let sceneUp = this.scene.get('SceneUp');
+        if (level === 1) {
+            if (subnivelCompletado === 3 && this.buscarSubnivel(subnivelCompletado)) {
+                sceneUp.write('Has cogido la linterna! para encenderla escribe: andy.turnOnLED();');
+                //this.andy.matrix
+            } else
+                console.log('YA COMPLETADO');
+        } else if (level === 2) {
+
+        }
+    }
+
+    /**
+     * Checks if a sublevel was completed, and then returns true, otherwise returns false
+     */
+    buscarSubnivel(subnivel) {
+        let enc = false;
+        for (let i = 0;
+            (i < this.sublevels.length) && !enc; i++) {
+            if (this.sublevels[i] === subnivel) {
+                this.sublevels[i] = -1; //This sublevel is visited, so can't complete it two times in a level iteration
+                enc = true;
+            }
+        }
+        return enc;
+    }
+
 
     /**
      * When zombies reached andy

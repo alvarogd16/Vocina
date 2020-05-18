@@ -1,28 +1,31 @@
-* {
+body {
+	background-color: rgb(10, 33, 53);
 	margin: 0;
 	padding: 0;
 }
 
-body {
-	background-color: rgb(10, 33, 53);
-}
-
 #principal {
 	max-width: 500px; 
-	margin:auto;
+	margin: auto;
+	position: relative;
 }
 
 #code {
 	height: 25vh; 
-	width: 100%;
 }
 
 #codeArea {
-	position: relative;
+	position: absolute;
+	z-index: 2;
+	height: 25vh;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 10px;
 }
 
 #gameContainer {
-	height: 75vh;
+	z-index: 1;
+	height: 100vh;
 	width: 100%;
 }
 
@@ -31,17 +34,13 @@ body {
 	right: 40px;
 	bottom: 20px;
 	width: 80px;
-	height: 45px;
+	height: 30px;
 	border: none;
 	cursor: pointer;
-	border-radius: 8px;
-	background-color: rgb(19, 102, 158);
-	font-size: 20px;
+	border-radius: 4px;
+	background-color: rgb(94, 27, 27);
+	font-size: 17px;
 	color: white;
-}
-
-.but:hover {
-	background-color: rgb(13, 69, 105);
 }
 
 .but:active {

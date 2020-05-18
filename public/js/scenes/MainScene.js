@@ -81,8 +81,8 @@ class MainScene extends Phaser.Scene {
         this.scene.stop('SceneDown');
         this.cm.style.display = 'none';
         this.game.style.height = "100vh";
-        this.scale.resize(document.getElementById('gameContainer').clientWidth, document.getElementById('gameContainer').clientHeight);
-        document.getElementById("run").disabled  = false;//Also reset the button to click again
+        //this.scale.resize(document.getElementById('gameContainer').clientWidth, document.getElementById('gameContainer').clientHeight);
+        //document.getElementById("run").disabled  = false;//Also reset the button to click again
         this.launchScenes();
     }
 
@@ -94,7 +94,7 @@ class MainScene extends Phaser.Scene {
         this.scene.launch("SceneDown", this.level);
         this.cm.style.display = 'block';
         this.game.style.height = "75vh";
-        this.scale.resize(document.getElementById('gameContainer').clientWidth, document.getElementById('gameContainer').clientHeight);
+        //this.scale.resize(document.getElementById('gameContainer').clientWidth, document.getElementById('gameContainer').clientHeight);
     }
 
     /**

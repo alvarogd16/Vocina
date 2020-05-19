@@ -61,11 +61,11 @@ class SceneDown extends Phaser.Scene {
         });
 
         this.keyJson = "json" + this.numLevel;
-        this.keyImg  = "map" + this.numLevel;
+        this.keyImgMap  = "map" + this.numLevel;
 
         //Load json and image map
         this.load.json(this.keyJson, "json/level" + this.numLevel + ".json");
-        this.load.image(this.keyImg, "assets/maps/level" + this.numLevel + ".jpg", true);
+        this.load.image(this.keyImgMap, "assets/maps/level" + this.numLevel + ".jpg", true);
 
         /* ROTATE TO FOR THE PLAYER */
         var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
@@ -86,6 +86,8 @@ class SceneDown extends Phaser.Scene {
         this.sublevels = this.cache.json.get(this.keyJson).sublevels; //[x, x1, ...]
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
         //console.log(this.mapMatrix[2+9*10]);
+        
+        
         /* EDITOR */
 
         //Check that it is not already created
@@ -125,8 +127,8 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setPosition(this.mapX, this.mapY);
 
 
-        this.map = this.add.image(0, 0, this.keyImg).setOrigin(0);
-        this.map.setTint(0x000033);
+        this.map = this.add.image(0, 0, this.keyImgMap).setOrigin(0);
+        this.map.setTint(0x000033); //0xffffff
         this.map.setScale(this.zoom);
 
         /* PHYSICS AND PLAYER */
@@ -143,7 +145,7 @@ class SceneDown extends Phaser.Scene {
 
         /* ILLUMINATION */
         this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
-        this.light.visible = true
+        this.light.visible = true;
 
         this.andy = new Player(this, this.andyX, this.andyY);
 
@@ -203,7 +205,7 @@ class SceneDown extends Phaser.Scene {
                 this.editor.clearHistory();
 
                 //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
-                this.cache.json.remove('json');
+                this.cache.json.remove(this.keyJson);
                 this.mainScene.closeScenes();
 
             }, [], this);
@@ -223,7 +225,7 @@ class SceneDown extends Phaser.Scene {
 
                 //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
 
-                this.cache.json.remove('json');
+                this.cache.json.remove(this.keyJson);
                 this.mainScene.closeScenes();
 
             }, [], this);

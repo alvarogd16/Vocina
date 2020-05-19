@@ -26,7 +26,7 @@ class SceneUp extends Phaser.Scene {
 
         //The new values
         this.bubbleWidth  = this.bubbleWidthOriginal  * this.zoomToAdapt;
-        this.bubbleHeight = this.bubbleHeidhtOriginal * this.zoomToAdapt;
+        this.bubbleHeight = this.bubbleHeightOriginal * this.zoomToAdapt;
         this.talkSpriteWidth  = this.talkSpriteWidthOriginal  * this.zoomToAdapt;
         this.talkSpriteHeight = this.talkSpriteHeightOriginal * this.zoomToAdapt;
 
@@ -78,9 +78,9 @@ class SceneUp extends Phaser.Scene {
         
         this.add.image(this.talkSpriteWidth, this.sceneYstart, 'bubble').setOrigin(0).setScale(this.zoomToAdapt);
         
-        let textGameObject = this.add.text(200, 330, '', {
+        let textGameObject = this.add.text(this.talkSpriteWidth+this.bubbleWidth/10, this.sceneYstart+this.bubbleHeight/4, '', {
             wordWrap: {
-                width: 250
+                width: this.talkSpriteWidth+this.bubbleWidth/10
             }
         });
         this.typing = this.plugins.get('rextexttypingplugin').add(textGameObject, {

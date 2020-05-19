@@ -7,7 +7,7 @@ const config = {
     height: heightD,
     parent: 'gameContainer',
     scene: [MainScene, SceneUp, SceneDown],
-    pixelArt: true,
+    //pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {

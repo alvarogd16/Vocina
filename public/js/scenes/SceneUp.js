@@ -9,9 +9,33 @@ class SceneUp extends Phaser.Scene {
         super("SceneUp");
         console.log('Creating SceneUp...');
 
-        this.dialogSize = 464;
-        this.widthCodeArea = document.getElementById('codeArea').clientWidth
-        this.heightCodeArea = document.getElementById('codeArea').clientHeight
+        this.widthGame  = document.getElementById('gameContainer').clientWidth;
+        this.heightGame = document.getElementById('gameContainer').clientHeight;
+
+        //Image's size
+        this.bubbleWidthOriginal  = 835;
+        this.bubbleHeightOriginal = 503;
+        this.talkSpriteWidthOriginal  = 400;
+        this.talkSpriteHeightOriginal = 867;
+
+        //These values ​​need to be adapted to the screen
+        this.sceneWidthOriginal  = this.bubbleWidthOriginal + this.talkSpriteWidthOriginal;
+        this.sceneHeightOriginal = this.bubbleHeightOriginal;
+
+        this.zoomToAdapt = this.widthGame / this.sceneWidthOriginal;
+
+        //The new values
+        this.bubbleWidth  = this.bubbleWidthOriginal  * this.zoomToAdapt;
+        this.bubbleHeight = this.bubbleHeidhtOriginal * this.zoomToAdapt;
+        this.talkSpriteWidth  = this.talkSpriteWidthOriginal  * this.zoomToAdapt;
+        this.talkSpriteHeight = this.talkSpriteHeightOriginal * this.zoomToAdapt;
+
+        this.sceneWidth  = this.widthGame;
+        this.sceneHeight = this.sceneHeightOriginal * this.zoomToAdapt;
+
+        this.sceneYstart = this.heightGame-this.widthGame-this.sceneHeight; 
+
+        this.editorHeight = this.sceneYstart;
     }
 
     /**
@@ -33,35 +57,28 @@ class SceneUp extends Phaser.Scene {
              key: 'talkSprite',
              url: "assets/dialogPlayer/NarradorSpriteSheet.png",
              frameConfig: {
-                 frameWidth: 400,     //The width of the frame in pixels.
-                 frameHeight: 867,    //The height of the frame in pixels. Uses the frameWidth value if not provided.
+                 frameWidth:  this.talkSpriteWidthOriginal,     //The width of the frame in pixels.
+                 frameHeight: this.talkSpriteHeightOriginal,    //The height of the frame in pixels. Uses the frameWidth value if not provided.
                  startFrame: 0,      //The first frame to start parsing from.
                  endFrame: 2,       //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
                  margin: 0,          //The margin in the image. This is the space around the edge of the frames.
                  spacing: 0          //The spacing between each frame in the image.
-             } 
+             }
          });
-    
-        this.load.image("mapUp", "assets/dialogPlayer/PantallaBackground.png");
         
-        //this.load.image("talkPlayer", "assets/dialogPlayer/PantallaNarradorSized.png"); 
-        this.load.image("bocadillo", "assets/dialogPlayer/Bocadillo.png"); 
+        
+        this.load.image("bubble", "assets/dialogPlayer/Bocadillo.png"); 
 
     }
     /**
      * Make the scene
      */
     create() {
-        this.zoom = this.widthCodeArea / this.dialogSize;
-
-        this.sprite = this.add.image(0, 0, 'mapUp').setOrigin(0);
-        this.sprite.setScale(this.zoom);
-
-        this.dialogPlayer = new DialogPlayer(this, 100, 100);
-        //this.add.image(100, 100, 'talkPlayer').setScale(0.35);
-        this.add.image(320, 80, 'bocadillo').setScale(0.35);//
+        this.dialogPlayer = new DialogPlayer(this, this.talkSpriteWidth/2, this.sceneYstart+this.sceneHeight/2, this.zoomToAdapt);
         
-        let textGameObject = this.add.text(200, 30, '', {
+        this.add.image(this.talkSpriteWidth, this.sceneYstart, 'bubble').setOrigin(0).setScale(this.zoomToAdapt);
+        
+        let textGameObject = this.add.text(200, 330, '', {
             wordWrap: {
                 width: 250
             }
@@ -77,21 +94,6 @@ class SceneUp extends Phaser.Scene {
         console.log(' -- Loaded typing plugin');
 
         this.typing.start('Andy por favor, tienes que venir a rescatarme!');
-        /*this.time.delayedCall(4000, function () {
-            this.typing.start('He descubierto que esta casa tiene demasiadas habitaciones');
-            this.time.delayedCall(5000, function () {
-                this.typing.start('Tendrás que ir pasando por ellas una a una hasta encontrar el garaje');
-                this.time.delayedCall(5000, function () {
-                    this.typing.start('Que es donde estoy yo');
-                    this.time.delayedCall(3000, function () {
-                        this.typing.start('Para ello primero necesitarás una linterna');
-                        this.time.delayedCall(5000, function () {
-                             this.typing.start('Ah, y cuidado con los zombies...');
-                        }, [], this);
-                    }, [], this);
-                }, [], this);
-            }, [], this);
-        }, [], this);*/   
     }
 
     /**

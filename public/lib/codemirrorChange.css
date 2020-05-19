@@ -4,27 +4,13 @@
 .codemirror-nonmatching-bracket { background: green; }
 */
 
-
-body {
-  margin: auto;
-  /*text-align: center;*/
-}
-
 /* BASICS */
-
-#game-canvas{
-  background-color: black;
-  height: 50vh;
-  width: 100%;
-  /*max-width: 50vh;*/
-  margin: auto;
-}
 
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
   font-weight: 700;
-  height: 25vh;
+  height: 100%;
   width: 100%;
   /*color: #c27ba0;*/
 }
@@ -126,11 +112,13 @@ body {
 /* NEW THEME */
 /* Blackboard theme */
 
-.cm-s-blackboard.CodeMirror { background: #0C1021; color: #F8F8F8; }
+/*linear-gradient(rgb(16, 16, 22), rgb(28, 28, 37))*/
+
+.cm-s-blackboard.CodeMirror { background:  linear-gradient(blue, white); color: #F8F8F8; }
 .cm-s-blackboard div.CodeMirror-selected { background: #253B76; }
 .cm-s-blackboard .CodeMirror-line::selection, .cm-s-blackboard .CodeMirror-line > span::selection, .cm-s-blackboard .CodeMirror-line > span > span::selection { background: rgba(37, 59, 118, .99); }
 .cm-s-blackboard .CodeMirror-line::-moz-selection, .cm-s-blackboard .CodeMirror-line > span::-moz-selection, .cm-s-blackboard .CodeMirror-line > span > span::-moz-selection { background: rgba(37, 59, 118, .99); }
-.cm-s-blackboard .CodeMirror-gutters { background: #0C1021; border-right: 0;}
+.cm-s-blackboard .CodeMirror-gutters { background: linear-gradient(rgb(28, 28, 37), rgb(16, 16, 22)); border-right: 0;}
 .cm-s-blackboard .CodeMirror-guttermarker { color: #FBDE2D; }
 .cm-s-blackboard .CodeMirror-guttermarker-subtle { color: #888; }
 .cm-s-blackboard .CodeMirror-linenumber { color: #888; }

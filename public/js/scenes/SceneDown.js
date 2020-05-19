@@ -60,9 +60,12 @@ class SceneDown extends Phaser.Scene {
             }
         });
 
+        this.keyJson = "json" + this.numLevel;
+        this.keyImg  = "map" + this.numLevel;
+
         //Load json and image map
-        this.load.json("json", "json/level" + this.numLevel + ".json");
-        this.load.image("map", "assets/maps/level" + this.numLevel + ".jpg", true);
+        this.load.json(this.keyJson, "json/level" + this.numLevel + ".json");
+        this.load.image(this.keyImg, "assets/maps/level" + this.numLevel + ".jpg", true);
 
         /* ROTATE TO FOR THE PLAYER */
         var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
@@ -78,37 +81,26 @@ class SceneDown extends Phaser.Scene {
         this.debugMode = this.mainScene.debugMode;
 
         /* MAP DATA */
-        this.mapName = this.cache.json.get("json").name;
-        this.playerStartPosition = this.cache.json.get("json").position; //[x, y]
-        this.sublevels = this.cache.json.get("json").sublevels; //[x, x1, ...]
-        this.mapMatrix = this.cache.json.get("json").map;
+        this.mapName = this.cache.json.get(this.keyJson).name;
+        this.playerStartPosition = this.cache.json.get(this.keyJson).position; //[x, y]
+        this.sublevels = this.cache.json.get(this.keyJson).sublevels; //[x, x1, ...]
+        this.mapMatrix = this.cache.json.get(this.keyJson).map;
         //console.log(this.mapMatrix[2+9*10]);
         /* EDITOR */
 
         //Check that it is not already created
-        if (document.getElementsByClassName('CodeMirror').length === 0) {
-            this.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
-                lineNumbers: true,
-                lineWrapping: true, //When finish one line jump to the next
-                undoDepth: 20, //Max number of lines to write
-                theme: "blackboard",
-            })
-            this.editor.setValue("//¿Estás") //Default value
+        //if (document.getElementsByClassName('CodeMirror').length === 0) {
+            this.editor = this.mainScene.editor;
 
             //Create the button to run the code
             let sceneThis = this;
             document.getElementById("run").onclick = function () {
                 let editorContent = sceneThis.editor.getValue();
-<<<<<<< HEAD
-                sceneThis.readWritten(editorContent);        
-                if (sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
-=======
                 sceneThis.readWritten(editorContent);
-                if (!sceneThis.mainScene.debugMode && !sceneThis.arrivedSublevel) //Only if debugMode of the mainScene is not activated
->>>>>>> b7e4b6655b3bd661be34a28196ee4690c295b473
-                    this.disabled = true;
+                //if (!sceneThis.mainScene.debugMode && !sceneThis.arrivedSublevel) //Only if debugMode of the mainScene is not activated
+                //    this.disabled = true;
             };
-        }
+        //}
 
         /*KEYBOARD*/
 
@@ -133,7 +125,7 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setPosition(this.mapX, this.mapY);
 
 
-        this.map = this.add.image(0, 0, 'map').setOrigin(0);
+        this.map = this.add.image(0, 0, this.keyImg).setOrigin(0);
         this.map.setTint(0x000033);
         this.map.setScale(this.zoom);
 
@@ -249,7 +241,9 @@ class SceneDown extends Phaser.Scene {
                 this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
                 this.editor.setValue(""); //Clear codemirror field
                 this.editor.clearHistory();
-                this.cache.json.remove('json');//The next json should be loaded
+
+                //this.cache.json.remove('map');
+                //this.cache.json.remove('json');//The next json should be loaded
                 this.mainScene.nextLevel();
             }, [], this);
         }
@@ -327,8 +321,6 @@ class SceneDown extends Phaser.Scene {
      * Update the scene
      */
     update() {
-        //this.light.setPosition(this.andyX, this.andyY);
-
         //Camera debug
         if (this.debugMode) {
             if (this.keyShift.isDown) {

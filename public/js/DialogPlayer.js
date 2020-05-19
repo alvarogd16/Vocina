@@ -10,26 +10,22 @@
 	 * @param {number} y - Start location y value.
 	 * @param {number} [frame] -
 	 */
-	constructor(scene, x, y, frame) {
-		super(scene, x, y, frame);
+	constructor(scene, x, y, zoom) {
+		super(scene, x, y);
 
 		this.scene = scene;
-		//scene.physics.world.enable(this);
 		scene.add.existing(this);
+
+		//this.setOrigin(0);
 
 		//Set the skins of the sprite
 		this.setTexture('talkSprite');
 		this.setPosition(x, y);
+     
+        this.setScale(zoom);
 
-		//Set collisions activation of the sprite
-		//this.body.setCollideWorldBounds(true);
-
-		//the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-		//this.body.setSize(scene.tileSize, scene.tileSize, x, y);       
-        this.setScale(0.35);
-
-        createAnimationsSceneUp(scene);
-        this.anims.play('talk', true);
+        //createAnimationsSceneUp(scene);
+        //this.anims.play('talk', true);
 	}
 
 }

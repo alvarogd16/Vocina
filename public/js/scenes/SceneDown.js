@@ -99,8 +99,8 @@ class SceneDown extends Phaser.Scene {
             document.getElementById("run").onclick = function () {
                 let editorContent = sceneThis.editor.getValue();
                 sceneThis.readWritten(editorContent);
-                //if (!sceneThis.mainScene.debugMode && !sceneThis.arrivedSublevel) //Only if debugMode of the mainScene is not activated
-                //    this.disabled = true;
+                if (!sceneThis.mainScene.debugMode && !sceneThis.arrivedSublevel) //Only if debugMode of the mainScene is not activated
+                    this.disabled = true;
             };
         //}
 
@@ -189,6 +189,23 @@ class SceneDown extends Phaser.Scene {
         let executeMe = this.createFunction(args, editorContent);
         executeMe(andy);
     }
+    
+    /**
+     * Reset function for the SceneDown and SceneUp, and also some variables aside from the scenes
+     */
+    resetGame(delayTime){
+    this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
+        this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
+
+        this.editor.setValue(""); //Clear codemirror field
+        this.editor.clearHistory();
+
+        //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
+        this.cache.json.remove(this.keyJson);
+        this.mainScene.closeScenes();
+
+        }, [], this);
+    }
 
     /**
      * When andy has reached the goal
@@ -198,17 +215,7 @@ class SceneDown extends Phaser.Scene {
             this.arrivedGoal = true;
             let sceneUp = this.scene.get('SceneUp');
             sceneUp.write('Llegaste andy, enhorabuena!');
-            this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
-                this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
-
-                this.editor.setValue(""); //Clear codemirror field
-                this.editor.clearHistory();
-
-                //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
-                this.cache.json.remove(this.keyJson);
-                this.mainScene.closeScenes();
-
-            }, [], this);
+            this.resetGame(5000);
         }
     }
 
@@ -219,16 +226,7 @@ class SceneDown extends Phaser.Scene {
         if (!this.mainScene.debugMode) { //Only if debugMode of the mainScene is not activated
             let sceneUp = this.scene.get('SceneUp');
             sceneUp.write('No has llegado andy :(, pero a la próxima podrás conseguirlo :)');
-            this.time.delayedCall(9000, function () { //Just to wait until the sceneUp showed the whole message
-                this.editor.setValue(""); //Clear codemirror field
-                this.editor.clearHistory();
-
-                //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
-
-                this.cache.json.remove(this.keyJson);
-                this.mainScene.closeScenes();
-
-            }, [], this);
+            this.resetGame(9000);
         }
     }
 
@@ -249,8 +247,10 @@ class SceneDown extends Phaser.Scene {
                 this.mainScene.nextLevel();
             }, [], this);
         }
-        else
+        else{
             sceneUp.write('Primero has de completar los demás subniveles andy!');
+            this.resetGame(9000);  
+        }
     }
 
     /**
@@ -275,8 +275,10 @@ class SceneDown extends Phaser.Scene {
             if (subnivelCompletado === 3 && this.buscarSubnivel(subnivelCompletado)) {
                 sceneUp.write('Has cogido la linterna! para encenderla escribe: andy.turnOnLED();');
                 //this.andy.matrix
-            } else
-                console.log('YA COMPLETADO');
+            } else{
+                sceneUp.write('Este subnivel ya está completado andy, deberías intentar llegar al final...');
+                this.resetGame(5000);
+            }
         } else if (level === 2) {
 
         }

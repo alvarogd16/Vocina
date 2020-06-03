@@ -44,6 +44,18 @@ if(isPi()){
     process.on('SIGINT', unexportOnClose);  //When press ctrl+c 
 }
 
+/*
+    If raspi is connect turn on LED 3 sec
+*/
+const raspiConnect = () => {
+    if(isPi()) {
+        LED,writeSync(1);
+        setTimeout(() => LED.writeSync(0), 3000);
+        console.log("Raspi connect");
+    } else 
+        console.log("Raspi is NOT connect");
+}
+
 const raspiWrite = (component, value) => {
     console.log(value);
     if(component === 'LED')
@@ -61,4 +73,4 @@ const raspiRead = (component) => {
         return isPi() ? true : false;
 };
 
-module.exports = {raspiWrite, raspiRead};
+module.exports = {raspiWrite, raspiRead, raspiConnect};

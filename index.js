@@ -4,18 +4,21 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const raspi = require('./raspi');
+
 app.use(express.static('public'));
 app.use(express.json());
 
 //Start the server
-app.listen(port, () => console.log(`Server listen on port ${port}`));
+app.listen(port, () => {
+    console.log(`Server listen on port ${port}`);
+    raspi.raspiConnect();
+});
 
 //app.get('/', (req, res) => res.sendFile('index.html'));
 
 
 /*RASPI PART*/
-
-const raspi = require('./raspi');
 
 //Serve raspi data to the user
 app.get('/raspi/:component', (req, res) => {

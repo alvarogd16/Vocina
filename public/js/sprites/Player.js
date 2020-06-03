@@ -26,8 +26,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.setScale(this.andyScale);
 
-        this.canMove = true;
         this.collision = false;
+        this.collisionWithoutMovement = false;
         this.scene.physics.world.enable(this);
         this.scene.add.existing(this);
 
@@ -100,6 +100,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
+                    if(numberOfMovs == 0)
+                        this.collisionWithoutMovement = true;
                     break;
                 } else if (this.actualPos === 0 || this.actualPos === 1) {
                     this.scene.arrivedGoal = false;
@@ -108,6 +110,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     console.log("Has llegado al final del nivel!");
                 } else if (this.actualPos >= 3) {
                     this.scene.arrivedSublevel = true;
+                    this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
+                    this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
                     console.log("Subnivel conseguido");
                 }
             }
@@ -139,6 +143,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
+                    if(numberOfMovs == 0)
+                        this.collisionWithoutMovement = true;
                     break;
                 } else if (this.actualPos === 0 || this.actualPos === 1) {
                     this.scene.arrivedGoal = false;
@@ -147,6 +153,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     console.log("Has llegado al final del nivel!")
                 } else if (this.actualPos >= 3) {
                     this.scene.arrivedSublevel = true;
+                    this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
+                    this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
                     console.log("Subnivel conseguido");
                 }
 
@@ -179,6 +187,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
+                    if(numberOfMovs == 0)
+                        this.collisionWithoutMovement = true;                    
                     break;
                 } else if (this.actualPos === 0 || this.actualPos === 1) {
                     this.scene.arrivedGoal = false;
@@ -187,6 +197,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     console.log("Has llegado al final del nivel!")
                 } else if (this.actualPos >= 3) {
                     this.scene.arrivedSublevel = true;
+                    this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
+                    this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
                     console.log("Subnivel conseguido");
                 }
             }
@@ -218,6 +230,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
+                    if(numberOfMovs == 0)
+                        this.collisionWithoutMovement = true;
                     break;
                 } else if (this.actualPos === 0 || this.actualPos === 1) {
                     this.scene.arrivedGoal = false;
@@ -226,6 +240,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     console.log("Has llegado al final del nivel!")
                 } else if (this.actualPos >= 3) {
                     this.scene.arrivedSublevel = true;
+                    this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
+                    this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
                     console.log("Subnivel conseguido");
                 }
             }
@@ -322,58 +338,57 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
 
-        if (this.canMove) {
-            //Light follow the player
-            this.light.setPosition(this.x, this.y);
+        //Light follow the player
+        this.light.setPosition(this.x, this.y);
 
-            // Player movement control, when condition it's true, player is moving and condition can't be trespassed
-            if (!this.andyMovesQueue.isEmpty() && !this.andyIsMoving) {
-                this.andyIsMoving = true;
-                //Check the direction variable in the last queue element
-                let dir = this.andyMovesQueue.first().dir;
-                this.moving(dir);
-            }
+        // Player movement control, when condition it's true, player is moving and condition can't be trespassed
+        if (!this.andyMovesQueue.isEmpty() && !this.andyIsMoving) {
+            this.andyIsMoving = true;
+            //Check the direction variable in the last queue element
+            let dir = this.andyMovesQueue.first().dir;
+            this.moving(dir);
+        }
 
-            // standing
-            let currentDirection = this.direction;
-            if (this.direction === 'left') {
-                currentDirection = 'right';
-            } //account for flipped sprite
-            this.animationName = 'stand-' + currentDirection;
+        // standing
+        let currentDirection = this.direction;
+        if (this.direction === 'left') {
+            currentDirection = 'right';
+        } //account for flipped sprite
+        this.animationName = 'stand-' + currentDirection;
 
-            //Distance between andy and the point will reach
-            let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
+        //Distance between andy and the point will reach
+        let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
 
-            if (this.body.speed > 0) {
-                //If the sprite reaches one point stored in the queue means that didn't reach the goal tile (checked in a
-                //event in the 'SceneDown' class)
-                if (distance < 0.1) {
-                    this.body.reset(this.target.x, this.target.y);
-                    this.stopAnimation();
+        if (this.body.speed > 0) {
+            //If the sprite reaches one point stored in the queue means that didn't reach the goal tile (checked in a
+            //event in the 'SceneDown' class)
+            if (distance < 0.1) {
+                this.body.reset(this.target.x, this.target.y);
+                this.stopAnimation();
 
+                //Restart the movement control
+                this.andyIsMoving = false;
+
+                if (this.andyMovesQueue.isEmpty() && this.scene.arrivedSublevel) {
+                    this.scene.andyCompletesSublevel(1, this.actualPos);
+                    this.scene.lastLevelCompleted = this.actualPos;
+                    this.scene.arrivedSublevel = false;
+                } 
+                //If the sprite reaches the last point in the queue and that point isn't the GOAL then reset that andy has NOT reached
+                else if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
+                    this.scene.andyDidntArriveTheGoal();
+                } //If the sprite reaches the last point in the queue and that point is the GOAL then reset that andy HAS reached
+                else if (this.andyMovesQueue.isEmpty() && this.scene.arrivedGoal) {
+                    this.scene.levelUp(this.scene.scene.get('MainScene').level);
+                } 
+                else if (this.andyMovesQueue.isEmpty() && this.collision) { //If reaches the last point in the queue and collides a bound then didn't reach the GOAL
                     //Restart the movement control
-                    this.andyIsMoving = false;
-
-                    if (this.andyMovesQueue.isEmpty() && this.scene.arrivedSublevel) {
-                        this.scene.andyCompletaSubnivel(1, this.actualPos);
-                        this.scene.arrivedSublevel = false;
-                    } 
-                    //If the sprite reaches the last point in the queue and that point isn't the GOAL then reset that andy has NOT reached
-                    else if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
-                        this.scene.andyNoHallegadoAlObjetivo();
-                    } //If the sprite reaches the last point in the queue and that point is the GOAL then reset that andy HAS reached
-                    else if (this.andyMovesQueue.isEmpty() && this.scene.arrivedGoal) {
-                        //this.scene.andyHaLLegadoAlObjetivo();
-                        this.scene.pasarDeNivel(this.scene.scene.get('MainScene').level);
-                    } 
-                    else if (this.andyMovesQueue.isEmpty() && this.collision) { //If reaches the last point in the queue and collides a bound then didn't reach the GOAL
-                        this.stopAnimation();
-                        //Restart the movement control
-                        this.andyIsMoving = false;
-                        this.scene.andyNoHallegadoAlObjetivo();
-                    }
+                    this.scene.andyDidntArriveTheGoal();
                 }
             }
+        } else if (this.collisionWithoutMovement) { //If andy tries to move towards a wall that's in (Is not going to be moving)
+            this.collisionWithoutMovement = false;
+            this.scene.andyDidntArriveTheGoal();
         }
     }
 }

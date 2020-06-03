@@ -98,7 +98,7 @@ class MainScene extends Phaser.Scene {
         this.scene.stop('SceneUp');
         this.scene.stop('SceneDown');
         //this.cm.style.display = 'none';
-        //document.getElementById("run").disabled  = false;//Also reset the button to click again
+        document.getElementById("run").disabled  = false;//Also reset the button to click again
         this.launchScenes();
     }
 

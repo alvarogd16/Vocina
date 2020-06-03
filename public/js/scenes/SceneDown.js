@@ -15,6 +15,9 @@ class SceneDown extends Phaser.Scene {
 
         this.arrivedGoal = false; //This is used for the player (update snippet in which it's checked whether the player reached a target or not) to know how to distinguish between reaching a target (means didn't reach the GOAL) and reaching the GOAL
         this.arrivedSublevel = false;
+        this.lastSublevelMatrixPositionFirst = 0;
+        this.lastSublevelMatrixPositionSecond = 0;
+        this.lastLevelCompleted = 0;
         this.lightOn = true;
         this.widthD = document.getElementById('gameContainer').clientWidth
         this.heightD = document.getElementById('gameContainer').clientHeight
@@ -196,6 +199,8 @@ class SceneDown extends Phaser.Scene {
     resetGame(delayTime){
     this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
         this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
+        this.subnivelAnteriorCompletado = 0;
+        this.scene.lastSublevelMatrixPosition = 0;
 
         this.editor.setValue(""); //Clear codemirror field
         this.editor.clearHistory();
@@ -206,36 +211,55 @@ class SceneDown extends Phaser.Scene {
 
         }, [], this);
     }
-
-    /**
-     * When andy has reached the goal
-     */
-    andyHaLLegadoAlObjetivo() {
-        if (!this.mainScene.debugMode) { //Only if debugMode of the mainScene is not activated
-            this.arrivedGoal = true;
+    
+    resetToSublevel(delayTime) {
+        this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
+            //Player last sublevel completed position set
+            this.andyX = (this.wallSize + this.tileSize / 2 + this.tileSize * this.lastSublevelMatrixPositionFirst) * this.zoom;
+            this.andyY = (this.wallSize + this.tileSize / 2 + this.tileSize * this.lastSublevelMatrixPositionSecond) * this.zoom;
+            this.andy.posMatrix[0] = this.lastSublevelMatrixPositionFirst;
+            this.andy.posMatrix[1] = this.lastSublevelMatrixPositionSecond;
+            
+            this.andy.setPosition(this.andyX, this.andyY);
+            
+            this.editor.setValue(""); //Clear codemirror field
+            this.editor.clearHistory();
+            
             let sceneUp = this.scene.get('SceneUp');
-            sceneUp.write('Llegaste andy, enhorabuena!');
-            this.resetGame(5000);
-        }
+            sceneUp.write('');
+            
+            this.andy.collision = false;
+            this.andy.collidingWorldBounds = false;
+            this.andy.collisionWithoutMovement = false;
+
+            document.getElementById("run").disabled  = false;//Also reset the button to click again
+            
+            //this.arrivedSublevel = true;
+        }, [], this);
     }
 
     /**
      * When andy has not reached the goal
      */
-    andyNoHallegadoAlObjetivo() {
-        if (!this.mainScene.debugMode) { //Only if debugMode of the mainScene is not activated
+    andyDidntArriveTheGoal() {
+        if(!this.debugMode){
             let sceneUp = this.scene.get('SceneUp');
             sceneUp.write('No has llegado andy :(, pero a la próxima podrás conseguirlo :)');
-            this.resetGame(9000);
+            if (this.subnivelAnteriorCompletado < 3) {//If non sublevel was completed
+                this.resetGame(9000);
+            }
+            else {//If any sublevel was completed
+                this.resetToSublevel(9000);
+            }
         }
     }
 
     /**
      * To the next level, calling the method in mainScene
      */
-    pasarDeNivel(level) {
+    levelUp(level) {
         let sceneUp = this.scene.get('SceneUp');
-        if (this.todosSubnivelesCompletados(level)) {  
+        if (this.allSublevelsCompleted(level)) {  
             sceneUp.write('Has encontrado la siguiente habitación!');
             this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
                 this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
@@ -256,7 +280,7 @@ class SceneDown extends Phaser.Scene {
     /**
      * If any sublevel is not completed, then should return false, if all completed then true
      */
-    todosSubnivelesCompletados(level) {
+    allSublevelsCompleted(level) {
         let enc = true;
         for (let i = 0;
             (i < this.sublevels.length) && enc; i++) {
@@ -267,14 +291,13 @@ class SceneDown extends Phaser.Scene {
     }
 
     /**
-     * This function is called when a sublevel is completed by andy
+     * This function is called when a sublevel is completed by andy, just to show a message on SceneUp and to check the completed sublevels with a -1 in the sublevel vector
      */
-    andyCompletaSubnivel(level, subnivelCompletado) {
+    andyCompletesSublevel(level, completedSublevel) {
         let sceneUp = this.scene.get('SceneUp');
         if (level === 1) {
-            if (subnivelCompletado === 3 && this.buscarSubnivel(subnivelCompletado)) {
+            if (completedSublevel === 3 && this.searchSublevel(completedSublevel)) {
                 sceneUp.write('Has cogido la linterna! para encenderla escribe: andy.turnOnLED();');
-                //this.andy.matrix
             } else{
                 sceneUp.write('Este subnivel ya está completado andy, deberías intentar llegar al final...');
                 this.resetGame(5000);
@@ -285,13 +308,13 @@ class SceneDown extends Phaser.Scene {
     }
 
     /**
-     * Checks if a sublevel was completed, and then returns true, otherwise returns false
+     * Checks if a sublevel was completed (If it is completed, then a -1 is set in that position), and then returns true, otherwise returns false
      */
-    buscarSubnivel(subnivel) {
+    searchSublevel(sublevel) {
         let enc = false;
         for (let i = 0;
             (i < this.sublevels.length) && !enc; i++) {
-            if (this.sublevels[i] === subnivel) {
+            if (this.sublevels[i] === sublevel) {
                 this.sublevels[i] = -1; //This sublevel is visited, so can't complete it two times in a level iteration
                 enc = true;
             }

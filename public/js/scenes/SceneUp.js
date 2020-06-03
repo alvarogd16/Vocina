@@ -18,7 +18,7 @@ class SceneUp extends Phaser.Scene {
         this.talkSpriteWidthOriginal  = 400;
         this.talkSpriteHeightOriginal = 867;
 
-        //These values ​​need to be adapted to the screen
+        //These values need to be adapted to the screen
         this.sceneWidthOriginal  = this.bubbleWidthOriginal + this.talkSpriteWidthOriginal;
         this.sceneHeightOriginal = this.bubbleHeightOriginal;
 

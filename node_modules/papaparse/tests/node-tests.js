@@ -41,6 +41,42 @@ describe('PapaParse', function() {
 		assertLongSampleParsedCorrectly(Papa.parse(longSampleRawCsv));
 	});
 
+	it('Pause and resume works (Regression Test for Bug #636)', function(done) {
+		this.timeout(30000);
+		var mod200Rows = [
+			["Etiam a dolor vitae est vestibulum","84","DEF"],
+			["Etiam a dolor vitae est vestibulum","84","DEF"],
+			["Lorem ipsum dolor sit","42","ABC"],
+			["Etiam a dolor vitae est vestibulum","84","DEF"],
+			["Etiam a dolor vitae est vestibulum","84"],
+			["Lorem ipsum dolor sit","42","ABC"],
+			["Etiam a dolor vitae est vestibulum","84","DEF"],
+			["Etiam a dolor vitae est vestibulum","84","DEF"],
+			["Lorem ipsum dolor sit","42","ABC"],
+			["Lorem ipsum dolor sit","42"]
+		];
+		var stepped = 0;
+		var dataRows = [];
+		Papa.parse(fs.createReadStream(__dirname + '/verylong-sample.csv'), {
+			step: function(results, parser) {
+				stepped++;
+				if (results)
+				{
+					parser.pause();
+					parser.resume();
+					if (results.data && stepped % 200 === 0) {
+						dataRows.push(results.data);
+					}
+				}
+			},
+			complete: function() {
+				assert.strictEqual(2001, stepped);
+				assert.deepEqual(mod200Rows, dataRows);
+				done();
+			}
+		});
+	});
+
 	it('asynchronously parsed CSV should be correctly parsed', function(done) {
 		Papa.parse(longSampleRawCsv, {
 			complete: function(parsedCsv) {
@@ -122,6 +158,21 @@ describe('PapaParse', function() {
 				'Aliquam Iaculis Incorporate',
 				'Phasellus@Quisquetincidunt.example'
 			]);
+			done();
+		});
+	});
+
+
+	it('piped streaming CSV should be correctly parsed when header is true', function(done) {
+		var data = [];
+		var readStream = fs.createReadStream(__dirname + '/sample-header.csv', 'utf8');
+		var csvStream = readStream.pipe(Papa.parse(Papa.NODE_STREAM_INPUT, {header: true}));
+		csvStream.on('data', function(item) {
+			data.push(item);
+		});
+		csvStream.on('end', function() {
+			assert.deepEqual(data[0], { title: 'test title 01', name: 'test name 01' });
+			assert.deepEqual(data[1],  { title: '', name: 'test name 02' });
 			done();
 		});
 	});

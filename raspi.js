@@ -49,10 +49,10 @@ if(isPi()){
 */
 const raspiConnect = () => {
     if(isPi()) {
-        LED,writeSync(1);
-        setTimeout(() => LED.writeSync(0), 3000);
+        //LEDR.writeSync(1);
+        //setTimeout(() => LEDR.writeSync(0), 3000);
         console.log("Raspi connect");
-    } else 
+    } else
         console.log("Raspi is NOT connect");
 }
 

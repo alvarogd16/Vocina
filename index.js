@@ -6,7 +6,7 @@ const port = 3000;
 
 const raspi = require('./raspi');
 
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 
 //Start the server

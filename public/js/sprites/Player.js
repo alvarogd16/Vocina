@@ -139,7 +139,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (!this.collision) {
             for (let i = 0; i < numberOfMovs; i++) {
                 this.posMatrix[0]--;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10]
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
                 if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
@@ -183,7 +183,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (!this.collision) {
             for (let i = 0; i < numberOfMovs; i++) {
                 this.posMatrix[1]++;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10]
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
                 if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
@@ -226,7 +226,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (!this.collision) {
             for (let i = 0; i < numberOfMovs; i++) {
                 this.posMatrix[1]--;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10]
+                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
                 if (this.actualPos === -1) {
                     numberOfMovs = i;
                     this.collision = true;
@@ -360,8 +360,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
 
         if (this.body.speed > 0) {
+  
+            //If collides a world bound (Bounds manually callculated in SceneDown class, based on the wall size)
+            if(this.x < this.scene.leftBound || this.x > this.scene.rightBound 
+               || this.y > this.scene.bottomBound || this.y < this.scene.upperBound){
+                this.stopAnimation();
+                console.log(this.x+' '+this.y)
+                this.body.reset(this.x, this.y);
+                this.scene.andyDidntArriveTheGoal();
+            }
+            
             //If the sprite reaches one point stored in the queue means that didn't reach the goal tile (checked in a
             //event in the 'SceneDown' class)
+
             if (distance < 0.1) {
                 this.body.reset(this.target.x, this.target.y);
                 this.stopAnimation();
@@ -370,7 +381,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.andyIsMoving = false;
 
                 if (this.andyMovesQueue.isEmpty() && this.scene.arrivedSublevel) {
-                    this.scene.andyCompletesSublevel(1, this.actualPos);
+                    this.scene.andyCompletesSublevel(this.actualPos);
                     this.scene.lastLevelCompleted = this.actualPos;
                     this.scene.arrivedSublevel = false;
                 } 
@@ -380,9 +391,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 } //If the sprite reaches the last point in the queue and that point is the GOAL then reset that andy HAS reached
                 else if (this.andyMovesQueue.isEmpty() && this.scene.arrivedGoal) {
                     this.scene.levelUp(this.scene.scene.get('MainScene').level);
-                } 
-                else if (this.andyMovesQueue.isEmpty() && this.collision) { //If reaches the last point in the queue and collides a bound then didn't reach the GOAL
-                    //Restart the movement control
+                } //If reaches the last point in the queue and collides a bound then didn't reach the GOAL
+                else if (this.andyMovesQueue.isEmpty() && this.collision) { 
                     this.scene.andyDidntArriveTheGoal();
                 }
             }

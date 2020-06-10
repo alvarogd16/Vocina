@@ -102,7 +102,7 @@ class SceneDown extends Phaser.Scene {
             document.getElementById("run").onclick = function () {
                 let editorContent = sceneThis.editor.getValue();
                 sceneThis.readWritten(editorContent);
-                if (!sceneThis.mainScene.debugMode && !sceneThis.arrivedSublevel) //Only if debugMode of the mainScene is not activated
+                if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                     this.disabled = true;
             };
         //}
@@ -133,7 +133,15 @@ class SceneDown extends Phaser.Scene {
         this.map = this.add.image(0, 0, this.keyImgMap).setOrigin(0);
         this.map.setTint(0x000033); //0xffffff
         this.map.setScale(this.zoom);
-
+        
+        /* MAP BOUNDS */
+        
+        //X axis
+        this.leftBound = this.wallSize * this.zoom;
+        this.rightBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
+        //Y axis. Towards upper bound, the position becomes smaller
+        this.upperBound = this.wallSize * this.zoom;
+        this.bottomBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom)) ;
         /* PHYSICS AND PLAYER */
 
         // Set physics boundaries from map width and height and create the player
@@ -199,7 +207,7 @@ class SceneDown extends Phaser.Scene {
     resetGame(delayTime){
     this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
         this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
-        this.subnivelAnteriorCompletado = 0;
+        this.lastLevelCompleted = 0;
         this.scene.lastSublevelMatrixPosition = 0;
 
         this.editor.setValue(""); //Clear codemirror field
@@ -245,7 +253,7 @@ class SceneDown extends Phaser.Scene {
         if(!this.debugMode){
             let sceneUp = this.scene.get('SceneUp');
             sceneUp.write('No has llegado andy :(, pero a la próxima podrás conseguirlo :)');
-            if (this.subnivelAnteriorCompletado < 3) {//If non sublevel was completed
+            if (this.lastLevelCompleted < 3) {//If non sublevel was completed
                 this.resetGame(9000);
             }
             else {//If any sublevel was completed
@@ -263,6 +271,8 @@ class SceneDown extends Phaser.Scene {
             sceneUp.write('Has encontrado la siguiente habitación!');
             this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
                 this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
+                this.lastLevelCompleted = 0;
+                
                 this.editor.setValue(""); //Clear codemirror field
                 this.editor.clearHistory();
 
@@ -293,17 +303,27 @@ class SceneDown extends Phaser.Scene {
     /**
      * This function is called when a sublevel is completed by andy, just to show a message on SceneUp and to check the completed sublevels with a -1 in the sublevel vector
      */
-    andyCompletesSublevel(level, completedSublevel) {
+    andyCompletesSublevel(completedSublevel) {
         let sceneUp = this.scene.get('SceneUp');
-        if (level === 1) {
+        document.getElementById("run").disabled  = false;//Also reset the button to click again
+        if (this.mainScene.level === 1) {
             if (completedSublevel === 3 && this.searchSublevel(completedSublevel)) {
                 sceneUp.write('Has cogido la linterna! para encenderla escribe: andy.turnOnLED();');
             } else{
                 sceneUp.write('Este subnivel ya está completado andy, deberías intentar llegar al final...');
                 this.resetGame(5000);
             }
-        } else if (level === 2) {
-
+        } else if (this.mainScene.level === 2) {
+            if (completedSublevel === 3 && this.searchSublevel(completedSublevel)) {
+                sceneUp.write('Has cogido la rueda!');
+            } else{
+                sceneUp.write('Este subnivel ya está completado andy, deberías intentar llegar al final...');
+                this.resetGame(5000);
+            }   
+        } else if (this.mainScene.level === 3) {
+ 
+        } else if (this.mainScene.level === 4) {
+  
         }
     }
 

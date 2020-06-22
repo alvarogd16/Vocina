@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google" content="notraslate">
+    <title>Vocina Game</title>
+
+
+    <!-- Libraries -->
+    <script src="lib/phaser.js"></script>
+    <script src="lib/codemirror.js"></script>
+    <script src="vocinaSyntax/javascript.js"></script>
+    <link rel="stylesheet" href="lib/codemirrorChange.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div id="principal">
+         <!--Editor zone-->
+         <div id="codeArea">
+            <textarea id="code"></textarea>
+            <button id="run" class="but">RUN</button>
+        </div>
+
+        <!--Game zone-->
+        <div id="gameContainer"></div>
+    </div>
+
+    <!-- Game files -->
+    <script src="js/debugInfo.js"></script>
+    <script src="js/raspiClient.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/Queue.js"></script>
+    <script src="js/sprites/Player.js"></script>
+    <script src="js/sprites/Zombie.js"></script>
+    <script src="js/DialogPlayer.js"></script>
+    <script src="js/scenes/SceneUp.js"></script>
+    <script src="js/scenes/SceneDown.js"></script>
+    <script src="js/scenes/MainScene.js"></script>
+    <script src="js/phaserGame.js"></script>
+</body>
+
+</html>

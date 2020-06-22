@@ -15,7 +15,7 @@ app.listen(port, () => {
     raspi.raspiConnect();
 });
 
-//app.get('/', (req, res) => res.sendFile('index.html'));
+//app.get('/game', (req, res) => res.sendFile(__dirname + '/public/game.html'));
 
 
 /*RASPI PART*/

@@ -1,0 +1,46 @@
+#menu{
+    width: 100%;
+    height: 100%;
+    top:0;
+    left:0;
+    position:fixed;
+    z-index: -1;   
+}
+
+.play {
+        background-image: url(assets/menu/play.png);
+  margin: 0;
+  position: absolute;
+  top: 90%;
+  left: 55%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+    display: inline-block;
+    background-color: #040243;
+    color: #1D2683;
+    padding: 10px 20px 10px 20px;
+    font-family: monospace;
+    font-size: 2.5em; 
+}
+
+.mask {
+    width: 60%;
+    height: 45%;
+    position: absolute;
+    top: 35%;
+    left: 55%;
+    -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.text {
+    width: 85%;
+    height: 40%;
+    position: absolute;
+    top: 71%;
+    left: 55%;
+    -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+    z-index: 1;
+}

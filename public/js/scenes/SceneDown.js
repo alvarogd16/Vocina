@@ -129,7 +129,6 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setSize(this.mapNewSize, this.mapNewSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
 
-
         this.map = this.add.image(0, 0, this.keyImgMap).setOrigin(0);
         this.map.setTint(0x000033); //0xffffff
         this.map.setScale(this.zoom);

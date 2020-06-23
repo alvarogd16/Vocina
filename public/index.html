@@ -6,41 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="google" content="notraslate">
-    <title>Vocina Game</title>
+    <title>Survival Escape</title>
 
-
-    <!-- Libraries -->
-    <script src="lib/phaser.js"></script>
-    <script src="lib/codemirror.js"></script>
-    <script src="vocinaSyntax/javascript.js"></script>
-    <link rel="stylesheet" href="lib/codemirrorChange.css">
-    <link rel="stylesheet" href="lib/main.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/menu.css">
 </head>
 
 <body>
+    <div id="mask"> <img src="assets/menu/mask.png" id="mask" class="mask" alt="mask img"></div> 
+    <div id="text"> <img src="assets/menu/text.png" id="text" class="text" alt="title game"></div> 
+    
     <div id="principal">
-         <!--Editor zone-->
-         <div id="codeArea">
-            <textarea id="code"></textarea>
-            <button id="run" class="but">RUN</button>
-        </div>
+        <!-- Button play zone -->
+        <!--<div id="button"><button id="play" class="play">play</button></div>-->
 
-        <!--Game zone-->
-        <div id="gameContainer"></div>
+        <a class="play" href="game.html">Boton</a>
+
     </div>
-
-    <!-- Game files -->
-    <script src="js/debugInfo.js"></script>
-    <script src="js/raspiClient.js"></script>
-    <script src="js/animations.js"></script>
-    <script src="js/Queue.js"></script>
-    <script src="js/sprites/Player.js"></script>
-    <script src="js/sprites/Zombie.js"></script>
-    <script src="js/DialogPlayer.js"></script>
-    <script src="js/scenes/SceneUp.js"></script>
-    <script src="js/scenes/SceneDown.js"></script>
-    <script src="js/scenes/MainScene.js"></script>
-    <script src="js/phaser.js"></script>
 </body>
 
-</html>
+</html> 

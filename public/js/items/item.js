@@ -1,4 +1,4 @@
-class Item extends Phaser.Physics.Arcade.Sprite {
+class item extends Phaser.Physics.Arcade.Sprite {
     
     constructor(scene, x, y, frame) {
         super(scene, x, y, frame);
@@ -7,12 +7,17 @@ class Item extends Phaser.Physics.Arcade.Sprite {
         this.matrix = this.scene.mapMatrix;
         //this.posMatrix = this.scene.itemPos; SPECIFIC
         
+        //The scale is relative to the map, and an extra substraction to make it a little bit smaller
+        this.itemScale = this.scene.zoom;
+        
+        this.setScale(this.itemScale * 0.6);
+        
         //this.setScale(); DONT KNOW
         this.scene.physics.world.enable(this);
         this.scene.add.existing(this);
         
         //Set the skins of the sprite
-        //this.setTexture('');
+        this.setTexture('button');
         this.setPosition(x, y);
         
         //Set collisions activation of the sprite
@@ -22,7 +27,6 @@ class Item extends Phaser.Physics.Arcade.Sprite {
         this.body.onWorldBounds = true;
         this.scene.physics.world.on('worldbounds', this.onWorldBounds, this);
         
-        //the hitbox is (height=tileHeight, width=tileWidth)
         this.body.setSize(this.scene.tileSize, this.scene.tileSize);
         
         //With this offset calculation the hitbox is situtated right on the center of the sprite
@@ -30,7 +34,7 @@ class Item extends Phaser.Physics.Arcade.Sprite {
         this.body.setOffset(bodyOffset, bodyOffset);
     }
     
-    onWorldBounds() {
-        console.log('Item '+)
+   onWorldBounds() {
+        console.log('Item ')
     }
 }

@@ -20,9 +20,20 @@ class Inventory {
            
     searchItem(item){
         var enc = false;
-        for(int i=0;i<this.itemCounter;i++){
+        for(var i=0;i<this.itemCounter;i++){
             if(this.items[i] == item)
                 enc = true;
+        }
+    }
+    
+    install(item){
+        if(this.searchItem(item)){
+            for(var i=0;i<this.itemCounter;i++){
+                if(this.items[i] == item)
+                    this.items.splice(i, 1);
+            }
+        } else {
+            console.log("no se encuentra el item");
         }
     }
     

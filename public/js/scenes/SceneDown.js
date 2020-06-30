@@ -159,16 +159,6 @@ class SceneDown extends Phaser.Scene {
 
         this.andy = new Player(this, this.andyX, this.andyY);
 
-
-        /* DEBUG INFO */
-
-        // if(this.debugMode){
-        //     showInfoCameras(this.size, this.mapX, this.mapY, this.center, this.zoom, false);
-        //     showInfoTile(this.tileSize,this.numOfTiles, this.sizeMapOriginal, this.numLevel, false);
-        //     showInfoAndy(this.andyX, this.andyY, this.andyScale, false);
-        //     showInfoRaspi(false);
-        // }
-
         this.setLight(true);
     }
 

@@ -1,0 +1,90 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: rgb(10, 33, 53);
+}
+
+#principal {
+	position: relative;
+	max-width: 500px; 
+	height: 100vh;
+	margin: auto;
+}
+
+.play {
+  	position: absolute;
+  	top: 90%;
+	left: 50%;
+	margin-left: -10px;
+	transform: translate(-50%);
+
+    background-color: #0a084ec9;
+    color: #1D2683;
+    padding: 10px 20px;
+    font-family: monospace;
+	font-size: 2.5em; 
+	
+	text-decoration: none;
+}
+
+.mask {
+    width: 60%;
+    height: 45%;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+  	transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.text {
+    width: 85%;
+    height: 40%;
+    position: absolute;
+    top: 71%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+  	transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+#code {
+	height: 25vh; 
+}
+
+#codeArea {
+	position: absolute;
+	height: 25vh;
+	width: 100%;
+	z-index: 2;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+#gameContainer {
+	height: 100vh;
+	width: 100%;
+	z-index: 1;
+}
+
+.but {
+	position: absolute;
+	right: 40px;
+	bottom: 20px;
+	width: 80px;
+	height: 30px;
+	border: none;
+	border-radius: 4px;
+
+	font-family: monospace;
+	font-size: 17px;
+
+	background-color: #200808e1;
+    color: rgb(255, 255, 255);
+	cursor: pointer;
+}
+
+.but:active {
+	transform: translateY(4px);
+}

@@ -93,7 +93,28 @@ class SceneUp extends Phaser.Scene {
         });
         console.log(' -- Loaded typing plugin');
 
-        this.typing.start('Andy por favor, tienes que venir a rescatarme!');
+        //Load json 1
+        this.keyJson = "json1";
+        this.load.json(this.keyJson, "json/level1.json");
+        this.typing.start(this.cache.json.get(this.keyJson).sentences['start']);
+        
+        // sentences
+        this.explanation1 = this.cache.json.get(this.keyJson).sentences['explanation1'];
+        this.sublevel11 = this.cache.json.get(this.keyJson).sentences['sublevel1'];
+
+        // start messages
+        this.time.delayedCall(3000, this.explanation, [], this);
+    }
+    
+    explanation(){ 
+        this.write(this.explanation1);
+        this.time.delayedCall(5000, this.explanationp2, [], this);
+    }
+    
+    explanationp2(){
+        console.log(this.sublevel11);
+        this.write(this.sublevel11);
+        this.time.delayedCall(3000, this.explanationp3, [], this);
     }
 
     /**

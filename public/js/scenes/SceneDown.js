@@ -62,6 +62,33 @@ class SceneDown extends Phaser.Scene {
                 spacing: 0
             }
         });
+        
+        // hardware
+        this.load.spritesheet({
+            key: 'button',
+            url: "assets/hardware/button.png",
+            frameConfig: {
+                frameWidth: 207,
+                frameHeight: 207,
+                startFrame: 0,
+                endFrame: 0,
+                margin: 0,
+                spacing: 0
+            }
+        });
+        
+        this.load.spritesheet({
+            key: 'led',
+            url: "assets/hardware/led.jpg",
+            frameConfig: {
+                frameWidth: 207,
+                frameHeight: 207,
+                startFrame: 0,
+                endFrame: 0,
+                margin: 0,
+                spacing: 0
+            }
+        });
 
         this.keyJson = "json" + this.numLevel;
         this.keyImgMap  = "map" + this.numLevel;
@@ -84,15 +111,14 @@ class SceneDown extends Phaser.Scene {
         this.debugMode = this.mainScene.debugMode;
 
         /* MAP DATA */
+        
         this.mapName = this.cache.json.get(this.keyJson).name;
         this.playerStartPosition = this.cache.json.get(this.keyJson).position; //[x, y]
         this.sublevels = this.cache.json.get(this.keyJson).sublevels; //[x, x1, ...]
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
-        //console.log(this.mapMatrix[2+9*10]);
-        
-        
+               
         /* EDITOR */
-
+        
         //Check that it is not already created
         //if (document.getElementsByClassName('CodeMirror').length === 0) {
             this.editor = this.mainScene.editor;
@@ -108,7 +134,7 @@ class SceneDown extends Phaser.Scene {
         //}
 
         /*KEYBOARD*/
-
+        
         //To debug camera
         this.key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR);
         this.key6 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX);
@@ -119,7 +145,7 @@ class SceneDown extends Phaser.Scene {
 
 
         /* MAP AND CAMERAS*/
-
+        
         //Some constants to the camera and map positions
         this.zoom = this.widthD / this.mapSize; //Zoom level to adapt the map to the scene
         this.mapNewSize = this.widthD;
@@ -128,6 +154,7 @@ class SceneDown extends Phaser.Scene {
 
         this.cameras.main.setSize(this.mapNewSize, this.mapNewSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
+
 
         this.map = this.add.image(0, 0, this.keyImgMap).setOrigin(0);
         this.map.setTint(0x000033); //0xffffff
@@ -141,6 +168,7 @@ class SceneDown extends Phaser.Scene {
         //Y axis. Towards upper bound, the position becomes smaller
         this.upperBound = this.wallSize * this.zoom;
         this.bottomBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom)) ;
+        
         /* PHYSICS AND PLAYER */
 
         // Set physics boundaries from map width and height and create the player
@@ -149,15 +177,34 @@ class SceneDown extends Phaser.Scene {
             this.mapNewSize);
 
         this.setPlayerStartLevelPosition();
+        
+        this.andy = new Player(this, this.andyX, this.andyY);
 
         //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
 
         /* ILLUMINATION */
+        
         this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
         this.light.visible = true;
-
-        this.andy = new Player(this, this.andyX, this.andyY);
+        
+        /* INVENTORY */
+        
+        this.inventory = new Inventory();
+        
+        /* PLAYER COLLIDER WITH ITEMS */
+        
+        this.button = new item(this, this.andyX+this.tileSize*this.zoom*3, this.andyY-this.tileSize*this.zoom*2);
+        this.led = new item(this, this.andyX+this.tileSize*this.zoom, this.andyY-this.tileSize*this.zoom*2);
+        
+        this.physics.add.overlap(this.andy, this.button, function () { 
+                this.button.disableBody(true, true);
+                this.inventory.addItem("button");
+            } , null, this);
+        this.physics.add.overlap(this.andy, this.button, function () {
+                this.led.disableBody(true, true);
+                this.inventory.addItem("led");
+            }, null, this);
 
 
         /* DEBUG INFO */
@@ -251,7 +298,7 @@ class SceneDown extends Phaser.Scene {
     andyDidntArriveTheGoal() {
         if(!this.debugMode){
             let sceneUp = this.scene.get('SceneUp');
-            sceneUp.write('No has llegado andy :(, pero a la próxima podrás conseguirlo :)');
+            sceneUp.write(this.cache.json.get(this.keyJson).sentences['fail']);
             if (this.lastLevelCompleted < 3) {//If non sublevel was completed
                 this.resetGame(9000);
             }
@@ -267,7 +314,8 @@ class SceneDown extends Phaser.Scene {
     levelUp(level) {
         let sceneUp = this.scene.get('SceneUp');
         if (this.allSublevelsCompleted(level)) {  
-            sceneUp.write('Has encontrado la siguiente habitación!');
+            sceneUp.write(this.cache.json.get(this.keyJson).sentences['goal']);
+            
             this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
                 this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
                 this.lastLevelCompleted = 0;
@@ -281,7 +329,7 @@ class SceneDown extends Phaser.Scene {
             }, [], this);
         }
         else{
-            sceneUp.write('Primero has de completar los demás subniveles andy!');
+            sceneUp.write('Primero tienes que completar los demás subniveles Andy...');
             this.resetGame(9000);  
         }
     }
@@ -305,18 +353,65 @@ class SceneDown extends Phaser.Scene {
     andyCompletesSublevel(completedSublevel) {
         let sceneUp = this.scene.get('SceneUp');
         document.getElementById("run").disabled  = false;//Also reset the button to click again
+        
         if (this.mainScene.level === 1) {
-            if (completedSublevel === 3 && this.searchSublevel(completedSublevel)) {
-                sceneUp.write('Has cogido la linterna! para encenderla escribe: andy.turnOnLED();');
-            } else{
-                sceneUp.write('Este subnivel ya está completado andy, deberías intentar llegar al final...');
-                this.resetGame(5000);
+            switch(completedSublevel){
+                case 3:
+                    if (this.searchSublevel(completedSublevel)){
+                        sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel1goal']);
+                        // message sublevel 2
+                        this.time.delayedCall(4000, function (){
+                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel2']);
+                                              }, [], this); 
+                    } else {
+                        sceneUp.write(this.sublevelcompleted);
+                        this.resetGame(5000);
+                    }
+                break;
+                case 4:
+                    if (this.searchSublevel(completedSublevel)) {
+                        sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel2goal']);
+                        // message sublevel 2
+                        this.time.delayedCall(5000, function (){
+                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel3']);
+                                              }, [], this); 
+                    } else {
+                        sceneUp.write(this.sublevelcompleted);
+                        this.resetGame(5000);
+                    }
+                break;
+                case 5:
+                    if(this.searchSublevel(completedSublevel)) {
+                        sceneUp.write(this.sublevel3goal);
+                        // message sublevel 5
+                        this.time.delayedCall(5000, function (){
+                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel3goal2']);
+                                              }, [], this); 
+                        this.time.delayedCall(5000, function (){
+                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel3goal3']);
+                                              }, [], this); 
+                        if(this.inventory.itemCounter == 0){
+                            sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel4']);
+                            if (this.lightOn == true){
+                                this.time.delayedCall(2000, function (){
+                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel5g1']);
+                                              }, [], this);
+                                this.time.delayedCall(2000, function (){
+                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel5g2']);
+                                              }, [], this);
+                            }
+                        }
+                    } else{
+                        sceneUp.write(this.sublevelcompleted);
+                        this.resetGame(5000);
+                    }
+                break;
             }
         } else if (this.mainScene.level === 2) {
             if (completedSublevel === 3 && this.searchSublevel(completedSublevel)) {
                 sceneUp.write('Has cogido la rueda!');
             } else{
-                sceneUp.write('Este subnivel ya está completado andy, deberías intentar llegar al final...');
+                sceneUp.write(this.completedSublevel);
                 this.resetGame(5000);
             }   
         } else if (this.mainScene.level === 3) {

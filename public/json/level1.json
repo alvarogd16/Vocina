@@ -1,15 +1,33 @@
 {
 	"name": "Salon",
 	"position": [2,9],
-    "sublevels": [3],
+    "sublevels": [3, 4, 5],
 	"map": [-1, -1, -1, -1, -1, -1, -1, -1, -1,  0,
-             3,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+            -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
             -1, -1,  0,  0,  0,  0,  0,  0,  0,  2,
             -1, -1,  0,  0, -1, -1, -1, -1,  0,  0,
             -1, -1,  0,  0, -1, -1, -1, -1,  0,  0,
             -1, -1,  0,  0, -1, -1, -1, -1,  0,  0,
             -1,  0,  0,  0, -1, -1, -1, -1,  0,  0,
-            -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-             0,  0,  0,  0,  0,  0, -1, -1, -1, -1,
-            -1,  0,  1,  0,  0,  0, -1, -1, -1, -1]
+            -1,  0,  4,  0,  0,  5,  0,  0,  0,  0,
+             0,  0,  3,  0,  0,  0, -1, -1, -1, -1,
+            -1,  0,  1,  0,  0,  0, -1, -1, -1, -1],
+    
+    "sentences": {
+        "start": "Andy por favor, tienes que venir a buscarme...",
+        "explanation1": "Para ello, contarás con mi ayuda. Te iré explicando como pasar de cada nivel",
+        "sublevel1": "Primero, aprenderás a andar por el mapa, escribe andy.moveUp(1) y pulsa el run",
+        "sublevel1goal": "Muy bien! Ahora vamos a encender las luces del salon",
+        "sublevel2": "Primero nos desplazaremos a por la linterna que está en la siguiente casilla",
+        "sublevel2goal": "Has cogido la linterna, pero falta el botón, ve hacia él con andy.moveRight(3)",
+        "sublevel3goal": "Ya tenemos los componentes necesarios para encender las luces",
+        "sublevel3goal2": "Vamos a instalarlos. Esto lo haremos poniendo linterna.instalar() y los componentes",
+        "sublevel3goal3": "En este caso, linterna.instalar(button) y linterna.instalar(led) ",
+        "sublevel4": "Perfecto, ahora podremos encender la linterna con linterna.turnOnLed()",
+        "sublevel5g1": "Muy bien Andy! Ahora iremos hacia la puerta poniendo dos instrucciones seguidas",
+        "sublevel5g2": "Para ello pondremos andy.moveRight(_),en la siguiente linea andy.moveUp(_) y en otra andy.moveRight(_)",
+        "sublevelCompleted":"Este subnivel ya está completado andy, deberías intentar llegar al final...",
+        "fail": "No has llegado Andy, pero seguro que a la próxima lo consigues",
+        "goal": "Enhorabuena, has encontrado la siguiente habitación!"
+    }
 }

@@ -3,6 +3,8 @@ const isPi = require('detect-rpi');
 let valLED = 0;     //LED
 let valBUT = 0;     //Button
 let valTEMPS = 0;   //Temperature sensor
+let encCont = 0;    //Encoder
+let encAux;
 
 const pinLED = 4;
 const pinBUT = 22;
@@ -13,8 +15,11 @@ const pinEncB = 6;
 
 if(isPi()){ 
     const Gpio = require('onoff').Gpio;
+
     const LEDR = new Gpio(pinLED, 'out');
-    const BUTR = new Gpio(pinBUT, 'out', 'rising');
+    const BUTR = new Gpio(pinBUT, 'in', 'rising');
+    const ENC_A = new Gpio(pinEncA, 'in', 'both');
+    const ENC_B = new Gpio(pinEncB, 'in', 'both');
 
     //TODO AND TO INSTALL
     const sensor = require('node-dht-sensor');
@@ -26,6 +31,7 @@ if(isPi()){
 
     //END TODO
 
+    //Button funcionality
     BUTR.watch(function (err, value){
         if(err){
             console.error(err);
@@ -34,10 +40,27 @@ if(isPi()){
         valBUT = !valBUT;   //When push the button change valBUT
     });
 
+    //Encoder funcionality
+    ENC_A.watch((err, valueA) => {
+        if(err) throw err;
+        encAux = valueA;
+        
+        ENC_B.read((err, valueB) => {
+            if(valueB != encAux) 
+                encCont++;
+            else
+                encCont--;
+                
+            console.log("Value: " + encAux + valueB + "Cont: " + encCont);
+        });
+    });
+
     function unexportOnClose() {
         LEDR.writeSync(0);
         LEDR.unexport();
         BUTR.unexport();
+        ENC_A.unexport();
+        ENC_B.unexport();
         process.exit();
     }
 
@@ -69,6 +92,8 @@ const raspiRead = (component) => {
         return valBUT;
     else if (component === 'TEMPS')
         return valTEMPS;
+    else if (component === 'ENC')
+        return encCont;
     else if(component === "CONNECTED")
         return isPi() ? true : false;
 };

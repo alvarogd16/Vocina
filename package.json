@@ -13,7 +13,7 @@
     "node-dht-sensor": "^0.4.2",
     "nodemon": "^2.0.4",
     "onoff": "^5.0.1",
-    "phaser3-rex-plugins": "^1.1.18"
+    "phaser3-rex-plugins": "^1.1.19"
   },
   "devDependencies": {
     "jsdox": "^0.4.10"

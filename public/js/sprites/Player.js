@@ -339,7 +339,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta);
 
         //Light follow the player
-        this.light.setPosition(this.x, this.y);
+        //this.light.setPosition(this.x, this.y);
 
         // Player movement control, when condition it's true, player is moving and condition can't be trespassed
         if (!this.andyMovesQueue.isEmpty() && !this.andyIsMoving) {

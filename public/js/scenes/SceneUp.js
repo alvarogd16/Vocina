@@ -49,8 +49,9 @@ class SceneUp extends Phaser.Scene {
 
         //Load the dialog plugin in the scene
         //this.load.plugin('DialogModalPlugin', 'js/dialog_plugin.js');
-        var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexttypingplugin.min.js';
-        this.load.plugin('rextexttypingplugin', url, true);
+        let path = "../../lib/rextexttypingplugin.min.js";
+        //let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexttypingplugin.min.js';
+        this.load.plugin('rextexttypingplugin', path, true);
 
         // Player sprite.
         this.load.spritesheet({
@@ -69,6 +70,9 @@ class SceneUp extends Phaser.Scene {
         
         this.load.image("bubble", "assets/dialogPlayer/Bocadillo.png"); 
 
+        //Load json 1
+        this.keyJson = "json1";
+        this.load.json(this.keyJson, "json/level1.json");
     }
     /**
      * Make the scene
@@ -93,9 +97,7 @@ class SceneUp extends Phaser.Scene {
         });
         console.log(' -- Loaded typing plugin');
 
-        //Load json 1
-        this.keyJson = "json1";
-        this.load.json(this.keyJson, "json/level1.json");
+        //Typing first phrase
         this.typing.start(this.cache.json.get(this.keyJson).sentences['start']);
         
         // sentences

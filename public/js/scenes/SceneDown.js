@@ -98,8 +98,9 @@ class SceneDown extends Phaser.Scene {
         this.load.image(this.keyImgMap, "assets/maps/level" + this.numLevel + ".jpg", true);
 
         /* ROTATE TO FOR THE PLAYER */
-        var url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
-        this.load.plugin('rexrotatetoplugin', url, true);
+        let path = "../../lib/rexrotatetoplugin.min.js";
+        //let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
+        this.load.plugin('rexrotatetoplugin', path, true);
 
     }
 

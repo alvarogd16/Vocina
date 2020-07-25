@@ -36,6 +36,7 @@ class SceneUp extends Phaser.Scene {
         this.sceneYstart = this.heightGame-this.widthGame-this.sceneHeight; 
 
         this.editorHeight = this.sceneYstart;
+        
     }
 
     /**
@@ -73,6 +74,12 @@ class SceneUp extends Phaser.Scene {
         //Load json 1
         this.keyJson = "json1";
         this.load.json(this.keyJson, "json/level1.json");
+        
+        // AUDIO LOAD
+        
+        this.load.audio('rand', [
+            'assets/sounds/rand.mp3'
+        ]);
     }
     /**
      * Make the scene
@@ -96,6 +103,12 @@ class SceneUp extends Phaser.Scene {
             setTextCallbackScope: null,
         });
         console.log(' -- Loaded typing plugin');
+        
+        //Initialize crisAlexVoice
+        this.crisAlexVoice = this.sound.add('rand');
+         
+        //Play talk voice
+        this.crisAlexVoice.play();
 
         //Typing first phrase
         this.typing.start(this.cache.json.get(this.keyJson).sentences['start']);
@@ -106,15 +119,28 @@ class SceneUp extends Phaser.Scene {
 
         // start messages
         this.time.delayedCall(3000, this.explanation, [], this);
+        
+        //Stop talk voice (Inside typing plugin event)
+        let crisAlexVoiceVar = this.crisAlexVoice;
+        this.typing.on('complete', function(typing, txt){crisAlexVoiceVar.stop();}); 
+        
     }
     
     explanation(){ 
         this.write(this.explanation1);
+        
+        //Play talk voice
+        this.crisAlexVoice.play();
+        
         this.time.delayedCall(5000, this.explanationp2, [], this);
     }
     
     explanationp2(){
         console.log(this.sublevel11);
+        
+        //Play talk voice
+        this.crisAlexVoice.play();
+        
         this.write(this.sublevel11);
         this.time.delayedCall(3000, this.explanationp3, [], this);
     }

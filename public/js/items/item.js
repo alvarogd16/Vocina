@@ -1,6 +1,6 @@
 class item extends Phaser.Physics.Arcade.Sprite {
     
-    constructor(scene, x, y, frame) {
+    constructor(scene, x, y, frame, object) {
         super(scene, x, y, frame);
 
         this.scene = scene;
@@ -17,7 +17,7 @@ class item extends Phaser.Physics.Arcade.Sprite {
         this.scene.add.existing(this);
         
         //Set the skins of the sprite
-        this.setTexture('button');
+        this.setTexture(object);
         this.setPosition(x, y);
         
         //Set collisions activation of the sprite

@@ -46,8 +46,7 @@ class MainScene extends Phaser.Scene {
         //Call the scenes
         this.scene.launch("SceneUp");
         this.scene.launch("SceneDown", this.level); //With Level1
-
-
+        
         //Calculate editor's height
         this.sceneUp = this.scene.get('SceneUp');
         this.cm.style.height = this.sceneUp.editorHeight + "px";

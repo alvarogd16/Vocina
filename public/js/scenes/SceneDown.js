@@ -79,7 +79,7 @@ class SceneDown extends Phaser.Scene {
         
         this.load.spritesheet({
             key: 'led',
-            url: "assets/hardware/led.jpg",
+            url: "assets/hardware/ledt.png",
             frameConfig: {
                 frameWidth: 207,
                 frameHeight: 207,
@@ -89,6 +89,30 @@ class SceneDown extends Phaser.Scene {
                 spacing: 0
             }
         });
+        
+        // AUDIO LOAD
+        
+        this.load.audio('pickUp', [
+            'assets/sounds/pickUp.wav'
+        ]);
+        
+        this.load.audio('walk', [
+            'assets/sounds/walk.mp3'
+        ]);
+        
+        this.load.audio('sublevelAchieved', [
+            'assets/sounds/sublevelAchieved.wav'
+        ]);
+        
+        this.load.audio('levelAchieved', [
+            'assets/sounds/levelAchieved.wav'
+        ]);
+        
+        this.load.audio('gameOver', [
+            'assets/sounds/gameOver.wav'
+        ]);
+        
+        // JSON LOAD
 
         this.keyJson = "json" + this.numLevel;
         this.keyImgMap  = "map" + this.numLevel;
@@ -195,16 +219,22 @@ class SceneDown extends Phaser.Scene {
         
         /* PLAYER COLLIDER WITH ITEMS */
         
-        this.button = new item(this, this.andyX+this.tileSize*this.zoom*3, this.andyY-this.tileSize*this.zoom*2);
-        this.led = new item(this, this.andyX+this.tileSize*this.zoom, this.andyY-this.tileSize*this.zoom*2);
+        this.button = new item(this, this.andyX+this.tileSize*this.zoom*3, this.andyY-this.tileSize*this.zoom*2, 0, 'button');
+        this.led = new item(this, this.andyX, this.andyY-this.tileSize*this.zoom*2, 0, 'led');
         
         this.physics.add.overlap(this.andy, this.button, function () { 
                 this.button.disableBody(true, true);
                 this.inventory.addItem("button");
+            
+                this.pickUp = this.sound.add('pickUp');
+                this.pickUp.play();
             } , null, this);
-        this.physics.add.overlap(this.andy, this.button, function () {
+        this.physics.add.overlap(this.andy, this.led, function () {
                 this.led.disableBody(true, true);
                 this.inventory.addItem("led");
+            
+                this.pickUp = this.sound.add('pickUp');
+                this.pickUp.play();
             }, null, this);
 
         this.setLight(true);

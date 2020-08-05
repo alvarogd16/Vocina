@@ -106,6 +106,8 @@ class MainScene extends Phaser.Scene {
         
         // AUDIO LOAD
         
+
+        
         this.load.audio('pickUp', [
             'assets/sounds/pickUp.wav'
         ]);

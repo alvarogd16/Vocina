@@ -15,7 +15,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.scene = scene;
         this.matrix = this.scene.mapMatrix;
-        this.posMatrix = this.scene.playerStartPosition;
+        this.posMatrix = this.scene.playerStartPosition;    //Andy's position in the map
 
         //The scale of the player is relative to the map, and an extra substraction to make it a little bit smaller
         this.andyScale = this.scene.zoom;
@@ -66,6 +66,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         /*ANIMATIONS*/
 
         createAnimationsPlayer(scene);
+
+        //Queue to stock moves
         this.andyMovesQueue = new Queue();
 
         this.light = this.scene.light;
@@ -73,19 +75,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     /*FUNCTIONS TO USE BY USER*/
 
+    //To delete
     /**Turn on game light and raspberry LED*/
     turnOnLED() {
         raspiWrite('LED', 1);
         this.scene.setLight(true);
     }
 
+    //To delete
     /**Turn off game light and raspberry LED*/
     turnOffLED() {
         raspiWrite('LED', 0);
         this.scene.setLight(false);
     }
-
-    // MOVE FROM CODEMIRROR
 
     /**
      * Console method to put the values of a new target (To the right) into the queue

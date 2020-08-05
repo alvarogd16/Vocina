@@ -58,7 +58,8 @@ class SceneDown extends Phaser.Scene {
         this.playerStartPosition = this.cache.json.get(this.keyJson).position;  //[x, y]
         this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //[x, x1, ...]
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
-        this.sentences = this.cache.json.get(this.keyJson).sentences;
+        this.sentences = this.cache.json.get(this.keyJson).sentences;           //text, time
+        this.items = this.cache.json.get(this.keyJson).items;                   //name, position
                
         /* EDITOR */
 
@@ -131,25 +132,19 @@ class SceneDown extends Phaser.Scene {
         
         this.inventory = new Inventory();
         
-        /* PLAYER COLLIDER WITH ITEMS */
-        
-        this.button = new item(this, this.andyX+this.tileSize*this.zoom*3, this.andyY-this.tileSize*this.zoom*2, 0, 'button');
-        this.led = new item(this, this.andyX, this.andyY-this.tileSize*this.zoom*2, 0, 'led');
-        
-        this.physics.add.overlap(this.andy, this.button, function () { 
-                this.button.disableBody(true, true);
-                this.inventory.addItem("button");
+        /* LOAD ITEMS */
+
+        this.items.forEach(element => {
+            let object = new item(this, this.andyX+this.tileSize*this.zoom*3, this.andyY-this.tileSize*this.zoom*2, 0, element.name);
+            this.physics.add.overlap(this.andy, object, function () { 
+                object.disableBody(true, true);
+                this.inventory.addItem(element.name);
             
                 this.pickUp = this.sound.add('pickUp');
                 this.pickUp.play();
             } , null, this);
-        this.physics.add.overlap(this.andy, this.led, function () {
-                this.led.disableBody(true, true);
-                this.inventory.addItem("led");
-            
-                this.pickUp = this.sound.add('pickUp');
-                this.pickUp.play();
-            }, null, this);
+            console.log(element.name, element.position);
+        });
 
         this.setLight(true);
     }

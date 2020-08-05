@@ -30,5 +30,8 @@
         "fail": "No has llegado Andy, pero seguro que a la próxima lo consigues",
         "goal": "Enhorabuena, has encontrado la siguiente habitación!"
     },
-    "items": []
+    "items": [
+        {"name": "button", "position": [2, 3]},
+        {"name": "led", "position": [3, 3]}
+    ]
 }

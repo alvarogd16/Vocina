@@ -49,7 +49,6 @@ class SceneUp extends Phaser.Scene {
         //this.load.image("dialogs", "../public/assets/dialogs.jpg");
 
         //Load the dialog plugin in the scene
-        //this.load.plugin('DialogModalPlugin', 'js/dialog_plugin.js');
         let path = "../../lib/rextexttypingplugin.min.js";
         //let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexttypingplugin.min.js';
         this.load.plugin('rextexttypingplugin', path, true);

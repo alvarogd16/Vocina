@@ -9,9 +9,9 @@ class SceneDown extends Phaser.Scene {
         super("SceneDown");
         console.log('Creating SceneDown...');
 
-        this.mapSize = 1125; //Original map sizes
-        this.tileSize = 103; //Measured with photoshop
-        this.wallSize = 44; //Measured with photoshop
+        this.mapSize = 1125;    //Original map sizes
+        this.tileSize = 103;    //Measured with photoshop
+        this.wallSize = 44;     //Measured with photoshop
 
         this.arrivedGoal = false; //This is used for the player (update snippet in which it's checked whether the player reached a target or not) to know how to distinguish between reaching a target (means didn't reach the GOAL) and reaching the GOAL
         this.arrivedSublevel = false;
@@ -35,97 +35,13 @@ class SceneDown extends Phaser.Scene {
      * Load all assets in cache
      */
     preload() {
-        // Player sprite.
-        this.load.spritesheet({
-            key: 'player',
-            url: "assets/andy/chico.png",
-            frameConfig: {
-                frameWidth: 207, //The width of the frame in pixels.
-                frameHeight: 207, //The height of the frame in pixels. Uses the frameWidth value if not provided.
-                startFrame: 0, //The first frame to start parsing from.
-                endFrame: 12, //The frame to stop parsing at. If not provided it will calculate the value based on the image and frame dimensions.
-                margin: 0, //The margin in the image. This is the space around the edge of the frames.
-                spacing: 0 //The spacing between each frame in the image.
-            }
-        });
-
-        // Zombie sprite.
-        this.load.spritesheet({
-            key: 'zombie',
-            url: "assets/zombie.png",
-            frameConfig: {
-                frameWidth: 21,
-                frameHeight: 26,
-                startFrame: 0,
-                endFrame: 0,
-                margin: 0,
-                spacing: 0
-            }
-        });
-        
-        // hardware
-        this.load.spritesheet({
-            key: 'button',
-            url: "assets/hardware/button.png",
-            frameConfig: {
-                frameWidth: 207,
-                frameHeight: 207,
-                startFrame: 0,
-                endFrame: 0,
-                margin: 0,
-                spacing: 0
-            }
-        });
-        
-        this.load.spritesheet({
-            key: 'led',
-            url: "assets/hardware/ledt.png",
-            frameConfig: {
-                frameWidth: 207,
-                frameHeight: 207,
-                startFrame: 0,
-                endFrame: 0,
-                margin: 0,
-                spacing: 0
-            }
-        });
-        
-        // AUDIO LOAD
-        
-        this.load.audio('pickUp', [
-            'assets/sounds/pickUp.wav'
-        ]);
-        
-        this.load.audio('walk', [
-            'assets/sounds/walk.mp3'
-        ]);
-        
-        this.load.audio('sublevelAchieved', [
-            'assets/sounds/sublevelAchieved.wav'
-        ]);
-        
-        this.load.audio('levelAchieved', [
-            'assets/sounds/levelAchieved.wav'
-        ]);
-        
-        this.load.audio('gameOver', [
-            'assets/sounds/gameOver.wav'
-        ]);
-        
         // JSON LOAD
 
         this.keyJson = "json" + this.numLevel;
         this.keyImgMap  = "map" + this.numLevel;
 
-        //Load json and image map
         this.load.json(this.keyJson, "json/level" + this.numLevel + ".json");
         this.load.image(this.keyImgMap, "assets/maps/level" + this.numLevel + ".jpg", true);
-
-        /* ROTATE TO FOR THE PLAYER */
-        let path = "../../lib/rexrotatetoplugin.min.js";
-        //let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
-        this.load.plugin('rexrotatetoplugin', path, true);
-
     }
 
     /**
@@ -133,30 +49,29 @@ class SceneDown extends Phaser.Scene {
      */
     create() {
         this.mainScene = this.scene.get('MainScene');
+        this.sceneUp = this.scene.get('SceneUp');
         this.debugMode = this.mainScene.debugMode;
 
         /* MAP DATA */
         
         this.mapName = this.cache.json.get(this.keyJson).name;
-        this.playerStartPosition = this.cache.json.get(this.keyJson).position; //[x, y]
-        this.sublevels = this.cache.json.get(this.keyJson).sublevels; //[x, x1, ...]
+        this.playerStartPosition = this.cache.json.get(this.keyJson).position;  //[x, y]
+        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //[x, x1, ...]
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
+        this.sentences = this.cache.json.get(this.keyJson).sentences;
                
         /* EDITOR */
-        
-        //Check that it is not already created
-        //if (document.getElementsByClassName('CodeMirror').length === 0) {
-            this.editor = this.mainScene.editor;
 
-            //Create the button to run the code
-            let sceneThis = this;
-            document.getElementById("run").onclick = function () {
-                let editorContent = sceneThis.editor.getValue();
-                sceneThis.readWritten(editorContent);
-                if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
-                    this.disabled = true;
-            };
-        //}
+        this.editor = this.mainScene.editor;
+
+        //Create the button to run the code
+        let sceneThis = this;
+        document.getElementById("run").onclick = function () {
+            let editorContent = sceneThis.editor.getValue();
+            sceneThis.readWritten(editorContent);
+            if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
+                this.disabled = true;
+        };
 
         /*KEYBOARD*/
         
@@ -180,7 +95,6 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setSize(this.mapNewSize, this.mapNewSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
 
-
         this.map = this.add.image(0, 0, this.keyImgMap).setOrigin(0);
         this.map.setTint(0x000033); //0xffffff
         this.map.setScale(this.zoom);
@@ -192,7 +106,7 @@ class SceneDown extends Phaser.Scene {
         this.rightBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
         //Y axis. Towards upper bound, the position becomes smaller
         this.upperBound = this.wallSize * this.zoom;
-        this.bottomBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom)) ;
+        this.bottomBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
         
         /* PHYSICS AND PLAYER */
 
@@ -264,8 +178,14 @@ class SceneDown extends Phaser.Scene {
     readWritten(editorContent) {
         let andy = this.andy;
         let args = 'andy';
-        let executeMe = this.createFunction(args, editorContent);
-        executeMe(andy);
+
+        try{
+            let executeMe = this.createFunction(args, editorContent);
+            executeMe(andy);
+        } catch(e){
+            console.error(e);
+            this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien")
+        }
     }
     
     /**
@@ -300,8 +220,7 @@ class SceneDown extends Phaser.Scene {
             this.editor.setValue(""); //Clear codemirror field
             this.editor.clearHistory();
             
-            let sceneUp = this.scene.get('SceneUp');
-            sceneUp.write('');
+            this.sceneUp.write('');
             
             this.andy.collision = false;
             this.andy.collidingWorldBounds = false;
@@ -318,8 +237,7 @@ class SceneDown extends Phaser.Scene {
      */
     andyDidntArriveTheGoal() {
         if(!this.debugMode){
-            let sceneUp = this.scene.get('SceneUp');
-            sceneUp.write(this.cache.json.get(this.keyJson).sentences['fail']);
+            this.sceneUp.write(this.sentences['fail']);
             if (this.lastLevelCompleted < 3) {//If non sublevel was completed
                 this.resetGame(9000);
             }
@@ -333,9 +251,8 @@ class SceneDown extends Phaser.Scene {
      * To the next level, calling the method in mainScene
      */
     levelUp(level) {
-        let sceneUp = this.scene.get('SceneUp');
         if (this.allSublevelsCompleted(level)) {  
-            sceneUp.write(this.cache.json.get(this.keyJson).sentences['goal']);
+            this.sceneUp.write(this.sentences['goal']);
             
             this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
                 this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
@@ -350,7 +267,7 @@ class SceneDown extends Phaser.Scene {
             }, [], this);
         }
         else{
-            sceneUp.write('Primero tienes que completar los demás subniveles Andy...');
+            this.sceneUp.write('Primero tienes que completar los demás subniveles Andy...');
             this.resetGame(9000);  
         }
     }
@@ -360,8 +277,7 @@ class SceneDown extends Phaser.Scene {
      */
     allSublevelsCompleted(level) {
         let enc = true;
-        for (let i = 0;
-            (i < this.sublevels.length) && enc; i++) {
+        for (let i = 0; (i < this.sublevels.length) && enc; i++) {
             if (this.sublevels[i] !== -1)
                 enc = false;
         }
@@ -372,67 +288,66 @@ class SceneDown extends Phaser.Scene {
      * This function is called when a sublevel is completed by andy, just to show a message on SceneUp and to check the completed sublevels with a -1 in the sublevel vector
      */
     andyCompletesSublevel(completedSublevel) {
-        let sceneUp = this.scene.get('SceneUp');
         document.getElementById("run").disabled  = false;//Also reset the button to click again
         
         if (this.mainScene.level === 1) {
             switch(completedSublevel){
                 case 3:
                     if (this.searchSublevel(completedSublevel)){
-                        sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel1goal']);
+                        this.sceneUp.write(this.sentences['sublevel1goal']);
                         // message sublevel 2
                         this.time.delayedCall(4000, function (){
-                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel2']);
+                                              this.sceneUp.write(this.sentences['sublevel2']);
                                               }, [], this); 
                     } else {
-                        sceneUp.write(this.sublevelcompleted);
+                        this.sceneUp.write(this.sublevelcompleted);
                         this.resetGame(5000);
                     }
                 break;
                 case 4:
                     if (this.searchSublevel(completedSublevel)) {
-                        sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel2goal']);
+                        this.sceneUp.write(this.sentences['sublevel2goal']);
                         // message sublevel 2
                         this.time.delayedCall(5000, function (){
-                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel3']);
+                                              this.sceneUp.write(this.sentences['sublevel3']);
                                               }, [], this); 
                     } else {
-                        sceneUp.write(this.sublevelcompleted);
+                        this.sceneUp.write(this.sublevelcompleted);
                         this.resetGame(5000);
                     }
                 break;
                 case 5:
                     if(this.searchSublevel(completedSublevel)) {
-                        sceneUp.write(this.sublevel3goal);
+                        this.sceneUp.write(this.sublevel3goal);
                         // message sublevel 5
                         this.time.delayedCall(5000, function (){
-                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel3goal2']);
+                                              this.sceneUp.write(this.sentences['sublevel3goal2']);
                                               }, [], this); 
                         this.time.delayedCall(5000, function (){
-                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel3goal3']);
+                                              this.sceneUp.write(this.sentences['sublevel3goal3']);
                                               }, [], this); 
                         if(this.inventory.itemCounter == 0){
-                            sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel4']);
+                            this.sceneUp.write(this.sentences['sublevel4']);
                             if (this.lightOn == true){
                                 this.time.delayedCall(2000, function (){
-                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel5g1']);
+                                              this.sceneUp.write(this.sentences['sublevel5g1']);
                                               }, [], this);
                                 this.time.delayedCall(2000, function (){
-                                              sceneUp.write(this.cache.json.get(this.keyJson).sentences['sublevel5g2']);
+                                              this.sceneUp.write(this.sentences['sublevel5g2']);
                                               }, [], this);
                             }
                         }
                     } else{
-                        sceneUp.write(this.sublevelcompleted);
+                        this.sceneUp.write(this.sublevelcompleted);
                         this.resetGame(5000);
                     }
                 break;
             }
         } else if (this.mainScene.level === 2) {
             if (completedSublevel === 3 && this.searchSublevel(completedSublevel)) {
-                sceneUp.write('Has cogido la rueda!');
+                this.sceneUp.write('Has cogido la rueda!');
             } else{
-                sceneUp.write(this.completedSublevel);
+                this.sceneUp.write(this.completedSublevel);
                 this.resetGame(5000);
             }   
         } else if (this.mainScene.level === 3) {
@@ -447,8 +362,7 @@ class SceneDown extends Phaser.Scene {
      */
     searchSublevel(sublevel) {
         let enc = false;
-        for (let i = 0;
-            (i < this.sublevels.length) && !enc; i++) {
+        for (let i = 0; (i < this.sublevels.length) && !enc; i++) {
             if (this.sublevels[i] === sublevel) {
                 this.sublevels[i] = -1; //This sublevel is visited, so can't complete it two times in a level iteration
                 enc = true;

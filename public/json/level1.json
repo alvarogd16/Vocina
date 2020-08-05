@@ -29,5 +29,6 @@
         "sublevelCompleted":"Este subnivel ya está completado andy, deberías intentar llegar al final...",
         "fail": "No has llegado Andy, pero seguro que a la próxima lo consigues",
         "goal": "Enhorabuena, has encontrado la siguiente habitación!"
-    }
+    },
+    "items": []
 }

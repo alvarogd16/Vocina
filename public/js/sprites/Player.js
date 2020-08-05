@@ -359,9 +359,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // standing
         let currentDirection = this.direction;
-        if (this.direction === 'left') {
+        if (this.direction === 'left')
             currentDirection = 'right';
-        } //account for flipped sprite
+        //account for flipped sprite
         this.animationName = 'stand-' + currentDirection;
 
         //Distance between andy and the point will reach
@@ -417,6 +417,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
         } else if (this.collisionWithoutMovement) { //If andy tries to move towards a wall that's in (Is not going to be moving)
+            console.log("Hola");
             this.gameOver = this.scene.sound.add('gameOver');
             this.gameOver.play();
             

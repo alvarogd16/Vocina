@@ -127,6 +127,10 @@ class MainScene extends Phaser.Scene {
         this.load.audio('gameOver', [
             'assets/sounds/gameOver.wav'
         ]);
+        
+        this.load.audio('levelsAmbience', [
+            'assets/sounds/levelsAmbience.mp3'
+        ]);
 
         // PLUGIN LOAD
 
@@ -156,6 +160,27 @@ class MainScene extends Phaser.Scene {
         })
         this.editor.setValue("//¿Estás preparado?") //Default value
 
+        
+        
+        //Play levels ambience
+        var loopMarker = {
+            name: 'loop',
+            config: {
+                loop: true
+            }
+        };
+        
+        this.levelsAmbience = this.sound.add('levelsAmbience');
+        //this.menuTheme.play();
+        
+        this.levelsAmbience.addMarker(loopMarker);
+
+        // Delay option can only be passed in config
+        this.levelsAmbience.play('loop', {
+            delay: 0
+        });
+        
+        
 
         //Call the scenes
         this.scene.launch("SceneUp");

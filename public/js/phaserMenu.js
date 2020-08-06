@@ -8,7 +8,7 @@ class Menu extends Phaser.Scene {
 
 	preload(){
 		//Load images files
-                this.load.audio('menuTheme', [
+        this.load.audio('menuTheme', [
             'assets/sounds/menuTheme.mp3'
         ])
 
@@ -45,7 +45,7 @@ class Menu extends Phaser.Scene {
 }
 
 const config = {
-    type: Phaser.AUTO,
+    type: Phaser.AUTO, 
     width: widthD,
     height: heightD,
     parent: 'principal',

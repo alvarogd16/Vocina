@@ -135,10 +135,12 @@ class SceneDown extends Phaser.Scene {
         /* LOAD ITEMS */
 
         this.items.forEach(element => {
-            let object = new item(this, this.andyX+this.tileSize*this.zoom*3, this.andyY-this.tileSize*this.zoom*2, 0, element.name);
+            this.setItemPosition(element.position);
+            let object = new item(this, this.itemPositionX, this.itemPositionY, 0, element.name);
             this.physics.add.overlap(this.andy, object, function () { 
                 object.disableBody(true, true);
                 this.inventory.addItem(element.name);
+                console.log(this.inventory);
             
                 this.pickUp = this.sound.add('pickUp');
                 this.pickUp.play();
@@ -153,6 +155,12 @@ class SceneDown extends Phaser.Scene {
         //Set player position
         this.andyX = (this.wallSize + this.tileSize / 2 + this.tileSize * this.playerStartPosition[0]) * this.zoom;
         this.andyY = (this.wallSize + this.tileSize / 2 + this.tileSize * this.playerStartPosition[1]) * this.zoom;
+    }
+    
+    setItemPosition(position) {
+        //Set an item position
+        this.itemPositionX = (this.wallSize + this.tileSize / 2 + this.tileSize * position[0]) * this.zoom;
+        this.itemPositionY = (this.wallSize + this.tileSize / 2 + this.tileSize * position[1]) * this.zoom;
     }
 
     /*EJECUTE CODE*/

@@ -15,7 +15,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.scene = scene;
         this.matrix = this.scene.mapMatrix;
-        this.posMatrix = this.scene.playerStartPosition;    //Andy's position in the map
+        this.posMatrix = this.scene.playerStartPosition; //Andy's position in the map
 
         //The scale of the player is relative to the map, and an extra substraction to make it a little bit smaller
         this.andyScale = this.scene.zoom;
@@ -95,27 +95,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     moveRight(numberOfMovs) {
         if (!this.collision) {
-            for (let i = 0; i < numberOfMovs; i++) {
-                this.posMatrix[0]++;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
-                if (this.actualPos === -1) {
-                    numberOfMovs = i;
-                    this.collision = true;
-                    if(numberOfMovs == 0)
-                        this.collisionWithoutMovement = true;
-                    break;
-                } else if (this.actualPos === 0 || this.actualPos === 1) {
-                    this.scene.arrivedGoal = false;
-                } else if (this.actualPos === 2) {
-                    this.scene.arrivedGoal = true;
-                    console.log("Has llegado al final del nivel!");
-                } else if (this.actualPos >= 3) {
-                    this.scene.arrivedSublevel = true;
-                    this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
-                    this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
-                    console.log("Subnivel conseguido");
-                }
-            }
+            this.matrixMovement(numberOfMovs, 'right');
 
             if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
@@ -138,28 +118,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     moveLeft(numberOfMovs) {
         if (!this.collision) {
-            for (let i = 0; i < numberOfMovs; i++) {
-                this.posMatrix[0]--;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
-                if (this.actualPos === -1) {
-                    numberOfMovs = i;
-                    this.collision = true;
-                    if(numberOfMovs == 0)
-                        this.collisionWithoutMovement = true;
-                    break;
-                } else if (this.actualPos === 0 || this.actualPos === 1) {
-                    this.scene.arrivedGoal = false;
-                } else if (this.actualPos === 2) {
-                    this.scene.arrivedGoal = true;
-                    console.log("Has llegado al final del nivel!")
-                } else if (this.actualPos >= 3) {
-                    this.scene.arrivedSublevel = true;
-                    this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
-                    this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
-                    console.log("Subnivel conseguido");
-                }
-
-            }
+            this.matrixMovement(numberOfMovs, 'left');
 
             if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
@@ -182,27 +141,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     moveDown(numberOfMovs) {
         if (!this.collision) {
-            for (let i = 0; i < numberOfMovs; i++) {
-                this.posMatrix[1]++;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
-                if (this.actualPos === -1) {
-                    numberOfMovs = i;
-                    this.collision = true;
-                    if(numberOfMovs == 0)
-                        this.collisionWithoutMovement = true;                    
-                    break;
-                } else if (this.actualPos === 0 || this.actualPos === 1) {
-                    this.scene.arrivedGoal = false;
-                } else if (this.actualPos === 2) {
-                    this.scene.arrivedGoal = true;
-                    console.log("Has llegado al final del nivel!")
-                } else if (this.actualPos >= 3) {
-                    this.scene.arrivedSublevel = true;
-                    this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
-                    this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
-                    console.log("Subnivel conseguido");
-                }
-            }
+            this.matrixMovement(numberOfMovs, 'down');
 
             if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
@@ -225,27 +164,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     moveUp(numberOfMovs) {
         if (!this.collision) {
-            for (let i = 0; i < numberOfMovs; i++) {
-                this.posMatrix[1]--;
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
-                if (this.actualPos === -1) {
-                    numberOfMovs = i;
-                    this.collision = true;
-                    if(numberOfMovs == 0)
-                        this.collisionWithoutMovement = true;
-                    break;
-                } else if (this.actualPos === 0 || this.actualPos === 1) {
-                    this.scene.arrivedGoal = false;
-                } else if (this.actualPos === 2) {
-                    this.scene.arrivedGoal = true;
-                    console.log("Has llegado al final del nivel!")
-                } else if (this.actualPos >= 3) {
-                    this.scene.arrivedSublevel = true;
-                    this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
-                    this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
-                    console.log("Subnivel conseguido");
-                }
-            }
+            this.matrixMovement(numberOfMovs, 'up');
 
             if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
@@ -258,6 +177,45 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
                 this.targetAux.dir = 'up';
                 this.andyMovesQueue.enqueue(this.targetAux);
+            }
+        }
+    }
+
+    // MATRIX MOVE
+
+    matrixMovement(numberOfMovs, direction) {
+        for (let i = 0; i < numberOfMovs; i++) {
+            switch (direction) {
+                case 'up':
+                    this.posMatrix[1]--;
+                    break;
+                case 'down':
+                    this.posMatrix[1]++;
+                    break;
+                case 'right':
+                    this.posMatrix[0]++;
+                    break;
+                case 'left':
+                    this.posMatrix[0]--;
+                    break;
+            }
+            this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
+            if (this.actualPos === -1) {
+                numberOfMovs = i;
+                this.collision = true;
+                if (numberOfMovs == 0)
+                    this.collisionWithoutMovement = true;
+                break;
+            } else if (this.actualPos === 0 || this.actualPos === 1) {
+                this.scene.arrivedGoal = false;
+            } else if (this.actualPos === 2) {
+                this.scene.arrivedGoal = true;
+                console.log("Has llegado al final del nivel!")
+            } else if (this.actualPos >= 3) {
+                this.scene.arrivedSublevel = true;
+                this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
+                this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
+                console.log("Subnivel conseguido");
             }
         }
     }
@@ -315,7 +273,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     startAnimation() {
         this.anims.play(this.animationName, true);
-        
+
         //Play walk sound
         this.walk = this.scene.sound.add('walk');
         this.walk.play();
@@ -326,7 +284,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     stopAnimation() {
         this.anims.stop();
-        
+
         //Stop walk sound
         this.walk.stop();
     }
@@ -368,16 +326,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
 
         if (this.body.speed > 0) {
-  
+
             //If collides a world bound (Bounds manually callculated in SceneDown class, based on the wall size)
-            if(this.x < this.scene.leftBound || this.x > this.scene.rightBound 
-               || this.y > this.scene.bottomBound || this.y < this.scene.upperBound){
+            if (this.x < this.scene.leftBound || this.x > this.scene.rightBound ||
+                this.y > this.scene.bottomBound || this.y < this.scene.upperBound) {
                 this.stopAnimation();
-                console.log(this.x+' '+this.y)
+                console.log(this.x + ' ' + this.y)
                 this.body.reset(this.x, this.y);
                 this.scene.andyDidntArriveTheGoal();
             }
-            
+
             //If the sprite reaches one point stored in the queue means that didn't reach the goal tile (checked in a
             //event in the 'SceneDown' class)
 
@@ -391,28 +349,28 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (this.andyMovesQueue.isEmpty() && this.scene.arrivedSublevel) {
                     this.sublevelAchieved = this.scene.sound.add('sublevelAchieved');
                     this.sublevelAchieved.play();
-                    
+
                     this.scene.andyCompletesSublevel(this.actualPos);
                     this.scene.lastLevelCompleted = this.actualPos;
                     this.scene.arrivedSublevel = false;
-                } 
+                }
                 //If the sprite reaches the last point in the queue and that point isn't the GOAL then reset that andy has NOT reached
                 else if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
                     this.gameOver = this.scene.sound.add('gameOver');
                     this.gameOver.play();
-                    
+
                     this.scene.andyDidntArriveTheGoal();
                 } //If the sprite reaches the last point in the queue and that point is the GOAL then reset that andy HAS reached
                 else if (this.andyMovesQueue.isEmpty() && this.scene.arrivedGoal) {
                     this.levelAchieved = this.scene.sound.add('levelAchieved');
                     this.levelAchieved.play();
-                    
+
                     this.scene.levelUp(this.scene.scene.get('MainScene').level);
                 } //If reaches the last point in the queue and collides a bound then didn't reach the GOAL
-                else if (this.andyMovesQueue.isEmpty() && this.collision) { 
+                else if (this.andyMovesQueue.isEmpty() && this.collision) {
                     this.gameOver = this.scene.sound.add('gameOver');
                     this.gameOver.play();
-                    
+
                     this.scene.andyDidntArriveTheGoal();
                 }
             }
@@ -420,7 +378,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             console.log("Hola");
             this.gameOver = this.scene.sound.add('gameOver');
             this.gameOver.play();
-            
+
             this.collisionWithoutMovement = false;
             this.scene.andyDidntArriveTheGoal();
         }

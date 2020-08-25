@@ -138,6 +138,8 @@ class MainScene extends Phaser.Scene {
         //let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
         this.load.plugin('rexrotatetoplugin', path, true);
 
+        this.load.plugin('rexfsmplugin', '../../lib/rexfsmplugin.min.js', true);
+
         this.load.image("background", "assets/dialogPlayer/PantallaBackground.png");
     }
 
@@ -163,7 +165,7 @@ class MainScene extends Phaser.Scene {
         
         
         //Play levels ambience
-        var loopMarker = {
+        let loopMarker = {
             name: 'loop',
             config: {
                 loop: true
@@ -180,7 +182,72 @@ class MainScene extends Phaser.Scene {
             delay: 0
         });
         
+
+        let stateConfig = {
+            states: {
+                explanation: {
+                    next: 'programming',
+                    enter: function () {
+                        console.log("explanation start");
+                        //call to the explanation function
+                    }
+                },
+                programming: {
+                    next: 'check',
+                    enter: function () {
+                        console.log("programming start");
+                        //activate writte and run button
+                    }
+                },
+                check: {
+                    next: function () {
+                        if(this.codeErrors){
+                            //error message
+                            return 'programming';
+                        } else {
+                            //complete message
+                            return 'action';
+                        }
+                    },
+                    enter: function (){
+                        console.log("check start");
+                        //
+                    }
+                },
+                action: {
+                    next: function () {
+                        if(this.sublevelComplete){
+                            if(this.lastSublevel){
+                                return 'end';
+                            }
+
+                            //next sublevel
+                            return 'explanation';
+                        } else {
+                            //fail message depends of tipe of sublevel
+                            return 'programming';
+                        }
+                    },
+                    enter: function () {
+                        console.log("action start");
+                        //Do the action depends of sublevel
+                    }
+                },
+                end: {
+                    enter: function () {
+                        console.log("End of game");       
+                    }
+                }
+            },
+            extend: {
+                codeErrors: false,
+                sublevelComplete: false,
+                lastSublevel: false
+            }
+        }
         
+        let state = this.plugins.get('rexfsmplugin').add(stateConfig).goto("explanation");
+
 
         //Call the scenes
         this.scene.launch("SceneUp");

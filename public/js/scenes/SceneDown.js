@@ -1,3 +1,6 @@
+import Lantern from '../items/lantern.js';
+import Fridge from '../items/fridge.js';
+
 /** Class where the game action occurs
  *  @extends Phaser.Scene
  */
@@ -21,6 +24,14 @@ class SceneDown extends Phaser.Scene {
         this.lightOn = true;
         this.widthD = document.getElementById('gameContainer').clientWidth
         this.heightD = document.getElementById('gameContainer').clientHeight
+
+        // Use ES6 Object Literal Property Value Shorthand to maintain a map
+        // where the keys share the same names as the classes themselves
+        this.itemObjectProxyClasses = {
+            Lantern,
+            Fridge
+        };
+
     }
 
     /**
@@ -60,6 +71,7 @@ class SceneDown extends Phaser.Scene {
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
         this.sentences = this.cache.json.get(this.keyJson).sentences;           //text, time
         this.items = this.cache.json.get(this.keyJson).items;                   //name, position
+        this.itemObject = this.cache.json.get(this.keyJson).itemObject;         //name
                
         /* EDITOR */
 
@@ -128,6 +140,8 @@ class SceneDown extends Phaser.Scene {
         this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
         this.light.visible = true;
         
+        this.setLight(true);
+        
         /* INVENTORY */
         
         this.inventory = new Inventory();
@@ -147,8 +161,14 @@ class SceneDown extends Phaser.Scene {
             } , null, this);
             console.log(element.name, element.position);
         });
+        
+        /* LOAD ITEMOBJECTS */
 
-        this.setLight(true);
+        this.itemObject.forEach(element => {
+            //new item(this, this.itemPositionX, this.itemPositionY, 0, element.name);
+            //console.log(element.name, element.);
+        });
+        
     }
 
     setPlayerStartLevelPosition() {

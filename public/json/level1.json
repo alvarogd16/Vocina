@@ -12,7 +12,6 @@
             -1,  0,  4,  0,  0,  5,  0,  0,  0,  0,
              0,  0,  3,  0,  0,  0, -1, -1, -1, -1,
             -1,  0,  1,  0,  0,  0, -1, -1, -1, -1],
-    
     "sentences": {
         "start": "Andy por favor, tienes que venir a buscarme...",
         "explanation1": "Para ello, contarás con mi ayuda. Te iré explicando como pasar de cada nivel",
@@ -33,5 +32,8 @@
     "items": [
         {"name": "button", "position": [5, 7]},
         {"name": "led", "position": [2, 7]}
+    ],
+    "itemObject": [
+        {"name": "lantern"}
     ]
 }

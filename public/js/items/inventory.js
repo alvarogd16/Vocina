@@ -8,6 +8,7 @@ class Inventory {
         this.itemCounter = 0;
     }
     
+    //Adds a new item into the inventory
     addItem(item){
         if(!this.searchItem(item)){
             console.log('Adding item to the inventory...');
@@ -18,22 +19,12 @@ class Inventory {
         }
     }
            
+    //Searches for the item in the inventory
     searchItem(item){
         var enc = false;
         for(var i=0;i<this.itemCounter;i++){
             if(this.items[i] == item)
                 enc = true;
-        }
-    }
-    
-    install(item){
-        if(this.searchItem(item)){
-            for(var i=0;i<this.itemCounter;i++){
-                if(this.items[i] == item)
-                    this.items.splice(i, 1);
-            }
-        } else {
-            console.log("no se encuentra el item");
         }
     }
     

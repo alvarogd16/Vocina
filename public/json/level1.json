@@ -1,7 +1,14 @@
 {
 	"name": "Salon",
 	"position": [2,9],
-    "sublevels": [3, 4, 5],
+    "sublevels": [{
+        "type": "move",
+        "params": [[2,8]],
+        "sentences": [
+            "Vamos a enseñarte a andar por el mapa",
+            "Escribe andy.moveUp(1); para moverte una casilla hacia arriba y pulsa el boton RUN"
+        ]
+    }],
 	"map": [-1, -1, -1, -1, -1, -1, -1, -1, -1,  0,
              0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
             -1, -1,  0,  0,  0,  0,  0,  0,  0,  2,

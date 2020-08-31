@@ -95,7 +95,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     moveRight(numberOfMovs) {
         if (!this.collision) {
-            this.matrixMovement(numberOfMovs, 'right');
+            numberOfMovs = this.matrixMovement(numberOfMovs, 'right');
 
             if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
@@ -118,7 +118,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     moveLeft(numberOfMovs) {
         if (!this.collision) {
-            this.matrixMovement(numberOfMovs, 'left');
+            numberOfMovs = this.matrixMovement(numberOfMovs, 'left');
 
             if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
@@ -141,7 +141,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     moveDown(numberOfMovs) {
         if (!this.collision) {
-            this.matrixMovement(numberOfMovs, 'down');
+            numberOfMovs = this.matrixMovement(numberOfMovs, 'down');
 
             if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
@@ -164,7 +164,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      */
     moveUp(numberOfMovs) {
         if (!this.collision) {
-            this.matrixMovement(numberOfMovs, 'up');
+            numberOfMovs = this.matrixMovement(numberOfMovs, 'up');
 
             if (numberOfMovs != 0) {
                 this.targetAux = new Phaser.Math.Vector2();
@@ -200,6 +200,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     break;
             }
             this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
+
+            console.log(this.posMatrix[0] + "---" + this.posMatrix[1] + "---" + this.actualPos);
+
             if (this.actualPos === -1) {
                 numberOfMovs = i;
                 this.collision = true;
@@ -218,6 +221,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 console.log("Subnivel conseguido");
             }
         }
+        return numberOfMovs;
     }
 
     // MOVING
@@ -330,6 +334,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //If collides a world bound (Bounds manually callculated in SceneDown class, based on the wall size)
             if (this.x < this.scene.leftBound || this.x > this.scene.rightBound ||
                 this.y > this.scene.bottomBound || this.y < this.scene.upperBound) {
+
                 this.stopAnimation();
                 console.log(this.x + ' ' + this.y)
                 this.body.reset(this.x, this.y);

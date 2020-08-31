@@ -36,7 +36,17 @@ class SceneUp extends Phaser.Scene {
         this.sceneYstart = this.heightGame-this.widthGame-this.sceneHeight; 
 
         this.editorHeight = this.sceneYstart;
-        
+
+
+        this.writeAvailable = true;
+    }
+
+    /**
+     * Level data from MainScene
+     * @param {number} numLevel - The level's number
+     */
+    init(numLevel) {
+        this.numLevel = numLevel;
     }
 
     /**
@@ -70,9 +80,11 @@ class SceneUp extends Phaser.Scene {
         
         this.load.image("bubble", "assets/dialogPlayer/Bocadillo.png"); 
 
-        //Load json 1
-        this.keyJson = "json1";
-        this.load.json(this.keyJson, "json/level1.json");
+        // //Load json 1
+        // this.keyJson = "json1";
+        // this.load.json(this.keyJson, "json/level1.json");
+
+        this.keyJson = "json" + this.numLevel;
         
         // AUDIO LOAD
         
@@ -85,8 +97,22 @@ class SceneUp extends Phaser.Scene {
      */
     create() {
         this.dialogPlayer = new DialogPlayer(this, this.talkSpriteWidth/2, this.sceneYstart+this.sceneHeight/2, this.zoomToAdapt);
+
+        this.sublevelsData = this.cache.json.get(this.keyJson).sublevels;
         
-        this.add.image(this.talkSpriteWidth, this.sceneYstart, 'bubble').setOrigin(0).setScale(this.zoomToAdapt);
+        this.sentencesQueue = new Queue();
+        //¡¡¡ TEMPORAL !!!
+        this.sentencesQueue.enqueue(this.cache.json.get(this.keyJson).sentences['start']);
+        this.sentencesQueue.enqueue(this.cache.json.get(this.keyJson).sentences['explanation1']);
+        
+        let bubble = this.add.sprite(this.talkSpriteWidth, this.sceneYstart, 'bubble')
+            .setOrigin(0).setScale(this.zoomToAdapt).setInteractive();
+
+        bubble.on('pointerdown', (pointer) => {
+            if(this.writeAvailable)
+                this.nextSentence();
+        });
+
         
         let textGameObject = this.add.text(this.talkSpriteWidth+this.bubbleWidth/10, this.sceneYstart+this.bubbleHeight/4, '', {
             wordWrap: {
@@ -107,41 +133,52 @@ class SceneUp extends Phaser.Scene {
         this.crisAlexVoice = this.sound.add('rand');
          
         //Play talk voice
-        this.crisAlexVoice.play();
+        //this.crisAlexVoice.play();
 
         //Typing first phrase
-        this.typing.start(this.cache.json.get(this.keyJson).sentences['start']);
+        //this.typing.start(this.cache.json.get(this.keyJson).sentences['start']);
         
         // sentences
         this.explanation1 = this.cache.json.get(this.keyJson).sentences['explanation1'];
         this.sublevel11 = this.cache.json.get(this.keyJson).sentences['sublevel1'];
 
-        // start messages
-        this.time.delayedCall(3000, this.explanation, [], this);
         
-        //Stop talk voice (Inside typing plugin event)
-        let crisAlexVoiceVar = this.crisAlexVoice;
-        this.typing.on('complete', function(typing, txt){crisAlexVoiceVar.stop();}); 
-        
+        //Stop talk voice
+        this.typing.on('complete', (typing, txt) => {
+            this.crisAlexVoice.stop();
+            //We dont want the last one to be activated 
+            if(!this.sentencesQueue.isEmpty())
+                this.writeAvailable = true;
+        }); 
     }
-    
-    explanation(){ 
-        this.write(this.explanation1);
-        
-        //Play talk voice
-        this.crisAlexVoice.play();
-        
-        this.time.delayedCall(5000, this.explanationp2, [], this);
+
+    /**
+     * Enqueu all the explanations sentences of the current sublevel
+     * @param {int} sublevelId 
+     */
+    loadSentences(sublevelId) {
+        this.sublevelsData[sublevelId].sentences.forEach(element => {
+            this.sentencesQueue.enqueue(element);
+        })
     }
-    
-    explanationp2(){
-        console.log(this.sublevel11);
-        
-        //Play talk voice
-        this.crisAlexVoice.play();
-        
-        this.write(this.sublevel11);
-        this.time.delayedCall(3000, this.explanationp3, [], this);
+
+    /**
+     * Start the explanation writing queue's sentences
+     */
+    startWrite() {
+        this.writeAvailable = true;
+        this.nextSentence();
+    }
+
+    /**
+     * Write the next sentence in the queue
+     */
+    nextSentence() {
+        this.write(this.sentencesQueue.dequeue());
+        if(this.sentencesQueue.isEmpty()){
+            this.mainScene.stateMachine.next();
+            this.writeAvailable = false;
+        }
     }
 
     /**
@@ -149,6 +186,10 @@ class SceneUp extends Phaser.Scene {
      * @param {string} sentence 
      */
     write(sentence) {
-        this.typing.start(sentence);
+        if(sentence) {
+            this.writeAvailable = false;
+            this.crisAlexVoice.play();
+            this.typing.start(sentence);
+        }
     }
 }

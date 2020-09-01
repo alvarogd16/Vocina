@@ -42,7 +42,5 @@
     ],
     "itemObject": [
         {"name": "lantern"},
-        {"name": "sink"},
-        {"name": "box"}
     ]
 }

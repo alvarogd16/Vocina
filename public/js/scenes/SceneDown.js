@@ -161,6 +161,12 @@ class SceneDown extends Phaser.Scene {
             if (element.name == "fridge") {
                 this.fridge = new Fridge();
             }
+            if (element.name == "sink") {
+                this.sink = new Sink();
+            }
+            if (element.name == "box") {
+                this.box = new Box();
+            }
         });
 
 
@@ -198,11 +204,13 @@ class SceneDown extends Phaser.Scene {
         let andy = this.andy;
         let linterna = this.lantern;
         let nevera = this.fridge;
-        let args = 'andy, linterna, nevera';
+        let grifo = this.sink;
+        let caja = this.box;
+        let args = 'andy, linterna, nevera, grifo, caja';
 
         try {
             let executeMe = this.createFunction(args, editorContent);
-            executeMe(andy, linterna, nevera);
+            executeMe(andy, linterna, nevera, grifo, caja);
         } catch (e) {
             console.error(e);
             this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien")

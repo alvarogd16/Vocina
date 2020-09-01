@@ -9,7 +9,6 @@ class ItemObject {
     //Install a new item into the dictionary
     instalar(key) {
         this.items[key] = 1;
-        console.log("installed"+this)
     }
     
     //Through an AND operation to all the items in the dictionary, checks if all the items are installed

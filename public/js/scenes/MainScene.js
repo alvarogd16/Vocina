@@ -25,7 +25,7 @@ class MainScene extends Phaser.Scene {
         // Player sprite.
         this.load.spritesheet({
             key: 'player',
-            url: "assets/andy/chico.png",
+            url: "assets/andy/andy.png",
             frameConfig: {
                 frameWidth: 207, //The width of the frame in pixels.
                 frameHeight: 207, //The height of the frame in pixels. Uses the frameWidth value if not provided.
@@ -67,7 +67,7 @@ class MainScene extends Phaser.Scene {
         
         this.load.spritesheet({
             key: 'led',
-            url: "assets/hardware/ledt.png",
+            url: "assets/hardware/led.png",
             frameConfig: {
                 frameWidth: 207,
                 frameHeight: 207,
@@ -80,7 +80,7 @@ class MainScene extends Phaser.Scene {
 
         this.load.spritesheet({
             key: 'encoder',
-            url: "assets/hardware/encoder.jpg",
+            url: "assets/hardware/encoder.png",
             frameConfig: {
                 frameWidth: 207,
                 frameHeight: 207,
@@ -93,7 +93,7 @@ class MainScene extends Phaser.Scene {
 
         this.load.spritesheet({
             key: 'sensor',
-            url: "assets/hardware/sensor.jpg",
+            url: "assets/hardware/sensor.png",
             frameConfig: {
                 frameWidth: 207,
                 frameHeight: 207,
@@ -140,7 +140,7 @@ class MainScene extends Phaser.Scene {
 
         this.load.plugin('rexfsmplugin', '../../lib/rexfsmplugin.min.js', true);
 
-        this.load.image("background", "assets/dialogPlayer/PantallaBackground.png");
+        this.load.image("background", "assets/crisDialogs/BackgroundScreen.png");
     }
 
     /**

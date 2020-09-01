@@ -41,7 +41,6 @@
         {"name": "led", "position": [2, 7]}
     ],
     "itemObject": [
-        {"name": "lantern"},
-        {"name": "fridge"}
+        {"name": "lantern"}
     ]
 }

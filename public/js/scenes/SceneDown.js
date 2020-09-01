@@ -72,8 +72,8 @@ class SceneDown extends Phaser.Scene {
         document.getElementById("run").onclick = function () {
             let editorContent = sceneThis.editor.getValue();
             sceneThis.readWritten(editorContent);
-            if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
-                this.disabled = true;
+            /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
+                this.disabled = true;*/
         };
 
         /*KEYBOARD*/
@@ -157,11 +157,9 @@ class SceneDown extends Phaser.Scene {
         this.itemObject.forEach(element => {
             if (element.name == "lantern") {
                 this.lantern = new Lantern();
-                this.lantern.encender();
             }
             if (element.name == "fridge") {
                 this.fridge = new Fridge();
-                this.fridge.leerSensor();
             }
         });
 
@@ -198,11 +196,13 @@ class SceneDown extends Phaser.Scene {
      */
     readWritten(editorContent) {
         let andy = this.andy;
-        let args = 'andy';
+        let linterna = this.lantern;
+        let nevera = this.fridge;
+        let args = 'andy, linterna, nevera';
 
         try {
             let executeMe = this.createFunction(args, editorContent);
-            executeMe(andy);
+            executeMe(andy, linterna, nevera);
         } catch (e) {
             console.error(e);
             this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien")

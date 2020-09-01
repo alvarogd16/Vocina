@@ -66,7 +66,7 @@ class SceneUp extends Phaser.Scene {
         // Player sprite.
         this.load.spritesheet({
              key: 'talkSprite',
-             url: "assets/dialogPlayer/NarradorSpriteSheet.png",
+             url: "assets/crisDialogs/NarratorSpriteSheet.png",
              frameConfig: {
                  frameWidth:  this.talkSpriteWidthOriginal,     //The width of the frame in pixels.
                  frameHeight: this.talkSpriteHeightOriginal,    //The height of the frame in pixels. Uses the frameWidth value if not provided.
@@ -78,7 +78,7 @@ class SceneUp extends Phaser.Scene {
          });
         
         
-        this.load.image("bubble", "assets/dialogPlayer/Bocadillo.png"); 
+        this.load.image("bubble", "assets/crisDialogs/Bubble.png"); 
 
         // //Load json 1
         // this.keyJson = "json1";
@@ -157,9 +157,9 @@ class SceneUp extends Phaser.Scene {
      * @param {int} sublevelId 
      */
     loadSentences(sublevelId) {
-        this.sublevelsData[sublevelId].sentences.forEach(element => {
+        /*this.sublevelsData[sublevelId].sentences.forEach(element => {
             this.sentencesQueue.enqueue(element);
-        })
+        })*/
     }
 
     /**

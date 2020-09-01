@@ -25,7 +25,7 @@ class SceneDown extends Phaser.Scene {
     }
 
     /**
-     * Map data from MainScene
+     * Level data from MainScene
      * @param {number} numLevel - The level's number
      */
     init(numLevel) {
@@ -148,8 +148,8 @@ class SceneDown extends Phaser.Scene {
 
                 this.pickUp = this.sound.add('pickUp');
                 this.pickUp.play();
-            }, null, this);
-            console.log(element.name, element.position);
+            } , null, this);
+            //console.log(element.name, element.position);
         });
 
         /* LOAD ITEMOBJECTS */

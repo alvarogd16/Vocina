@@ -153,6 +153,7 @@ class MainScene extends Phaser.Scene {
         this.zoomBackground = this.width / 1125; //1125 is the image's width
         this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
 
+
         //Create code editor
         this.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
             lineNumbers: true,
@@ -183,12 +184,17 @@ class MainScene extends Phaser.Scene {
         });
         
 
+        //Finite state machine
+
         let stateConfig = {
             states: {
                 explanation: {
                     next: 'programming',
                     enter: function () {
                         console.log("explanation start");
+                        
+                        this.sceneUp.loadSentences(this.sublevelId);
+                        this.sceneUp.startWrite();
                         //call to the explanation function
                     }
                 },
@@ -222,6 +228,7 @@ class MainScene extends Phaser.Scene {
                             }
 
                             //next sublevel
+                            this.sublevelId++;
                             return 'explanation';
                         } else {
                             //fail message depends of tipe of sublevel
@@ -240,18 +247,25 @@ class MainScene extends Phaser.Scene {
                 }
             },
             extend: {
+                sublevelId: 0,
                 codeErrors: false,
                 sublevelComplete: false,
-                lastSublevel: false
+                lastSublevel: false,
+                mainScene: undefined,
+                sceneUp: undefined,
+                sceneDown: undefined
             }
         }
         
-        let state = this.plugins.get('rexfsmplugin').add(stateConfig).goto("explanation");
+        this.stateMachine = this.plugins.get('rexfsmplugin').add(stateConfig);
+        this.stateMachine.mainScene = this;
+        this.stateMachine.sceneUp = this.scene.get("SceneUp");
+        this.stateMachine.sceneDown = this.scene.get("SceneDown");
 
 
         //Call the scenes
-        this.scene.launch("SceneUp");
-        this.scene.launch("SceneDown", this.level); //With Level1
+        this.scene.launch("SceneUp", this.level);
+        this.scene.launch("SceneDown", this.level); //Start with Level1
         
         //Calculate editor's height
         this.sceneUp = this.scene.get('SceneUp');
@@ -260,6 +274,10 @@ class MainScene extends Phaser.Scene {
         //Keys        
         this.keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         this.key8 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT);
+
+        this.time.delayedCall(500, function (){
+            this.stateMachine.goto("explanation");
+            }, [], this);
     }
 
     /**

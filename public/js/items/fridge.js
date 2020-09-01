@@ -4,7 +4,7 @@ class Fridge extends ItemObject{
 
     constructor() {
         super();
-        this.items {
+        this.items = {
             "sensor": false,
             "enconder": false
         };

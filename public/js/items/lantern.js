@@ -4,7 +4,7 @@ class Lantern extends ItemObject{
     
     constructor() {
         super();
-        this.items {
+        this.items = {
             "LED": false,
             "Button": false
         };

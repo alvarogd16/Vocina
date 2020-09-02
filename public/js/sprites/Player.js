@@ -69,8 +69,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //Queue to stock moves
         this.andyMovesQueue = new Queue();
-
-        this.light = this.scene.light;
     }
 
     /*FUNCTIONS TO USE BY USER*/
@@ -308,8 +306,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
 
-        //Light follow the player
-        //this.light.setPosition(this.x, this.y);
+        //Light follow the player. Light configuration ONLY in level one to activate the lantern
+        if (this.scene.numLevel == 1)
+            this.scene.light.setPosition(this.x, this.y);
 
         // Player movement control, when condition it's true, player is moving and condition can't be trespassed
         if (!this.andyMovesQueue.isEmpty() && !this.andyIsMoving) {

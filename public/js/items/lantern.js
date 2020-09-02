@@ -2,8 +2,8 @@
  */
 class Lantern extends ItemObject{
     
-    constructor() {
-        super();
+    constructor(scene) {
+        super(scene);
         this.items = {
             "LED": false,
             "Button": false
@@ -12,6 +12,7 @@ class Lantern extends ItemObject{
     
     encender() {
         console.log("ENCENDER");
+        this.scene.setLight(true);
     }
     
 }

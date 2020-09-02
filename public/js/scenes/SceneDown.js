@@ -18,7 +18,7 @@ class SceneDown extends Phaser.Scene {
         this.lastSublevelMatrixPositionFirst = 0;
         this.lastSublevelMatrixPositionSecond = 0;
         this.lastLevelCompleted = 0;
-        this.lightOn = true;
+        this.lightOn = false;
         this.widthD = document.getElementById('gameContainer').clientWidth
         this.heightD = document.getElementById('gameContainer').clientHeight
 
@@ -94,13 +94,12 @@ class SceneDown extends Phaser.Scene {
         this.mapNewSize = this.widthD;
         this.mapX = 0;
         this.mapY = this.heightD - this.widthD;
+        
+        this.map = this.add.image(0, 0, this.keyImgMap).setOrigin(0);
+        this.map.setScale(this.zoom);
 
         this.cameras.main.setSize(this.mapNewSize, this.mapNewSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
-
-        this.map = this.add.image(0, 0, this.keyImgMap).setOrigin(0);
-        this.map.setTint(0x000033); //0xffffff
-        this.map.setScale(this.zoom);
 
         /* MAP BOUNDS */
 
@@ -111,7 +110,7 @@ class SceneDown extends Phaser.Scene {
         this.upperBound = this.wallSize * this.zoom;
         this.bottomBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
 
-        /* PHYSICS AND PLAYER */
+        /* PHYSICS, PLAYER AND ILLUMINATION */
 
         // Set physics boundaries from map width and height and create the player
         this.physics.world.setBounds(0, 0,
@@ -120,17 +119,17 @@ class SceneDown extends Phaser.Scene {
 
         this.setPlayerStartLevelPosition();
 
-        this.andy = new Player(this, this.andyX, this.andyY);
-
         //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
         //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
 
-        /* ILLUMINATION */
+        this.andy = new Player(this, this.andyX, this.andyY);
 
-        this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
-        this.light.visible = true;
-
-        this.setLight(true);
+        //Light configuration ONLY in level one to activate the lantern
+        if (this.numLevel == 1) {
+            this.map.setTint(0x000033); //0xffffff
+            this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
+            this.light.visible = true;
+        }
 
         /* INVENTORY */
 
@@ -148,7 +147,7 @@ class SceneDown extends Phaser.Scene {
 
                 this.pickUp = this.sound.add('pickUp');
                 this.pickUp.play();
-            } , null, this);
+            }, null, this);
             //console.log(element.name, element.position);
         });
 
@@ -156,10 +155,10 @@ class SceneDown extends Phaser.Scene {
 
         this.itemObject.forEach(element => {
             if (element.name == "lantern") {
-                this.lantern = new Lantern();
+                this.lantern = new Lantern(this);
             }
             if (element.name == "fridge") {
-                this.fridge = new Fridge();
+                this.fridge = new Fridge(this);
             }
             if (element.name == "sink") {
                 this.sink = new Sink();
@@ -413,11 +412,11 @@ class SceneDown extends Phaser.Scene {
     }
 
     /**
-     * Set light on or off
+     * Set light on
      * @param {boolean} value 
      */
-    setLight(value) {
-        this.lightOn = value;
+    setLight() {
+        this.lightOn = true;
         this.map.setTint(0xffffff);
         this.light.visible = false;
     }

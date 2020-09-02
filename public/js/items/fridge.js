@@ -2,8 +2,8 @@
  */
 class Fridge extends ItemObject{
 
-    constructor() {
-        super();
+    constructor(scene) {
+        super(scene);
         this.items = {
             "sensor": false,
             "enconder": false

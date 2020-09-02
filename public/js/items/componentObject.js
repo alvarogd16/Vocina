@@ -1,8 +1,10 @@
-/* Father class of fridge and lantern classes
+/* Father class of fridge and lantern classes. Also, physics phaser sprite that's not seen on the map
 */
-class ItemObject {
+class ItemObject extends Phaser.Physics.Arcade.Sprite {
     
-    constructor() {
+    constructor(scene) {
+        super(scene);
+        this.scene = scene;
         this.items = {};
     }
     

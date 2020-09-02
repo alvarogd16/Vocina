@@ -11,8 +11,11 @@ class Lantern extends ItemObject{
     }
     
     encender() {
-        console.log("ENCENDER");
         this.scene.setLight(true);
+        
+        //Turning on lantern sound
+        this.lanternClick = this.scene.sound.add('lanternClick');
+        this.lanternClick.play();
     }
     
 }

@@ -131,6 +131,10 @@ class MainScene extends Phaser.Scene {
         this.load.audio('levelsAmbience', [
             'assets/sounds/levelsAmbience.mp3'
         ]);
+        
+        this.load.audio('lanternClick', [
+            'assets/sounds/lanternClick.mp3'
+        ]);
 
         // PLUGIN LOAD
 

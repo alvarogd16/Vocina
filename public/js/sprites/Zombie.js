@@ -20,8 +20,8 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 		scene.add.existing(this);
 
 		//Set the skins of the sprite
-		this.setTexture('zombie');
-		this.setPosition(x, y);
+		//this.setTexture('zombie');
+		//this.setPosition(x, y);
 
 		//Set collisions activation of the sprite
 		this.body.setCollideWorldBounds(true);
@@ -43,7 +43,7 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 		this.scene.physics.moveToObject(this, this.target, 5);
 	}
 
-	//Before scene update
+	/*//Before scene update
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 
@@ -60,5 +60,9 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 				}
 			}
 		}
-	}
+	}*/
+    
+    cerca() {
+        return true;
+    }
 }

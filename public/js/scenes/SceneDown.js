@@ -119,9 +119,6 @@ class SceneDown extends Phaser.Scene {
 
         this.setPlayerStartLevelPosition();
 
-        //this.zombie1 = new Zombie(this, andyX+128, andyY-128, this.andy).setScale(1.3);
-        //this.zombie2 = new Zombie(this, andyX, andyY-128, this.andy).setScale(1.3);
-
         this.andy = new Player(this, this.andyX, this.andyY);
 
         //Light configuration ONLY in level one to activate the lantern
@@ -161,10 +158,13 @@ class SceneDown extends Phaser.Scene {
                 this.fridge = new Fridge(this);
             }
             if (element.name == "sink") {
-                this.sink = new Sink();
+                this.sink = new Sink(this);
+                this.zombie = new Zombie(this);
             }
             if (element.name == "box") {
-                this.box = new Box();
+                this.box1 = new Box(this, false);
+                this.box2 = new Box(this, true);
+                this.box3 = new Box(this, false);
             }
         });
 
@@ -204,12 +204,20 @@ class SceneDown extends Phaser.Scene {
         let linterna = this.lantern;
         let nevera = this.fridge;
         let grifo = this.sink;
-        let caja = this.box;
-        let args = 'andy, linterna, nevera, grifo, caja';
+        let caja1 = this.box1;
+        let caja2 = this.box2;
+        let caja3 = this.box3;
+        
+        let zombie = this.zombie;
+        
+        //TEST
+        let mainScene = this.mainScene;
+        
+        let args = 'andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie';
 
         try {
             let executeMe = this.createFunction(args, editorContent);
-            executeMe(andy, linterna, nevera, grifo, caja);
+            executeMe(andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie);
         } catch (e) {
             console.error(e);
             this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien")

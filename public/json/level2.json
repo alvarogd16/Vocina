@@ -16,7 +16,7 @@
     },
     "items": [
         {"name": "sensor", "position": [2, 2]},
-        {"name": "encoder", "position": [3, 3]},
+        {"name": "encoder", "position": [3, 3]}
     ],
     "itemObject": [
         {"name": "fridge"}

@@ -152,11 +152,11 @@ class MainScene extends Phaser.Scene {
         this.load.audio('waterTap', [
             'assets/sounds/waterTap.mp3'
         ]);
-        
+
         this.load.audio('lockedBox', [
             'assets/sounds/lockedBox.mp3'
         ]);
-        
+
         this.load.audio('unlockedBox', [
             'assets/sounds/unlockedBox.mp3'
         ]);
@@ -184,6 +184,8 @@ class MainScene extends Phaser.Scene {
 
 
         //Create code editor
+        /*
+        
         this.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
             lineNumbers: true,
             lineWrapping: true, //When finish one line jump to the next
@@ -191,7 +193,15 @@ class MainScene extends Phaser.Scene {
             theme: "blackboard",
         })
         this.editor.setValue("//¿Estás preparado?") //Default value
+        
+        */
 
+        //NEW
+        this.editorElem = document.getElementById('code');
+        this.flask = new CodeFlask(this.editorElem, {
+            language: 'js',
+            lineNumbers: true
+        });
 
 
         //Play levels ambience

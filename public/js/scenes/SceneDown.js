@@ -65,15 +65,23 @@ class SceneDown extends Phaser.Scene {
 
         /* EDITOR */
 
+        /*
+        
         this.editor = this.mainScene.editor;
+        
+        */
+        
+        this.flask = this.mainScene.flask;
 
         //Create the button to run the code
         let sceneThis = this;
         document.getElementById("run").onclick = function () {
-            let editorContent = sceneThis.editor.getValue();
+            /* let editorContent = sceneThis.editor.getValue(); */
+            let editorContent = sceneThis.flask.getCode();
+            console.log(editorContent);
             sceneThis.readWritten(editorContent);
-            /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
-                this.disabled = true;*/
+            //if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
+            //    this.disabled = true;
         };
 
         /*KEYBOARD*/
@@ -94,7 +102,7 @@ class SceneDown extends Phaser.Scene {
         this.mapNewSize = this.widthD;
         this.mapX = 0;
         this.mapY = this.heightD - this.widthD;
-        
+
         this.map = this.add.image(0, 0, this.keyImgMap).setOrigin(0);
         this.map.setScale(this.zoom);
 
@@ -207,12 +215,12 @@ class SceneDown extends Phaser.Scene {
         let caja1 = this.box1;
         let caja2 = this.box2;
         let caja3 = this.box3;
-        
+
         let zombie = this.zombie;
-        
+
         //TEST
         let mainScene = this.mainScene;
-        
+
         let args = 'andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie';
 
         try {
@@ -233,8 +241,12 @@ class SceneDown extends Phaser.Scene {
             this.lastLevelCompleted = 0;
             this.scene.lastSublevelMatrixPosition = 0;
 
+            /*
+            
             this.editor.setValue(""); //Clear codemirror field
             this.editor.clearHistory();
+            
+            */
 
             //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
             this.cache.json.remove(this.keyJson);
@@ -253,8 +265,12 @@ class SceneDown extends Phaser.Scene {
 
             this.andy.setPosition(this.andyX, this.andyY);
 
+            /* 
+            
             this.editor.setValue(""); //Clear codemirror field
             this.editor.clearHistory();
+            
+            */
 
             this.sceneUp.write('');
 
@@ -293,8 +309,12 @@ class SceneDown extends Phaser.Scene {
                 this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
                 this.lastLevelCompleted = 0;
 
+                /* 
+                
                 this.editor.setValue(""); //Clear codemirror field
                 this.editor.clearHistory();
+                
+                */
 
                 //this.cache.json.remove('map');
                 //this.cache.json.remove('json');//The next json should be loaded

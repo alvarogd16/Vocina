@@ -1,5 +1,5 @@
-import Lantern from '../items/lantern.js';
-import Fridge from '../items/fridge.js';
+//import Lantern from '../items/lantern.js';
+//import Fridge from '../items/fridge.js';
 
 /** Class where the game action occurs
  *  @extends Phaser.Scene
@@ -27,10 +27,10 @@ class SceneDown extends Phaser.Scene {
 
         // Use ES6 Object Literal Property Value Shorthand to maintain a map
         // where the keys share the same names as the classes themselves
-        this.itemObjectProxyClasses = {
-            Lantern,
-            Fridge
-        };
+        // this.itemObjectProxyClasses = {
+        //     Lantern,
+        //     Fridge
+        // };
 
     }
 
@@ -67,22 +67,24 @@ class SceneDown extends Phaser.Scene {
         
         this.mapName = this.cache.json.get(this.keyJson).name;
         this.playerStartPosition = this.cache.json.get(this.keyJson).position;  //[x, y]
-        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //[x, x1, ...]
+        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //object
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
         this.sentences = this.cache.json.get(this.keyJson).sentences;           //text, time
         this.items = this.cache.json.get(this.keyJson).items;                   //name, position
         this.itemObject = this.cache.json.get(this.keyJson).itemObject;         //name
+
+        this.stateMachine = this.mainScene.stateMachine;
                
         /* EDITOR */
 
         this.editor = this.mainScene.editor;
 
         //Create the button to run the code
-        let sceneThis = this;
-        document.getElementById("run").onclick = function () {
-            let editorContent = sceneThis.editor.getValue();
-            sceneThis.readWritten(editorContent);
-            if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
+        document.getElementById("run").onclick = () => {
+            let editorContent = this.editor.getValue();
+            this.readWritten(editorContent);
+            this.stateMachine.next();
+            if (!this.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                 this.disabled = true;
         };
 
@@ -168,7 +170,9 @@ class SceneDown extends Phaser.Scene {
             //new item(this, this.itemPositionX, this.itemPositionY, 0, element.name);
             //console.log(element.name, element.);
         });
-        
+
+        //At first disallowed this opctions
+        this.runButtonAndWriteAllowed(false);
     }
 
     setPlayerStartLevelPosition() {
@@ -205,27 +209,37 @@ class SceneDown extends Phaser.Scene {
         try{
             let executeMe = this.createFunction(args, editorContent);
             executeMe(andy);
+            this.stateMachine.codeErrors = false;
         } catch(e){
             console.error(e);
-            this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien")
+            this.stateMachine.codeErrors = true;
         }
+
+        this.stateMachine.next();
     }
+
+    runButtonAndWriteAllowed(allowed) {
+        document.getElementById("run").disabled = !allowed;
+        //this.editor.readOnly = !allowed; Not working
+        //Remove or activate button animation
+    }
+
     
     /**
      * Reset function for the SceneDown and SceneUp, and also some variables aside from the scenes
      */
     resetGame(delayTime){
-    this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
-        this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
-        this.lastLevelCompleted = 0;
-        this.scene.lastSublevelMatrixPosition = 0;
+        this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
+            this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
+            this.lastLevelCompleted = 0;
+            this.scene.lastSublevelMatrixPosition = 0;
 
-        this.editor.setValue(""); //Clear codemirror field
-        this.editor.clearHistory();
+            this.editor.setValue(""); //Clear codemirror field
+            this.editor.clearHistory();
 
-        //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
-        this.cache.json.remove(this.keyJson);
-        this.mainScene.closeScenes();
+            //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
+            this.cache.json.remove(this.keyJson);
+            this.mainScene.closeScenes();
 
         }, [], this);
     }
@@ -293,18 +307,6 @@ class SceneDown extends Phaser.Scene {
             this.sceneUp.write('Primero tienes que completar los demás subniveles Andy...');
             this.resetGame(9000);  
         }
-    }
-
-    /**
-     * If any sublevel is not completed, then should return false, if all completed then true
-     */
-    allSublevelsCompleted(level) {
-        let enc = true;
-        for (let i = 0; (i < this.sublevels.length) && enc; i++) {
-            if (this.sublevels[i] !== -1)
-                enc = false;
-        }
-        return enc;
     }
 
     /**
@@ -380,8 +382,23 @@ class SceneDown extends Phaser.Scene {
         }
     }
 
+
     /**
-     * Checks if a sublevel was completed (If it is completed, then a -1 is set in that position), and then returns true, otherwise returns false
+     * If any sublevel is not completed, then should return false, if all completed then true
+     */
+    allSublevelsCompleted(level) {
+        let enc = true;
+        for (let i = 0; (i < this.sublevels.length) && enc; i++) {
+            if (!this.sublevels[i].complete)
+                enc = false;
+        }
+        return enc;
+    }
+
+    /**
+     * Checks if a sublevel was completed and then returns true, otherwise returns false
+     * 
+     * ¡¡¡ NO NEED NOW !!!
      */
     searchSublevel(sublevel) {
         let enc = false;

@@ -253,11 +253,6 @@ class MainScene extends Phaser.Scene {
                     }
                 },
                 action: {
-<<<<<<< HEAD
-                    next: function () {
-                        if (this.sublevelComplete) {
-                            if (this.lastSublevel) {
-=======
                     next: "checkSublevel",
                     enter: function () {
                         console.log("action start");
@@ -272,7 +267,6 @@ class MainScene extends Phaser.Scene {
                     next: function () { 
                         if(this.sublevelComplete){
                             if(this.lastSublevel){
->>>>>>> bug
                                 return 'end';
                             }
 

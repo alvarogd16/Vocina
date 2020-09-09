@@ -102,8 +102,8 @@ class SceneUp extends Phaser.Scene {
         
         this.sentencesQueue = new Queue();
         //¡¡¡ TEMPORAL !!!
-        this.sentencesQueue.enqueue(this.cache.json.get(this.keyJson).sentences['start']);
-        this.sentencesQueue.enqueue(this.cache.json.get(this.keyJson).sentences['explanation1']);
+        //this.sentencesQueue.enqueue(this.cache.json.get(this.keyJson).sentences['start']);
+        //this.sentencesQueue.enqueue(this.cache.json.get(this.keyJson).sentences['explanation1']);
         
         let bubble = this.add.sprite(this.talkSpriteWidth, this.sceneYstart, 'bubble')
             .setOrigin(0).setScale(this.zoomToAdapt).setInteractive();

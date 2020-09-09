@@ -7,8 +7,19 @@
         "sentences": [
             "Vamos a enseñarte a andar por el mapa",
             "Escribe andy.moveUp(1); para moverte una casilla hacia arriba y pulsa el boton RUN"
-        ]
-    }],
+        ],
+        "complete": false
+        },
+        {
+            "type": "move",
+            "params": [[8,5]],
+            "sentences": [
+                "Ahora vas a moverte más",
+                "Venga muevete, vAMOS, ME ESTAS ENFADANDO!!!!"
+            ],
+            "complete": false
+        }
+    ],
 	"map": [-1, -1, -1, -1, -1, -1, -1, -1, -1,  0,
              0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
             -1, -1,  0,  0,  0,  0,  0,  0,  0,  2,

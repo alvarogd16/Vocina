@@ -56,13 +56,15 @@ class SceneDown extends Phaser.Scene {
         /* MAP DATA */
 
         this.mapName = this.cache.json.get(this.keyJson).name;
-        this.playerStartPosition = this.cache.json.get(this.keyJson).position; //[x, y]
-        this.sublevels = this.cache.json.get(this.keyJson).sublevels; //[x, x1, ...]
+        this.playerStartPosition = this.cache.json.get(this.keyJson).position;  //[x, y]
+        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //object
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
-        this.sentences = this.cache.json.get(this.keyJson).sentences; //text, time
-        this.items = this.cache.json.get(this.keyJson).items; //name, position
-        this.itemObject = this.cache.json.get(this.keyJson).itemObject; //name
+        this.sentences = this.cache.json.get(this.keyJson).sentences;           //text, time
+        this.items = this.cache.json.get(this.keyJson).items;                   //name, position
+        this.itemObject = this.cache.json.get(this.keyJson).itemObject;         //name
 
+        this.stateMachine = this.mainScene.stateMachine;
+               
         /* EDITOR */
 
         this.editor = this.mainScene.editor;
@@ -168,8 +170,8 @@ class SceneDown extends Phaser.Scene {
             }
         });
 
-
-
+        //At first disallowed this opctions
+        this.runButtonAndWriteAllowed(false);
     }
 
     setPlayerStartLevelPosition() {
@@ -218,16 +220,26 @@ class SceneDown extends Phaser.Scene {
         try {
             let executeMe = this.createFunction(args, editorContent);
             executeMe(andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie);
+            this.stateMachine.codeErrors = false;
         } catch (e) {
             console.error(e);
-            this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien")
+            this.stateMachine.codeErrors = true;
         }
+
+        this.stateMachine.next();
     }
 
+    runButtonAndWriteAllowed(allowed) {
+        document.getElementById("run").disabled = !allowed;
+        //this.editor.readOnly = !allowed; Not working
+        //Remove or activate button animation
+    }
+
+    
     /**
      * Reset function for the SceneDown and SceneUp, and also some variables aside from the scenes
      */
-    resetGame(delayTime) {
+    resetGame(delayTime){
         this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
             this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
             this.lastLevelCompleted = 0;
@@ -307,19 +319,6 @@ class SceneDown extends Phaser.Scene {
     }
 
     /**
-     * If any sublevel is not completed, then should return false, if all completed then true
-     */
-    allSublevelsCompleted(level) {
-        let enc = true;
-        for (let i = 0;
-            (i < this.sublevels.length) && enc; i++) {
-            if (this.sublevels[i] !== -1)
-                enc = false;
-        }
-        return enc;
-    }
-
-    /**
      * This function is called when a sublevel is completed by andy, just to show a message on SceneUp and to check the completed sublevels with a -1 in the sublevel vector
      */
     andyCompletesSublevel(completedSublevel) {
@@ -392,8 +391,23 @@ class SceneDown extends Phaser.Scene {
         }
     }
 
+
     /**
-     * Checks if a sublevel was completed (If it is completed, then a -1 is set in that position), and then returns true, otherwise returns false
+     * If any sublevel is not completed, then should return false, if all completed then true
+     */
+    allSublevelsCompleted(level) {
+        let enc = true;
+        for (let i = 0; (i < this.sublevels.length) && enc; i++) {
+            if (!this.sublevels[i].complete)
+                enc = false;
+        }
+        return enc;
+    }
+
+    /**
+     * Checks if a sublevel was completed and then returns true, otherwise returns false
+     * 
+     * ¡¡¡ NO NEED NOW !!!
      */
     searchSublevel(sublevel) {
         let enc = false;

@@ -2,12 +2,17 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: rgb(10, 33, 53);
+	height: 100%;
+}
+
+html {
+	height: 100%;
 }
 
 #principal {
 	position: relative;
 	max-width: 500px; 
-	height: 100vh;
+	height: 100%;
 	margin: auto;
 }
 
@@ -50,12 +55,12 @@ body {
 } */
 
 #code {
-	height: 25vh; 
+	height: 25%; 
 }
 
 #codeArea {
 	position: absolute;
-	height: 25vh;
+	height: 25%;
 	width: 100%;
 	z-index: 2;
 	padding: 10px;
@@ -63,7 +68,7 @@ body {
 }
 
 #gameContainer {
-	height: 100vh;
+	height: 100%;
 	width: 100%;
 	z-index: 1;
 }

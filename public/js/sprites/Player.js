@@ -199,7 +199,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
             this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
 
-            console.log(this.posMatrix[0] + "---" + this.posMatrix[1] + "---" + this.actualPos);
+            //console.log(this.posMatrix[0] + "---" + this.posMatrix[1] + "---" + this.actualPos);
+            console.log(this.posMatrix);
 
             if (this.actualPos === -1) {
                 numberOfMovs = i;
@@ -207,17 +208,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (numberOfMovs == 0)
                     this.collisionWithoutMovement = true;
                 break;
-            } else if (this.actualPos === 0 || this.actualPos === 1) {
-                this.scene.arrivedGoal = false;
-            } else if (this.actualPos === 2) {
-                this.scene.arrivedGoal = true;
-                console.log("Has llegado al final del nivel!")
-            } else if (this.actualPos >= 3) {
-                this.scene.arrivedSublevel = true;
-                this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
-                this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
-                console.log("Subnivel conseguido");
             }
+            // } else if (this.actualPos === 0 || this.actualPos === 1) {
+            //     this.scene.arrivedGoal = false;
+            // } else if (this.actualPos === 2) {
+            //     this.scene.arrivedGoal = true;
+            //     console.log("Has llegado al final del nivel!")
+            // } else if (this.actualPos >= 3) {
+            //     this.scene.arrivedSublevel = true;
+            //     this.scene.lastSublevelMatrixPositionFirst = this.posMatrix[0];
+            //     this.scene.lastSublevelMatrixPositionSecond = this.posMatrix[1];
+            //     console.log("Subnivel conseguido");
+            // }
         }
         return numberOfMovs;
     }
@@ -330,6 +332,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         if (this.body.speed > 0) {
 
+            /* TO REVISE */
+            /* Dont need this */
+
             //If collides a world bound (Bounds manually callculated in SceneDown class, based on the wall size)
             if (this.x < this.scene.leftBound || this.x > this.scene.rightBound ||
                 this.y > this.scene.bottomBound || this.y < this.scene.upperBound) {
@@ -339,6 +344,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.body.reset(this.x, this.y);
                 this.scene.andyDidntArriveTheGoal();
             }
+            /* END TO REVISE */
 
             //If the sprite reaches one point stored in the queue means that didn't reach the goal tile (checked in a
             //event in the 'SceneDown' class)
@@ -350,33 +356,37 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 //Restart the movement control
                 this.andyIsMoving = false;
 
-                if (this.andyMovesQueue.isEmpty() && this.scene.arrivedSublevel) {
-                    this.sublevelAchieved = this.scene.sound.add('sublevelAchieved');
-                    this.sublevelAchieved.play();
-
-                    this.scene.andyCompletesSublevel(this.actualPos);
-                    this.scene.lastLevelCompleted = this.actualPos;
-                    this.scene.arrivedSublevel = false;
+                if (this.andyMovesQueue.isEmpty()){
+                    this.scene.stateMachine.next();
                 }
-                //If the sprite reaches the last point in the queue and that point isn't the GOAL then reset that andy has NOT reached
-                else if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
-                    this.gameOver = this.scene.sound.add('gameOver');
-                    this.gameOver.play();
 
-                    this.scene.andyDidntArriveTheGoal();
-                } //If the sprite reaches the last point in the queue and that point is the GOAL then reset that andy HAS reached
-                else if (this.andyMovesQueue.isEmpty() && this.scene.arrivedGoal) {
-                    this.levelAchieved = this.scene.sound.add('levelAchieved');
-                    this.levelAchieved.play();
+                // if (this.andyMovesQueue.isEmpty() && this.scene.arrivedSublevel) {
+                //     this.sublevelAchieved = this.scene.sound.add('sublevelAchieved');
+                //     this.sublevelAchieved.play();
 
-                    this.scene.levelUp(this.scene.scene.get('MainScene').level);
-                } //If reaches the last point in the queue and collides a bound then didn't reach the GOAL
-                else if (this.andyMovesQueue.isEmpty() && this.collision) {
-                    this.gameOver = this.scene.sound.add('gameOver');
-                    this.gameOver.play();
+                //     this.scene.andyCompletesSublevel(this.actualPos);
+                //     this.scene.lastLevelCompleted = this.actualPos;
+                //     this.scene.arrivedSublevel = false;
+                // }
+                // //If the sprite reaches the last point in the queue and that point isn't the GOAL then reset that andy has NOT reached
+                // else if (this.andyMovesQueue.isEmpty() && !this.scene.arrivedGoal) {
+                //     this.gameOver = this.scene.sound.add('gameOver');
+                //     this.gameOver.play();
 
-                    this.scene.andyDidntArriveTheGoal();
-                }
+                //     this.scene.andyDidntArriveTheGoal();
+                // } //If the sprite reaches the last point in the queue and that point is the GOAL then reset that andy HAS reached
+                // else if (this.andyMovesQueue.isEmpty() && this.scene.arrivedGoal) {
+                //     this.levelAchieved = this.scene.sound.add('levelAchieved');
+                //     this.levelAchieved.play();
+
+                //     this.scene.levelUp(this.scene.scene.get('MainScene').level);
+                // } //If reaches the last point in the queue and collides a bound then didn't reach the GOAL
+                // else if (this.andyMovesQueue.isEmpty() && this.collision) {
+                //     this.gameOver = this.scene.sound.add('gameOver');
+                //     this.gameOver.play();
+
+                //     this.scene.andyDidntArriveTheGoal();
+                // }
             }
         } else if (this.collisionWithoutMovement) { //If andy tries to move towards a wall that's in (Is not going to be moving)
             console.log("Hola");

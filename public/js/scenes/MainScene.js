@@ -195,37 +195,53 @@ class MainScene extends Phaser.Scene {
                         
                         this.sceneUp.loadSentences(this.sublevelId);
                         this.sceneUp.startWrite();
-                        //call to the explanation function
                     }
                 },
                 programming: {
-                    next: 'check',
+                    next: 'checkCode',
                     enter: function () {
                         console.log("programming start");
                         //activate writte and run button
+
+                        this.sceneDown.runButtonAndWriteAllowed(true);
+                    },
+                    exit: function () {
+                        this.sceneDown.runButtonAndWriteAllowed(false);
                     }
                 },
-                check: {
+                checkCode: {
                     next: function () {
                         if(this.codeErrors){
                             //error message
+                            this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien escrito")
                             return 'programming';
                         } else {
-                            //complete message
                             return 'action';
                         }
                     },
                     enter: function (){
                         console.log("check start");
-                        //
                     }
                 },
                 action: {
-                    next: function () {
+                    next: "checkSublevel",
+                    enter: function () {
+                        console.log("action start");
+                        //Do the action depends of sublevel
+
+                        //Cargar objetivo
+                        this.sublevelType = "move";
+                        this.sublevelObjetive = [2, 8]
+                    }
+                },
+                checkSublevel: {
+                    next: function () { 
                         if(this.sublevelComplete){
                             if(this.lastSublevel){
                                 return 'end';
                             }
+
+                            this.sublevelComplete = false;
 
                             //next sublevel
                             this.sublevelId++;
@@ -236,8 +252,23 @@ class MainScene extends Phaser.Scene {
                         }
                     },
                     enter: function () {
-                        console.log("action start");
-                        //Do the action depends of sublevel
+                        //TODO
+                        switch(this.sublevelType){
+                            case "move":
+                                //TO DO
+                                console.log(this.sceneDown.andy.posMatrix)
+                                if(this.sceneDown.andy.posMatrix[0] === this.sublevelObjetive[0] &&
+                                    this.sceneDown.andy.posMatrix[1] === this.sublevelObjetive[1]){
+
+                                    console.log("sublevel complete");
+                                    this.sublevelComplete = true;
+                                } else {
+                                    //Volver a la posicion anterior
+                                    this.sceneUp.write("PErro te moviste maaaall");
+                                }
+                                this.next();
+                            break;
+                        }
                     }
                 },
                 end: {
@@ -250,6 +281,8 @@ class MainScene extends Phaser.Scene {
                 sublevelId: 0,
                 codeErrors: false,
                 sublevelComplete: false,
+                sublevelType: undefined,
+                sublevelObjetive: undefined,
                 lastSublevel: false,
                 mainScene: undefined,
                 sceneUp: undefined,

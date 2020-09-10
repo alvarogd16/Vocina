@@ -152,11 +152,11 @@ class MainScene extends Phaser.Scene {
         this.load.audio('waterTap', [
             'assets/sounds/waterTap.mp3'
         ]);
-        
+
         this.load.audio('lockedBox', [
             'assets/sounds/lockedBox.mp3'
         ]);
-        
+
         this.load.audio('unlockedBox', [
             'assets/sounds/unlockedBox.mp3'
         ]);
@@ -164,7 +164,6 @@ class MainScene extends Phaser.Scene {
         // PLUGIN LOAD
 
         let path = "../../lib/rexrotatetoplugin.min.js";
-        //let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexrotatetoplugin.min.js';
         this.load.plugin('rexrotatetoplugin', path, true);
 
         this.load.plugin('rexfsmplugin', '../../lib/rexfsmplugin.min.js', true);
@@ -184,14 +183,11 @@ class MainScene extends Phaser.Scene {
 
 
         //Create code editor
-        this.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
-            lineNumbers: true,
-            lineWrapping: true, //When finish one line jump to the next
-            undoDepth: 20, //Max number of lines to write
-            theme: "blackboard",
-        })
-        this.editor.setValue("//¿Estás preparado?") //Default value
-
+        this.editorElem = document.getElementById('code');
+        this.flask = new CodeFlask(this.editorElem, {
+            language: 'js',
+            lineNumbers: true
+        });
 
 
         //Play levels ambience

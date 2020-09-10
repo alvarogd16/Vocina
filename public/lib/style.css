@@ -81,6 +81,8 @@ html {
 	height: 30px;
 	border: none;
 	border-radius: 4px;
+    
+    z-index: 2;
 
 	font-family: monospace;
 	font-size: 17px;

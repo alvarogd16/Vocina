@@ -69,6 +69,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //Queue to stock moves
         this.andyMovesQueue = new Queue();
+
+        this.x = x;
+        this.y = y;
     }
 
     /*FUNCTIONS TO USE BY USER*/
@@ -169,6 +172,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (this.andyMovesQueue.isEmpty()) { //If it's empty it's target it's calculated as usually
                     this.targetAux.x = this.x;
                     this.targetAux.y = this.y - this.tileSizeOfTheMovement * numberOfMovs;
+                    //console.log(this.y + "      " + this.targetAux.y)
                 } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
                     this.targetAux.x = this.andyMovesQueue.last().x;
                     this.targetAux.y = this.andyMovesQueue.last().y - this.tileSizeOfTheMovement * numberOfMovs;
@@ -200,7 +204,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
 
             //console.log(this.posMatrix[0] + "---" + this.posMatrix[1] + "---" + this.actualPos);
-            console.log(this.posMatrix);
+            //console.log(this.posMatrix);
 
             if (this.actualPos === -1) {
                 numberOfMovs = i;
@@ -263,6 +267,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     /*OTHER FUNCTIONS*/
 
     /**
+     * Set player position in the map with a x and y
+     * @param {number} x X position in the matrix
+     * @param {number} y Y position in the matrix
+     */
+    setPosition(xPos, yPos) {
+        //TODO
+    }
+
+    /**
+     * Set player rotation to a specifies direction
+     * @param {string} direction Represent the player direction
+     */
+    setRotation(direction){
+        //TODO
+    }
+
+    /**
      * Change the level. Only use by teachers
      * @param {number} password - Password to go to the next level 
      * @param {number} level - What level are you going to change
@@ -309,8 +330,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta);
 
         //Light follow the player. Light configuration ONLY in level one to activate the lantern
-        if (this.scene.numLevel == 1)
-            this.scene.light.setPosition(this.x, this.y);
+        // if (this.scene.numLevel == 1)
+        //     this.scene.light.setPosition(this.x, this.y);
 
         // Player movement control, when condition it's true, player is moving and condition can't be trespassed
         if (!this.andyMovesQueue.isEmpty() && !this.andyIsMoving) {

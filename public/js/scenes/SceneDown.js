@@ -33,10 +33,10 @@ class SceneDown extends Phaser.Scene {
     }
 
     /**
-     * Load all assets in cache
+     * Load all map data in cache
      */
     preload() {
-        // JSON LOAD
+        /* JSON LOAD */
 
         this.keyJson = "json" + this.numLevel;
         this.keyImgMap = "map" + this.numLevel;
@@ -55,14 +55,15 @@ class SceneDown extends Phaser.Scene {
 
         /* MAP DATA */
 
-        this.mapName = this.cache.json.get(this.keyJson).name;
+        this.mapName = this.cache.json.get(this.keyJson).name; //I think that is not usefull
         this.playerStartPosition = this.cache.json.get(this.keyJson).position;  //[x, y]
-        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //object
+        this.playerStartRotation = this.cache.json.get(this.keyJson).rotation;  //right, up...
+        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //array with objects
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
-        this.sentences = this.cache.json.get(this.keyJson).sentences;           //text, time
         this.items = this.cache.json.get(this.keyJson).items;                   //name, position
         this.itemObject = this.cache.json.get(this.keyJson).itemObject;         //name
 
+        //Control the sublevels flow
         this.stateMachine = this.mainScene.stateMachine;
                
         /* EDITOR */
@@ -70,15 +71,15 @@ class SceneDown extends Phaser.Scene {
         this.editor = this.mainScene.editor;
 
         //Create the button to run the code
-        let sceneThis = this;
-        document.getElementById("run").onclick = function () {
-            let editorContent = sceneThis.editor.getValue();
-            sceneThis.readWritten(editorContent);
+        document.getElementById("run").onclick = () => {
+            let editorContent = this.editor.getValue();
+            this.readWritten(editorContent);
+            this.stateMachine.next();
             /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                 this.disabled = true;*/
         };
 
-        /*KEYBOARD*/
+        /* KEYBOARD */
 
         //To debug camera
         this.key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR);
@@ -119,15 +120,15 @@ class SceneDown extends Phaser.Scene {
             this.mapNewSize,
             this.mapNewSize);
 
-        this.setPlayerStartLevelPosition();
 
+        this.setPlayerStartLevelPosition();
         this.andy = new Player(this, this.andyX, this.andyY);
 
         //Light configuration ONLY in level one to activate the lantern
         if (this.numLevel == 1) {
-            this.map.setTint(0x000033); //0xffffff
+            //this.map.setTint(0x000033); //0xffffff
             this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
-            this.light.visible = true;
+            this.light.visible = false;
         }
 
         /* INVENTORY */
@@ -153,20 +154,25 @@ class SceneDown extends Phaser.Scene {
         /* LOAD ITEMOBJECTS */
 
         this.itemObject.forEach(element => {
-            if (element.name == "lantern") {
-                this.lantern = new Lantern(this);
-            }
-            if (element.name == "fridge") {
-                this.fridge = new Fridge(this);
-            }
-            if (element.name == "sink") {
-                this.sink = new Sink(this);
-                this.zombie = new Zombie(this);
-            }
-            if (element.name == "box") {
-                this.box1 = new Box(this, false);
-                this.box2 = new Box(this, true);
-                this.box3 = new Box(this, false);
+            switch(element.name){
+                case "lantern":
+                    this.lantern = new Lantern(this);
+                break;
+
+                case "fridge":
+                    this.fridge = new Fridge(this);
+                break;
+
+                case "sink":
+                    this.sink = new Sink(this);
+                    this.zombie = new Zombie(this);
+                break;
+
+                case "box":
+                    this.box1 = new Box(this, false);
+                    this.box2 = new Box(this, true);
+                    this.box3 = new Box(this, false);
+                break;
             }
         });
 
@@ -186,7 +192,15 @@ class SceneDown extends Phaser.Scene {
         this.itemPositionY = (this.wallSize + this.tileSize / 2 + this.tileSize * position[1]) * this.zoom;
     }
 
-    /*EJECUTE CODE*/
+    getSublevelType(sublevelId) {
+        return this.sublevels[sublevelId].type;
+    }
+
+    getSublevelObjetive(sublevelId) {
+        return this.sublevels[sublevelId].objetives;
+    }
+
+    /* EJECUTE CODE */
 
     /**
      * Create a new function with the code passed by parameter

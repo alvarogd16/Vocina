@@ -157,9 +157,9 @@ class SceneUp extends Phaser.Scene {
      * @param {int} sublevelId 
      */
     loadSentences(sublevelId) {
-        /*this.sublevelsData[sublevelId].sentences.forEach(element => {
+        this.sublevelsData[sublevelId].sentences.forEach(element => {
             this.sentencesQueue.enqueue(element);
-        })*/
+        })
     }
 
     /**

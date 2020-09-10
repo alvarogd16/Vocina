@@ -1,18 +1,35 @@
 {
 	"name": "Salon",
-	"position": [2,9],
+    "position": [2,9],
+    "rotation": "right",
     "sublevels": [{
-        "type": "move",
-        "params": [[2,8]],
-        "sentences": [
-            "Vamos a enseñarte a andar por el mapa",
-            "Escribe andy.moveUp(1); para moverte una casilla hacia arriba y pulsa el boton RUN"
-        ],
-        "complete": false
+            "type": "move",
+            "objetives": [[2,8]],
+            "sentences": [
+                "Vamos a enseñarte a andar por el mapa",
+                "Escribe andy.moveUp(1); para moverte una casilla hacia arriba y pulsa el boton RUN"
+            ],
+            "complete": false
+        },
+        {
+            "type": "item",
+            "objetives": [[2,7], "led"],
+            "sentences": [
+                "Recoge el item venga"
+            ],
+            "complete": false
+        },
+        {
+            "type": "item",
+            "objetives": [[5,7], "button"],
+            "sentences": [
+                "Recoge el item venga"
+            ],
+            "complete": false
         },
         {
             "type": "move",
-            "params": [[8,5]],
+            "objetives": [[8,5]],
             "sentences": [
                 "Ahora vas a moverte más",
                 "Venga muevete, vAMOS, ME ESTAS ENFADANDO!!!!"

@@ -21,10 +21,18 @@ class Inventory {
            
     //Searches for the item in the inventory
     searchItem(item){
-        var enc = false;
-        for(var i=0;i<this.itemCounter;i++){
-            if(this.items[i] == item)
+        let enc = false;
+        for(let i=0; i < this.itemCounter; i++){
+            if(this.items[i] === item)
                 enc = true;
+        }
+        return enc;
+    }
+
+    //Show all the items
+    showItems() {
+        for(let i=0; i < this.itemCounter; i++){
+            console.log(this.items[i])
         }
     }
     

@@ -230,8 +230,8 @@ class MainScene extends Phaser.Scene {
                     next: 'checkCode',
                     enter: function () {
                         console.log("programming start");
-                        //activate writte and run button
 
+                        //activate write and run button
                         this.sceneDown.runButtonAndWriteAllowed(true);
                     },
                     exit: function () {
@@ -259,8 +259,8 @@ class MainScene extends Phaser.Scene {
                         //Do the action depends of sublevel
 
                         //Cargar objetivo
-                        this.sublevelType = "move";
-                        this.sublevelObjetive = [2, 8]
+                        this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
+                        this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
                     }
                 },
                 checkSublevel: {
@@ -282,27 +282,43 @@ class MainScene extends Phaser.Scene {
                     },
                     enter: function () {
                         //TODO
-                        switch(this.sublevelType){
-                            case "move":
-                                //TO DO
-                                console.log(this.sceneDown.andy.posMatrix)
-                                if(this.sceneDown.andy.posMatrix[0] === this.sublevelObjetive[0] &&
-                                    this.sceneDown.andy.posMatrix[1] === this.sublevelObjetive[1]){
+                        console.log("-- Check " + this.sublevelType + " sublevel");
 
-                                    console.log("sublevel complete");
+                        switch(this.sublevelType){
+                            //Only have to go to one place
+                            case "move":
+                                if(this.sceneDown.andy.posMatrix[0] === this.sublevelObjetive[0][0] &&
+                                    this.sceneDown.andy.posMatrix[1] === this.sublevelObjetive[0][1]){
+
+                                    console.log("Sublevel complete");
                                     this.sublevelComplete = true;
                                 } else {
-                                    //Volver a la posicion anterior
+                                    //TODO Volver a la posicion anterior
                                     this.sceneUp.write("PErro te moviste maaaall");
                                 }
-                                this.next();
+                            break;
+
+                            case "item":
+                                this.sceneDown.inventory.showItems();
+                                if(this.sceneDown.andy.posMatrix[0] === this.sublevelObjetive[0][0] &&
+                                    this.sceneDown.andy.posMatrix[1] === this.sublevelObjetive[0][1] &&
+                                    this.sceneDown.inventory.searchItem(this.sublevelObjetive[1])){
+
+                                    console.log("Sublevel complete");
+                                    this.sublevelComplete = true;
+                                } else {
+                                    //TODO Volver a la posicion anterior
+                                    this.sceneUp.write("PErro te moviste maaaall");
+                                }
                             break;
                         }
+
+                        this.next();
                     }
                 },
                 end: {
                     enter: function () {
-                        console.log("End of game");
+                        console.log("End of level");
                     }
                 }
             },

@@ -33,7 +33,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //Set the skins of the sprite
         this.setTexture('player');
-        this.setPosition(x, y);
+        //this.setPosition(x, y);
 
         //Set collisions activation of the sprite
         this.body.setCollideWorldBounds(true);
@@ -70,31 +70,31 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //Queue to stock moves
         this.andyMovesQueue = new Queue();
 
-        this.x = x;
-        this.y = y;
+        // this.x = x;
+        // this.y = y;
     }
 
     /*FUNCTIONS TO USE BY USER*/
 
-    //To delete
-    /**Turn on game light and raspberry LED*/
-    turnOnLED() {
-        raspiWrite('LED', 1);
-        this.scene.setLight(true);
-    }
+    // //To delete
+    // /**Turn on game light and raspberry LED*/
+    // turnOnLED() {
+    //     raspiWrite('LED', 1);
+    //     this.scene.setLight(true);
+    // }
 
-    //To delete
-    /**Turn off game light and raspberry LED*/
-    turnOffLED() {
-        raspiWrite('LED', 0);
-        this.scene.setLight(false);
-    }
+    // //To delete
+    // /**Turn off game light and raspberry LED*/
+    // turnOffLED() {
+    //     raspiWrite('LED', 0);
+    //     this.scene.setLight(false);
+    // }
 
     /**
      * Console method to put the values of a new target (To the right) into the queue
      * @param {number} numberOfMovs - The number of right moves
      */
-    moveRight(numberOfMovs) {
+    moverDerecha(numberOfMovs) {
         if (!this.collision) {
             numberOfMovs = this.matrixMovement(numberOfMovs, 'right');
 
@@ -117,7 +117,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * Console method to put the values of a new target (To the left) into the queue
      * @param {number} numberOfMovs - The number of left moves
      */
-    moveLeft(numberOfMovs) {
+    moverIzquierda(numberOfMovs) {
         if (!this.collision) {
             numberOfMovs = this.matrixMovement(numberOfMovs, 'left');
 
@@ -140,7 +140,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * Console method to put the values of a new target (To move it down) into the queue
      * @param {number} numberOfMovs - The number of down moves
      */
-    moveDown(numberOfMovs) {
+    moverAbajo(numberOfMovs) {
         if (!this.collision) {
             numberOfMovs = this.matrixMovement(numberOfMovs, 'down');
 
@@ -163,7 +163,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * Console method to put the values of a new target (To move it up) into the queue
      * @param {number} numberOfMovs - The number of up moves
      */
-    moveUp(numberOfMovs) {
+    moverArriba(numberOfMovs) {
         if (!this.collision) {
             numberOfMovs = this.matrixMovement(numberOfMovs, 'up');
 
@@ -271,16 +271,44 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * @param {number} x X position in the matrix
      * @param {number} y Y position in the matrix
      */
-    setPosition(xPos, yPos) {
-        //TODO
+    setPlayerPosition(xPos, yPos) {
+        this.posMatrix[0] = xPos;
+        this.posMatrix[1] = yPos;
+
+        let tileSize = this.scene.tileSize;
+        this.x = (this.scene.wallSize + tileSize / 2 + tileSize * xPos) * this.scene.zoom;
+        this.y = (this.scene.wallSize + tileSize / 2 + tileSize * yPos) * this.scene.zoom;
+    }
+
+    getPlayerPosition() {
+        return this.posMatrix;
     }
 
     /**
      * Set player rotation to a specifies direction
      * @param {string} direction Represent the player direction
      */
-    setRotation(direction){
-        //TODO
+    setPlayerRotation(direction){
+        this.playerRotation = direction;
+        
+        switch (direction) {
+            case 'right':
+                this.setAngle(90);
+                break;
+            case 'left':
+                this.setAngle(270);
+                break;
+            case 'down':
+                this.setAngle(180);
+                break;
+            case 'up':
+                this.setAngle(360);
+                break;
+        }
+    }
+
+    getPlayerRotation() {
+        return this.playerRotation;
     }
 
     /**

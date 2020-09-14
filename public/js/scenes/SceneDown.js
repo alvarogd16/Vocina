@@ -67,12 +67,6 @@ class SceneDown extends Phaser.Scene {
         this.stateMachine = this.mainScene.stateMachine;
                
         /* EDITOR */
-
-        /*
-        
-        this.editor = this.mainScene.editor;
-        
-        */
         
         this.flask = this.mainScene.flask;
 
@@ -127,12 +121,18 @@ class SceneDown extends Phaser.Scene {
             this.mapNewSize);
 
 
-        this.setPlayerStartLevelPosition();
-        this.andy = new Player(this, this.andyX, this.andyY);
+        this.andy = new Player(this, 0, 0);
+        //Calculate the map position with the matrix position
+        this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]);
+        this.andy.setPlayerRotation(this.playerStartRotation);
+
+        this.andyX = this.andy.x;
+        this.andyY = this.andy.y;
 
         //Light configuration ONLY in level one to activate the lantern
         if (this.numLevel == 1) {
             //this.map.setTint(0x000033); //0xffffff
+            //TO REVISE andyX and andyY is undefined now
             this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
             this.light.visible = false;
         }
@@ -186,12 +186,6 @@ class SceneDown extends Phaser.Scene {
         this.runButtonAndWriteAllowed(false);
     }
 
-    setPlayerStartLevelPosition() {
-        //Set player position
-        this.andyX = (this.wallSize + this.tileSize / 2 + this.tileSize * this.playerStartPosition[0]) * this.zoom;
-        this.andyY = (this.wallSize + this.tileSize / 2 + this.tileSize * this.playerStartPosition[1]) * this.zoom;
-    }
-
     setItemPosition(position) {
         //Set an item position
         this.itemPositionX = (this.wallSize + this.tileSize / 2 + this.tileSize * position[0]) * this.zoom;
@@ -204,6 +198,20 @@ class SceneDown extends Phaser.Scene {
 
     getSublevelObjetive(sublevelId) {
         return this.sublevels[sublevelId].objetives;
+    }
+
+    getSublevelsNum() {
+        return this.sublevels.length - 1;
+    }
+
+    initializePlayerState() {
+        let playerState = {
+            position: this.andy.getPlayerPosition(),
+            rotation: this.andy.getPlayerRotation(),
+            inventory: this.inventory
+        };
+        console.log(playerState)
+        return playerState;
     }
 
     /* EJECUTE CODE */

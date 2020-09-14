@@ -177,6 +177,9 @@ class MainScene extends Phaser.Scene {
     create() {
         console.log("Creating game");
 
+        this.sceneUp   = this.scene.get('SceneUp');
+        this.sceneDown = this.scene.get('SceneDown');
+
         //Background image
         this.zoomBackground = this.width / 1125; //1125 is the image's width
         this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
@@ -213,6 +216,17 @@ class MainScene extends Phaser.Scene {
 
         let stateConfig = {
             states: {
+                boot: {
+                    next: 'explanation',
+                    enter: function () {
+                        console.log("boot start");
+
+                        this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
+                        this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
+
+                        this.next();
+                  }  
+                },
                 explanation: {
                     next: 'programming',
                     enter: function () {
@@ -253,26 +267,28 @@ class MainScene extends Phaser.Scene {
                     enter: function () {
                         console.log("action start");
                         //Do the action depends of sublevel
-
-                        //Cargar objetivo
-                        this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
-                        this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
                     }
                 },
                 checkSublevel: {
                     next: function () { 
                         if(this.sublevelComplete){
-                            if(this.lastSublevel){
+                            console.log(this.sceneDown.getSublevelsNum())
+                            if(this.sublevelId === this.sceneDown.getSublevelsNum()){
                                 return 'end';
                             }
+
+                            //Update the last player state
 
                             this.sublevelComplete = false;
 
                             //next sublevel
                             this.sublevelId++;
-                            return 'explanation';
+                            return 'boot';
                         } else {
                             //fail message depends of tipe of sublevel
+
+                            //Change to the last player state
+
                             return 'programming';
                         }
                     },
@@ -315,16 +331,19 @@ class MainScene extends Phaser.Scene {
                 end: {
                     enter: function () {
                         console.log("End of level");
+
+                        this.sublevelId = 0;
+                        this.mainScene.nextLevel();
                     }
                 }
             },
             extend: {
                 sublevelId: 0,
-                codeErrors: false,
                 sublevelComplete: false,
                 sublevelType: undefined,
                 sublevelObjetive: undefined,
-                lastSublevel: false,
+                lastPlayerState: {},
+                codeErrors: false,
                 mainScene: undefined,
                 sceneUp: undefined,
                 sceneDown: undefined
@@ -333,16 +352,14 @@ class MainScene extends Phaser.Scene {
 
         this.stateMachine = this.plugins.get('rexfsmplugin').add(stateConfig);
         this.stateMachine.mainScene = this;
-        this.stateMachine.sceneUp = this.scene.get("SceneUp");
-        this.stateMachine.sceneDown = this.scene.get("SceneDown");
-
+        this.stateMachine.sceneUp   = this.sceneUp;
+        this.stateMachine.sceneDown = this.sceneDown;
 
         //Call the scenes
         this.scene.launch("SceneUp", this.level);
         this.scene.launch("SceneDown", this.level); //Start with Level1
 
         //Calculate editor's height
-        this.sceneUp = this.scene.get('SceneUp');
         this.cm.style.height = this.sceneUp.editorHeight + "px";
 
         //Keys        
@@ -350,7 +367,8 @@ class MainScene extends Phaser.Scene {
         this.key8 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT);
 
         this.time.delayedCall(500, function () {
-            this.stateMachine.goto("explanation");
+            this.stateMachine.lastPlayerState = this.sceneDown.initializePlayerState();
+            this.stateMachine.goto("boot");
         }, [], this);
     }
 
@@ -394,7 +412,7 @@ class MainScene extends Phaser.Scene {
         this.scene.stop('SceneUp');
         this.scene.stop('SceneDown');
         //this.cm.style.display = 'none';
-        document.getElementById("run").disabled = false; //Also reset the button to click again
+        //document.getElementById("run").disabled = false; //Also reset the button to click again
         this.launchScenes();
     }
 

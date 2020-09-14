@@ -1,13 +1,12 @@
 {
 	"name": "Salon",
     "position": [2,9],
-    "rotation": "right",
+    "rotation": "up",
     "sublevels": [{
             "type": "move",
             "objetives": [[2,8]],
             "sentences": [
-                "Vamos a enseñarte a andar por el mapa",
-                "Escribe andy.moveUp(1); para moverte una casilla hacia arriba y pulsa el boton RUN"
+                "Lo primero que debes aprender es a moverte por las habitaciones para llevar a cabo las acciones necesarias"
             ],
             "complete": false
         },
@@ -32,7 +31,11 @@
             "objetives": [[8,5]],
             "sentences": [
                 "Ahora vas a moverte más",
-                "Venga muevete, vAMOS, ME ESTAS ENFADANDO!!!!"
+                "Venga muevete, vAMOS, ME ESTAS ENFADANDO!!!!",
+                "Para poder ayudarme, deberás además hacer acciones en varias habitaciones",
+                "Cada habitación está formada por casillas",
+                "Para poder moverte, debes escribir instrucciones en la consola",
+                "Muévete una casilla hacia arriba escribiendo andy.moverArriba(1)"
             ],
             "complete": false
         }

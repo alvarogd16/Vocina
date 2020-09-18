@@ -1,10 +1,12 @@
 class item extends Phaser.Physics.Arcade.Sprite {
     
-    constructor(scene, x, y, frame, object) {
-        super(scene, x, y, frame);
+    constructor(scene, x, y, name) {
+        super(scene, x, y);
+
+        this.name = name;
 
         this.scene = scene;
-        this.matrix = this.scene.mapMatrix;
+        //this.matrix = this.scene.mapMatrix;
         //this.posMatrix = this.scene.itemPos; SPECIFIC
         
         //The scale is relative to the map, and an extra substraction to make it a little bit smaller
@@ -12,20 +14,12 @@ class item extends Phaser.Physics.Arcade.Sprite {
         
         this.setScale(this.itemScale * 0.6);
         
-        //this.setScale(); DONT KNOW
         this.scene.physics.world.enable(this);
         this.scene.add.existing(this);
         
         //Set the skins of the sprite
-        this.setTexture(object);
+        this.setTexture(this.name);
         this.setPosition(x, y);
-        
-        //Set collisions activation of the sprite
-        this.body.setCollideWorldBounds(true);
-
-        //On world bounds 
-        this.body.onWorldBounds = true;
-        this.scene.physics.world.on('worldbounds', this.onWorldBounds, this);
         
         this.body.setSize(this.scene.tileSize, this.scene.tileSize);
         
@@ -33,8 +27,10 @@ class item extends Phaser.Physics.Arcade.Sprite {
         let bodyOffset = Math.trunc(this.scene.tileSize / 2);
         this.body.setOffset(bodyOffset, bodyOffset);
     }
-    
-   onWorldBounds() {
-        console.log('Item ')
+
+    setItemPosition(xPos, yPos) {
+        let tileSize = this.scene.tileSize;
+        this.x = (this.scene.wallSize + tileSize / 2 + tileSize * xPos) * this.scene.zoom;
+        this.y = (this.scene.wallSize + tileSize / 2 + tileSize * yPos) * this.scene.zoom;
     }
 }

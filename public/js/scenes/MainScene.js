@@ -224,6 +224,12 @@ class MainScene extends Phaser.Scene {
                         this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
                         this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
 
+                        switch(this.sublevelType){
+                            case "item":
+                                this.sceneDown.prepareItem(this.sublevelObjetive[1]);
+                                break;
+                        }
+
                         this.next();
                   }  
                 },
@@ -288,6 +294,8 @@ class MainScene extends Phaser.Scene {
                             //fail message depends of tipe of sublevel
 
                             //Change to the last player state
+
+                            this.sceneDown.setPlayerState(this.lastPlayerState);
 
                             return 'programming';
                         }

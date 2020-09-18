@@ -60,7 +60,7 @@ class SceneDown extends Phaser.Scene {
         this.playerStartRotation = this.cache.json.get(this.keyJson).rotation;  //right, up...
         this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //array with objects
         this.mapMatrix = this.cache.json.get(this.keyJson).map;
-        this.items = this.cache.json.get(this.keyJson).items;                   //name, position
+        this.jsonItems = this.cache.json.get(this.keyJson).items;               //[{name, position}]
         this.itemObject = this.cache.json.get(this.keyJson).itemObject;         //name
 
         //Control the sublevels flow
@@ -143,19 +143,26 @@ class SceneDown extends Phaser.Scene {
 
         /* LOAD ITEMS */
 
-        this.items.forEach(element => {
-            this.setItemPosition(element.position);
-            let object = new item(this, this.itemPositionX, this.itemPositionY, 0, element.name);
-            this.physics.add.overlap(this.andy, object, function () {
-                object.disableBody(true, true);
-                this.inventory.addItem(element.name);
-                console.log(this.inventory);
+        this.mapItems = [];
 
-                this.pickUp = this.sound.add('pickUp');
-                this.pickUp.play();
-            }, null, this);
-            //console.log(element.name, element.position);
+        this.jsonItems.forEach(jsonItem => {
+            let mapItem = new item(this, 0, 0, jsonItem.name);
+            mapItem.setItemPosition(jsonItem.position[0], jsonItem.position[1]);
+            mapItem.visible = false;
+
+            this.mapItems.push(mapItem);
+            
+            // this.physics.add.overlap(this.andy, mapItem, function () {
+            //     mapItem.disableBody(true, true);
+            //     this.inventory.addItem(jsonItem.name);
+            //     console.log(this.inventory);
+
+            //     this.pickUp = this.sound.add('pickUp');
+            //     this.pickUp.play();
+            // }, null, this);
+            //console.log(jsonItem.name, jsonItem.position);
         });
+       this.mapItems.forEach(element => console.log(element.name));
 
         /* LOAD ITEMOBJECTS */
 
@@ -163,33 +170,24 @@ class SceneDown extends Phaser.Scene {
             switch(element.name){
                 case "lantern":
                     this.lantern = new Lantern(this);
-                break;
-
+                    break;
                 case "fridge":
                     this.fridge = new Fridge(this);
-                break;
-
+                    break;
                 case "sink":
                     this.sink = new Sink(this);
                     this.zombie = new Zombie(this);
-                break;
-
+                    break;
                 case "box":
                     this.box1 = new Box(this, false);
                     this.box2 = new Box(this, true);
                     this.box3 = new Box(this, false);
-                break;
+                    break;
             }
         });
 
         //At first disallowed this opctions
         this.runButtonAndWriteAllowed(false);
-    }
-
-    setItemPosition(position) {
-        //Set an item position
-        this.itemPositionX = (this.wallSize + this.tileSize / 2 + this.tileSize * position[0]) * this.zoom;
-        this.itemPositionY = (this.wallSize + this.tileSize / 2 + this.tileSize * position[1]) * this.zoom;
     }
 
     getSublevelType(sublevelId) {
@@ -208,10 +206,18 @@ class SceneDown extends Phaser.Scene {
         let playerState = {
             position: this.andy.getPlayerPosition(),
             rotation: this.andy.getPlayerRotation(),
-            inventory: this.inventory
+            items: this.inventory.getItems(),
+            mapItems: undefined     //[[item, position], ...]
         };
         console.log(playerState)
         return playerState;
+    }
+
+    setPlayerState(newState) {
+        //TODO
+        this.andy.setPlayerPosition(newState.position[0], newState.position[1]);
+        this.andy.setPlayerRotation(newState.rotation);
+        console.log(newState.items);
     }
 
     /* EJECUTE CODE */
@@ -261,6 +267,23 @@ class SceneDown extends Phaser.Scene {
         document.getElementById("run").disabled = !allowed;
         //this.editor.readOnly = !allowed; Not working
         //Remove or activate button animation
+    }
+
+    prepareItem(itemName) {
+        let mapItem;
+        this.mapItems.forEach(element => {
+            if(itemName === element.name) mapItem = element;
+        })
+
+        mapItem.visible = true;
+        this.physics.add.overlap(this.andy, mapItem, function () {
+            mapItem.disableBody(true, true);
+            this.inventory.addItem(mapItem.name);
+            console.log(this.inventory);
+
+            this.pickUp = this.sound.add('pickUp');
+            this.pickUp.play();
+        }, null, this);
     }
 
     

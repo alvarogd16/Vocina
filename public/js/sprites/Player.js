@@ -281,7 +281,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     getPlayerPosition() {
-        return this.posMatrix;
+        return [...this.posMatrix];
     }
 
     /**

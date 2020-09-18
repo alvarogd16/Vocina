@@ -68,8 +68,8 @@
         "goal": "Enhorabuena, has encontrado la siguiente habitación!"
     },
     "items": [
-        {"name": "button", "position": [5, 7]},
-        {"name": "led", "position": [2, 7]}
+        {"name": "led", "position": [2, 7]},
+        {"name": "button", "position": [5, 7]}
     ],
     "itemObject": [
         {"name": "lantern"}

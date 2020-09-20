@@ -10,6 +10,11 @@
             ]
         },
         {
+            "type": "lightOff",
+            "objetives": [],
+            "sentences": []
+        },
+        {
             "type": "item",
             "objetives": [[2,7], "led"],
             "sentences": [
@@ -22,6 +27,11 @@
             "sentences": [
                 "Recoge el item venga"
             ]
+        },
+        {
+            "type": "lightOn",
+            "objetives": [],
+            "sentences": []
         },
         {
             "type": "move",

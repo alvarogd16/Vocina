@@ -229,7 +229,15 @@ class MainScene extends Phaser.Scene {
                   }  
                 },
                 explanation: {
-                    next: 'programming',
+                    next: function () {
+                        if(this.sublevelObjetive.length === 0) {
+                            // Its not necessary check the sublevel
+                            this.sublevelComplete = true;
+                            return 'action';
+                        } else {
+                            return 'programming';
+                        }
+                    },
                     enter: function () {
                         console.log("explanation start");
 
@@ -275,6 +283,26 @@ class MainScene extends Phaser.Scene {
                     enter: function () {
                         console.log("action start");
                         //Do the action depends of sublevel
+
+                        switch(this.sublevelType) {
+                            case "lightOff":
+                                //turn off lights
+                                this.sceneDown.setLight(false);
+
+                                this.next();
+                                break;
+                            case "lightOn":
+                                console.log("Luces encendidass");
+
+                                // Wait to raspi button signal
+                                raspiRead("BUT").then(value => {
+                                    if(value) {
+                                        this.sceneDown.lantern.encender();
+                                        this.next();
+                                    }
+                                });
+                                break;
+                        }
                     }
                 },
                 checkSublevel: {
@@ -291,7 +319,7 @@ class MainScene extends Phaser.Scene {
                             //next sublevel
                             this.sublevelId++;
                             this.sublevelComplete = false;
-                            
+
                             return 'boot';
                         } else {
                             //fail message depends of tipe of sublevel

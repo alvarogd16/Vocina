@@ -129,16 +129,8 @@ class SceneDown extends Phaser.Scene {
         this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]);
         this.andy.setPlayerRotation(this.playerStartRotation);
 
-        this.andyX = this.andy.x;
-        this.andyY = this.andy.y;
-
-        //Light configuration ONLY in level one to activate the lantern
-        if (this.numLevel == 1) {
-            //this.map.setTint(0x000033); //0xffffff
-            //TO REVISE andyX and andyY is undefined now
-            this.light = this.add.circle(this.andyX, this.andyY, 50, 0xffffff, 0.10);
-            this.light.visible = false;
-        }
+        this.light = this.add.circle(this.andy.x, this.andy.y, 50, 0xffffff, 0.10);
+        this.light.visible = false;
 
         /* INVENTORY */
 
@@ -205,7 +197,6 @@ class SceneDown extends Phaser.Scene {
     }
 
     setPlayerState(newState) {
-        //TODO
         this.andy.setPlayerPosition(newState.position[0], newState.position[1]);
         this.andy.setPlayerRotation(newState.rotation);
         this.inventory.updateItems(newState.items);
@@ -281,107 +272,6 @@ class SceneDown extends Phaser.Scene {
         }, null, this);
     }
 
-    /**
-     * To the next level, calling the method in mainScene
-     */
-    levelUp(level) {
-        if (this.allSublevelsCompleted(level)) {
-            this.sceneUp.write(this.sentences['goal']);
-
-            this.time.delayedCall(5000, function () { //Just to wait until the sceneUp showed the whole message
-                this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
-                this.lastLevelCompleted = 0;
-
-                /* 
-                
-                this.editor.setValue(""); //Clear codemirror field
-                this.editor.clearHistory();
-                
-                */
-
-                //this.cache.json.remove('map');
-                //this.cache.json.remove('json');//The next json should be loaded
-                this.mainScene.nextLevel();
-            }, [], this);
-        } else {
-            this.sceneUp.write('Primero tienes que completar los demás subniveles Andy...');
-            this.resetGame(9000);
-        }
-    }
-
-    /**
-     * This function is called when a sublevel is completed by andy, just to show a message on SceneUp and to check the completed sublevels with a -1 in the sublevel vector
-     */
-    andyCompletesSublevel(completedSublevel) {
-        document.getElementById("run").disabled = false; //Also reset the button to click again
-
-        if (this.mainScene.level === 1) {
-            switch (completedSublevel) {
-                case 3:
-                    if (this.searchSublevel(completedSublevel)) {
-                        this.sceneUp.write(this.sentences['sublevel1goal']);
-                        // message sublevel 2
-                        this.time.delayedCall(4000, function () {
-                            this.sceneUp.write(this.sentences['sublevel2']);
-                        }, [], this);
-                    } else {
-                        this.sceneUp.write(this.sublevelcompleted);
-                        this.resetGame(5000);
-                    }
-                    break;
-                case 4:
-                    if (this.searchSublevel(completedSublevel)) {
-                        this.sceneUp.write(this.sentences['sublevel2goal']);
-                        // message sublevel 2
-                        this.time.delayedCall(5000, function () {
-                            this.sceneUp.write(this.sentences['sublevel3']);
-                        }, [], this);
-                    } else {
-                        this.sceneUp.write(this.sublevelcompleted);
-                        this.resetGame(5000);
-                    }
-                    break;
-                case 5:
-                    if (this.searchSublevel(completedSublevel)) {
-                        this.sceneUp.write(this.sublevel3goal);
-                        // message sublevel 5
-                        this.time.delayedCall(5000, function () {
-                            this.sceneUp.write(this.sentences['sublevel3goal2']);
-                        }, [], this);
-                        this.time.delayedCall(5000, function () {
-                            this.sceneUp.write(this.sentences['sublevel3goal3']);
-                        }, [], this);
-                        if (this.inventory.itemCounter == 0) {
-                            this.sceneUp.write(this.sentences['sublevel4']);
-                            if (this.lightOn == true) {
-                                this.time.delayedCall(2000, function () {
-                                    this.sceneUp.write(this.sentences['sublevel5g1']);
-                                }, [], this);
-                                this.time.delayedCall(2000, function () {
-                                    this.sceneUp.write(this.sentences['sublevel5g2']);
-                                }, [], this);
-                            }
-                        }
-                    } else {
-                        this.sceneUp.write(this.sublevelcompleted);
-                        this.resetGame(5000);
-                    }
-                    break;
-            }
-        } else if (this.mainScene.level === 2) {
-            if (completedSublevel === 3 && this.searchSublevel(completedSublevel)) {
-                this.sceneUp.write('Has cogido la rueda!');
-            } else {
-                this.sceneUp.write(this.completedSublevel);
-                this.resetGame(5000);
-            }
-        } else if (this.mainScene.level === 3) {
-
-        } else if (this.mainScene.level === 4) {
-
-        }
-    }
-
 
     /**
      * If any sublevel is not completed, then should return false, if all completed then true
@@ -425,13 +315,16 @@ class SceneDown extends Phaser.Scene {
     }
 
     /**
-     * Set light on
-     * @param {boolean} value 
+     * Set light on or off
+     * @param {boolean} value on is true and off false
      */
-    setLight() {
-        this.lightOn = true;
-        this.map.setTint(0xffffff);
-        this.light.visible = false;
+    setLight(value) {
+        this.lightOn = !value;
+        this.light.visible = !value;
+        if(value)
+            this.map.setTint(0xffffff);
+        else 
+            this.map.setTint(0x000033);
     }
 
     /**

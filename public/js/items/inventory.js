@@ -6,8 +6,6 @@ class Inventory {
     constructor(){
         // Contains the items name in the inventory
         this.items = [];
-        // TO DELETE 
-        //this.itemCounter = 0;
     }
 
     getItems() {

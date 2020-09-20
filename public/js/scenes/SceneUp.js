@@ -92,6 +92,8 @@ class SceneUp extends Phaser.Scene {
     create() {
         this.dialogPlayer = new DialogPlayer(this, this.talkSpriteWidth/2, this.sceneYstart+this.sceneHeight/2, this.zoomToAdapt);
 
+
+        // there is to wait to preload in sceeneDown finished
         this.sublevelsData = this.cache.json.get(this.keyJson).sublevels;
         
         this.sentencesQueue = new Queue();

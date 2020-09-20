@@ -11,7 +11,7 @@ class Lantern extends ItemObject {
     }
 
     encender() {
-        if (this.comprobarItems()) {
+        if (!this.comprobarItems()) {
             this.scene.setLight(true);
 
             //Playing lantern sound

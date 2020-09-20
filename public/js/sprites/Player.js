@@ -241,24 +241,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.target.y = this.targetAux.y;
 
         this.direction = dir;
+        this.playerRotation = dir;
         this.animationName = "chicoCamina";
         this.startAnimation();
 
         //Rotate the player before moving
+        let angle;
         switch (this.direction) {
             case 'right':
-                this.rotateTo.rotateTo(90);
+                angle = 90;
                 break;
             case 'left':
-                this.rotateTo.rotateTo(270);
+                angle = 270;
                 break;
             case 'down':
-                this.rotateTo.rotateTo(180);
+                angle = 180;
                 break;
             case 'up':
-                this.rotateTo.rotateTo(360);
+                angle = 360;
                 break;
         }
+        this.rotateTo.rotateTo(angle);
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
         this.scene.physics.moveToObject(this, this.andyMovesQueue.dequeue(), 60);

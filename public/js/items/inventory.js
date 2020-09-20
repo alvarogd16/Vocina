@@ -25,7 +25,12 @@ class Inventory {
     }
 
     removeItem(item){
-        this.items.pop();
+        let index = array.indexOf(item);
+        if(index != -1) this.items.splice(index, 1);
+    }
+
+    updateItems(newItems) {
+        this.items = [...newItems];
     }
            
     //Searches for the item in the inventory

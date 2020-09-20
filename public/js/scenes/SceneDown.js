@@ -55,6 +55,9 @@ class SceneDown extends Phaser.Scene {
 
         /* MAP DATA */
 
+        // In case it was necessary
+        // this.cache.json.remove();
+
         this.mapName = this.cache.json.get(this.keyJson).name; //I think that is not usefull
         this.playerStartPosition = this.cache.json.get(this.keyJson).position;  //[x, y]
         this.playerStartRotation = this.cache.json.get(this.keyJson).rotation;  //right, up...
@@ -143,26 +146,16 @@ class SceneDown extends Phaser.Scene {
 
         /* LOAD ITEMS */
 
+        //Store all level items object
         this.mapItems = [];
 
         this.jsonItems.forEach(jsonItem => {
             let mapItem = new item(this, 0, 0, jsonItem.name);
             mapItem.setItemPosition(jsonItem.position[0], jsonItem.position[1]);
-            mapItem.visible = false;
+            mapItem.disableBody(true, true);    //Hide the item
 
             this.mapItems.push(mapItem);
-            
-            // this.physics.add.overlap(this.andy, mapItem, function () {
-            //     mapItem.disableBody(true, true);
-            //     this.inventory.addItem(jsonItem.name);
-            //     console.log(this.inventory);
-
-            //     this.pickUp = this.sound.add('pickUp');
-            //     this.pickUp.play();
-            // }, null, this);
-            //console.log(jsonItem.name, jsonItem.position);
         });
-       this.mapItems.forEach(element => console.log(element.name));
 
         /* LOAD ITEMOBJECTS */
 
@@ -206,10 +199,8 @@ class SceneDown extends Phaser.Scene {
         let playerState = {
             position: this.andy.getPlayerPosition(),
             rotation: this.andy.getPlayerRotation(),
-            items: this.inventory.getItems(),
-            mapItems: undefined     //[[item, position], ...]
+            items: this.inventory.getItems()
         };
-        console.log(playerState)
         return playerState;
     }
 
@@ -217,7 +208,7 @@ class SceneDown extends Phaser.Scene {
         //TODO
         this.andy.setPlayerPosition(newState.position[0], newState.position[1]);
         this.andy.setPlayerRotation(newState.rotation);
-        console.log(newState.items);
+        this.inventory.updateItems(newState.items);
     }
 
     /* EJECUTE CODE */
@@ -269,88 +260,25 @@ class SceneDown extends Phaser.Scene {
         //Remove or activate button animation
     }
 
+    /**
+     * Set visible the item and activate the collision
+     * @param {String} itemName 
+     */
     prepareItem(itemName) {
         let mapItem;
         this.mapItems.forEach(element => {
             if(itemName === element.name) mapItem = element;
         })
 
-        mapItem.visible = true;
+        mapItem.enableBody(false, 0, 0, true, true);  //Activate and show the item
         this.physics.add.overlap(this.andy, mapItem, function () {
             mapItem.disableBody(true, true);
             this.inventory.addItem(mapItem.name);
-            console.log(this.inventory);
+            //console.log(this.inventory);
 
             this.pickUp = this.sound.add('pickUp');
             this.pickUp.play();
         }, null, this);
-    }
-
-    
-    /**
-     * Reset function for the SceneDown and SceneUp, and also some variables aside from the scenes
-     */
-    resetGame(delayTime){
-        this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
-            this.arrivedGoal = false; //Reset the boolean to check if andy is in the GOAL tile for the player class
-            this.lastLevelCompleted = 0;
-            this.scene.lastSublevelMatrixPosition = 0;
-
-            /*
-            
-            this.editor.setValue(""); //Clear codemirror field
-            this.editor.clearHistory();
-            
-            */
-
-            //this.andy.turnOffLED(); //Also LED (Lantern light in level 1) must be reset
-            this.cache.json.remove(this.keyJson);
-            this.mainScene.closeScenes();
-
-        }, [], this);
-    }
-
-    resetToSublevel(delayTime) {
-        this.time.delayedCall(delayTime, function () { //Just to wait until the sceneUp showed the whole message
-            //Player last sublevel completed position set
-            this.andyX = (this.wallSize + this.tileSize / 2 + this.tileSize * this.lastSublevelMatrixPositionFirst) * this.zoom;
-            this.andyY = (this.wallSize + this.tileSize / 2 + this.tileSize * this.lastSublevelMatrixPositionSecond) * this.zoom;
-            this.andy.posMatrix[0] = this.lastSublevelMatrixPositionFirst;
-            this.andy.posMatrix[1] = this.lastSublevelMatrixPositionSecond;
-
-            this.andy.setPosition(this.andyX, this.andyY);
-
-            /* 
-            
-            this.editor.setValue(""); //Clear codemirror field
-            this.editor.clearHistory();
-            
-            */
-
-            this.sceneUp.write('');
-
-            this.andy.collision = false;
-            this.andy.collidingWorldBounds = false;
-            this.andy.collisionWithoutMovement = false;
-
-            document.getElementById("run").disabled = false; //Also reset the button to click again
-
-            //this.arrivedSublevel = true;
-        }, [], this);
-    }
-
-    /**
-     * When andy has not reached the goal
-     */
-    andyDidntArriveTheGoal() {
-        if (!this.debugMode) {
-            this.sceneUp.write(this.sentences['fail']);
-            if (this.lastLevelCompleted < 3) { //If non sublevel was completed
-                this.resetGame(9000);
-            } else { //If any sublevel was completed
-                this.resetToSublevel(9000);
-            }
-        }
     }
 
     /**

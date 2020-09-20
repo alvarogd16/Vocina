@@ -37,7 +37,6 @@ class SceneUp extends Phaser.Scene {
 
         this.editorHeight = this.sceneYstart;
 
-
         this.writeAvailable = true;
     }
 
@@ -60,7 +59,6 @@ class SceneUp extends Phaser.Scene {
 
         //Load the dialog plugin in the scene
         let path = "../../lib/rextexttypingplugin.min.js";
-        //let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexttypingplugin.min.js';
         this.load.plugin('rextexttypingplugin', path, true);
 
         // Player sprite.
@@ -80,10 +78,6 @@ class SceneUp extends Phaser.Scene {
         
         this.load.image("bubble", "assets/crisDialogs/Bubble.png"); 
 
-        // //Load json 1
-        // this.keyJson = "json1";
-        // this.load.json(this.keyJson, "json/level1.json");
-
         this.keyJson = "json" + this.numLevel;
         
         // AUDIO LOAD
@@ -101,9 +95,6 @@ class SceneUp extends Phaser.Scene {
         this.sublevelsData = this.cache.json.get(this.keyJson).sublevels;
         
         this.sentencesQueue = new Queue();
-        //¡¡¡ TEMPORAL !!!
-        //this.sentencesQueue.enqueue(this.cache.json.get(this.keyJson).sentences['start']);
-        //this.sentencesQueue.enqueue(this.cache.json.get(this.keyJson).sentences['explanation1']);
         
         let bubble = this.add.sprite(this.talkSpriteWidth, this.sceneYstart, 'bubble')
             .setOrigin(0).setScale(this.zoomToAdapt).setInteractive();
@@ -119,6 +110,7 @@ class SceneUp extends Phaser.Scene {
                 width: this.talkSpriteWidth+this.bubbleWidth/10
             }
         });
+
         this.typing = this.plugins.get('rextexttypingplugin').add(textGameObject, {
             speed: 50, // typing speed in ms
             typeMode: 0, //0|'left-to-right'|1|'right-to-left'|2|'middle-to-sides'|3|'sides-to-middle'
@@ -134,13 +126,6 @@ class SceneUp extends Phaser.Scene {
          
         //Play talk voice
         //this.crisAlexVoice.play();
-
-        //Typing first phrase
-        //this.typing.start(this.cache.json.get(this.keyJson).sentences['start']);
-        
-        // sentences
-        this.explanation1 = this.cache.json.get(this.keyJson).sentences['explanation1'];
-        this.sublevel11 = this.cache.json.get(this.keyJson).sentences['sublevel1'];
 
         
         //Stop talk voice

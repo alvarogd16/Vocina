@@ -8,9 +8,9 @@ class MainScene extends Phaser.Scene {
     constructor() {
         super("MainScene");
 
-        this.debugMode = false; //Show information and alllow you to move the camera
+        this.debugMode = false;             //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false;
-        this.level = 1; //Each level has a .json file
+        this.level = 1;                     //Each level has a .json file
         this.maxLevels = 4;
 
         this.width = document.getElementById('gameContainer').clientWidth;
@@ -211,8 +211,9 @@ class MainScene extends Phaser.Scene {
             delay: 0
         });
 
-
-        //Finite state machine
+        //********************************//
+        //***** Finite state machine *****//
+        //********************************//
 
         let stateConfig = {
             states: {
@@ -223,12 +224,6 @@ class MainScene extends Phaser.Scene {
 
                         this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
                         this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
-
-                        switch(this.sublevelType){
-                            case "item":
-                                this.sceneDown.prepareItem(this.sublevelObjetive[1]);
-                                break;
-                        }
 
                         this.next();
                   }  
@@ -249,6 +244,13 @@ class MainScene extends Phaser.Scene {
 
                         //activate write and run button
                         this.sceneDown.runButtonAndWriteAllowed(true);
+
+                        // Temporal here?
+                        switch(this.sublevelType){
+                            case "item":
+                                this.sceneDown.prepareItem(this.sublevelObjetive[1]);
+                                break;
+                        }
                     },
                     exit: function () {
                         this.sceneDown.runButtonAndWriteAllowed(false);
@@ -278,23 +280,23 @@ class MainScene extends Phaser.Scene {
                 checkSublevel: {
                     next: function () { 
                         if(this.sublevelComplete){
-                            console.log(this.sceneDown.getSublevelsNum())
+                            //console.log(this.sceneDown.getSublevelsNum())
                             if(this.sublevelId === this.sceneDown.getSublevelsNum()){
                                 return 'end';
                             }
 
                             //Update the last player state
-
-                            this.sublevelComplete = false;
+                            this.lastPlayerState = this.sceneDown.initializePlayerState();
 
                             //next sublevel
                             this.sublevelId++;
+                            this.sublevelComplete = false;
+                            
                             return 'boot';
                         } else {
                             //fail message depends of tipe of sublevel
 
                             //Change to the last player state
-
                             this.sceneDown.setPlayerState(this.lastPlayerState);
 
                             return 'programming';
@@ -319,7 +321,6 @@ class MainScene extends Phaser.Scene {
                             break;
 
                             case "item":
-                                this.sceneDown.inventory.showItems();
                                 if(this.sceneDown.andy.posMatrix[0] === this.sublevelObjetive[0][0] &&
                                     this.sceneDown.andy.posMatrix[1] === this.sublevelObjetive[0][1] &&
                                     this.sceneDown.inventory.searchItem(this.sublevelObjetive[1])){
@@ -420,7 +421,6 @@ class MainScene extends Phaser.Scene {
         this.scene.stop('SceneUp');
         this.scene.stop('SceneDown');
         //this.cm.style.display = 'none';
-        //document.getElementById("run").disabled = false; //Also reset the button to click again
         this.launchScenes();
     }
 

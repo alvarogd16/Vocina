@@ -1,52 +1,6 @@
 {
-	"name": "Salon",
-    "position": [2,9],
-    "rotation": "up",
-    "sublevels": [{
-            "type": "move",
-            "objetives": [[2,8]],
-            "sentences": [
-                "Lo primero que debes aprender es a moverte por las habitaciones para llevar a cabo las acciones necesarias"
-            ]
-        },
-        {
-            "type": "lightOff",
-            "objetives": [],
-            "sentences": []
-        },
-        {
-            "type": "item",
-            "objetives": [[2,7], "led"],
-            "sentences": [
-                "Recoge el item venga"
-            ]
-        },
-        {
-            "type": "item",
-            "objetives": [[5,7], "button"],
-            "sentences": [
-                "Recoge el item venga"
-            ]
-        },
-        {
-            "type": "lightOn",
-            "objetives": [],
-            "sentences": []
-        },
-        {
-            "type": "move",
-            "objetives": [[8,5]],
-            "sentences": [
-                "Ahora vas a moverte más",
-                "Venga muevete, vAMOS, ME ESTAS ENFADANDO!!!!",
-                "Para poder ayudarme, deberás además hacer acciones en varias habitaciones",
-                "Cada habitación está formada por casillas",
-                "Para poder moverte, debes escribir instrucciones en la consola",
-                "Muévete una casilla hacia arriba escribiendo andy.moverArriba(1)"
-            ]
-        }
-    ],
-	"map": [-1, -1, -1, -1, -1, -1, -1, -1, -1,  0,
+    "name": "Salon",
+    "map": [-1, -1, -1, -1, -1, -1, -1, -1, -1,  0,
              0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
             -1, -1,  0,  0,  0,  0,  0,  0,  0,  2,
             -1, -1,  0,  0, -1, -1, -1, -1,  0,  0,
@@ -56,9 +10,69 @@
             -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
              0,  0,  0,  0,  0,  0, -1, -1, -1, -1,
             -1,  0,  1,  0,  0,  0, -1, -1, -1, -1],
+    "position": [2,9],
+    "rotation": "up",
+    "sublevels": [
+        {
+            "type": "move",
+            "objetives": [[2,8]],
+            "sentences": [
+                "Lo primero que debes aprender es a moverte por las habitaciones para llevar a cabo las acciones necesarias"
+            ]
+        },
+        {
+            "type": "item",
+            "objetives": [[2,7], "led"],
+            "sentences": [
+                "Recoge el item venga"
+            ]
+        },
+        {
+            "type": "put",
+            "objetives": [0, "LED"],
+            "sentences": []
+        },
+        {
+            "type": "move",
+            "objetives": [[8,5]],
+            "sentences": [
+                "Muy bien andy!"
+            ]
+        },
+        {
+            "type": "lightOff",
+            "objetives": [],
+            "sentences": []
+        },
+        {
+            "type": "item",
+            "objetives": [[8,4], "button"],
+            "sentences": [
+                "Recoge el item venga"
+            ]
+        },
+        {
+            "type": "put",
+            "objetives": [0, "button"],
+            "sentences": []
+        },
+        {
+            "type": "lightOn",
+            "objetives": [],
+            "sentences": []
+        },
+        {
+            "type": "move",
+            "objetives": [[9,2]],
+            "sentences": [
+                "Ahora vas a moverte más",
+                "Venga muevete, vAMOS, ME ESTAS ENFADANDO!!!!"
+            ]
+        }
+    ],
     "items": [
-        {"name": "led", "position": [2, 7]},
-        {"name": "button", "position": [5, 7]}
+        {"name": "led", "position": [2,7]},
+        {"name": "button", "position": [8,4]}
     ],
     "itemObject": [
         {"name": "lantern"}

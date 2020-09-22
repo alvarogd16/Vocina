@@ -8,20 +8,29 @@ class Fridge extends ItemObject {
             "sensor": false
         };
         this.temporary = false;
+
+        this.actualTemp = 20;
+        this.tempAfter = -20;
         //this.temperatureEncoder;
     }
 
     leerSensor() {
         if (this.comprobarItems()) {
-            if (this.temporary == false) {
-                this.temporary = true;
-                console.log("22");
-                return 22;
-            } else {
-                console.log("-20");
-                return -20;
-            }
+            // if (this.temporary == false) {
+            //     this.temporary = true;
+            //     console.log(this._tempBefore);
+            //     return this._tempBefore;
+            // } else {
+            //     console.log("-20");
+            //     return -20;
+            // }
+
+            this.actualTemp = 20;
         } else
             console.log("ERROR NEVERA -- No se encuentran instalados todos los items necesarios");
+    }
+
+    checkTemp() {
+        return this.actualTemp === this.tempAfter;
     }
 }

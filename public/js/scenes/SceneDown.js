@@ -151,22 +151,30 @@ class SceneDown extends Phaser.Scene {
 
         /* LOAD ITEMOBJECTS */
 
+        this.itemsObject = [];
+
         this.itemObject.forEach(element => {
             switch(element.name){
                 case "lantern":
                     this.lantern = new Lantern(this);
+                    this.itemsObject.push(this.lantern);
                     break;
                 case "fridge":
                     this.fridge = new Fridge(this);
+                    this.itemsObject.push(this.fridge);
                     break;
                 case "sink":
                     this.sink = new Sink(this);
+                    this.itemsObject.push(this.sink);
                     this.zombie = new Zombie(this);
                     break;
                 case "box":
                     this.box1 = new Box(this, false);
                     this.box2 = new Box(this, true);
                     this.box3 = new Box(this, false);
+                    this.itemsObject.push(this.box1);
+                    this.itemsObject.push(this.box2);
+                    this.itemsObject.push(this.box3);
                     break;
             }
         });

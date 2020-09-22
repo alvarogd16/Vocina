@@ -1,9 +1,11 @@
 //********************************//
-//***** Finite state machine *****//
+//***** Finite State Machine *****//
 //********************************//
 
+// Configuration object to the FSM 
 let stateConfig = {
 	states: {
+		// Load some important info like the sublevel type or the id
 		boot: {
 			next: 'explanation',
 			enter: function () {
@@ -15,23 +17,32 @@ let stateConfig = {
 				this.next();
 			}  
 		},
+		// Load and write all the sentences of the sublevel
 		explanation: {
 			next: function () {
+				// When there arent objetives in th sublevel 
 				if(this.sublevelObjetive.length === 0) {
-					// Its not necessary check the sublevel
 					this.sublevelComplete = true;
 					return 'action';
-				} else {
+				} else
 					return 'programming';
-				}
 			},
 			enter: function () {
 				console.log("explanation start");
 
 				this.sceneUp.loadSentences(this.sublevelId);
 				this.sceneUp.startWrite();
+			},
+			exit: function () {
+				// Activate and load the item
+				switch(this.sublevelType){
+					case "item":
+						this.sceneDown.prepareItem(this.sublevelObjetive[1]);
+						break;
+				}
 			}
 		},
+		// Allows user to program in editor
 		programming: {
 			next: 'checkCode',
 			enter: function () {
@@ -39,22 +50,17 @@ let stateConfig = {
 
 				//activate write and run button
 				this.sceneDown.runButtonAndWriteAllowed(true);
-
-				// Temporal here?
-				switch(this.sublevelType){
-					case "item":
-						this.sceneDown.prepareItem(this.sublevelObjetive[1]);
-						break;
-				}
 			},
 			exit: function () {
 				this.sceneDown.runButtonAndWriteAllowed(false);
 			}
 		},
+		// Check the syntactic errors of the code
+		// (implements with try catch in sceneDown)
 		checkCode: {
 			next: function () {
 				if (this.codeErrors) {
-					//error message
+					// Error message
 					this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien escrito")
 					return 'programming';
 				} else {
@@ -65,15 +71,16 @@ let stateConfig = {
 				console.log("check start");
 			}
 		},
+		// Some sublevels need specific actions
+		// (move and item wait for the player to finish the move)
 		action: {
 			next: "checkSublevel",
 			enter: function () {
 				console.log("action start");
-				//Do the action depends of sublevel
 
+				// Do the action depends of sublevel
 				switch(this.sublevelType) {
 					case "lightOff":
-						//turn off lights
 						this.sceneDown.setLight(false);
 
 						this.next();
@@ -85,6 +92,7 @@ let stateConfig = {
 						this.sceneDown.lantern.encender(this.sceneDown.inventory);
 						this.next();
 
+						// WHEN YOU TRY THE RASPI
 						// // Wait to raspi button signal
 						// raspiRead("BUT").then(value => {
 						//     if(value) {
@@ -99,24 +107,25 @@ let stateConfig = {
 				}
 			}
 		},
+		// Check each sublevel depending of the objetives
 		checkSublevel: {
 			next: function () { 
 				if(this.sublevelComplete){
-					//console.log(this.sceneDown.getSublevelsNum())
 					if(this.sublevelId === this.sceneDown.getSublevelsNum()){
 						return 'end';
 					}
 
-					//Update the last player state
-					this.lastPlayerState = this.sceneDown.initializePlayerState();
+					// Update the last player state
+					this.lastPlayerState = this.sceneDown.updatePlayerState();
 
-					//next sublevel
+					// Next sublevel
 					this.sublevelId++;
 					this.sublevelComplete = false;
 
 					return 'boot';
 				} else {
-					//fail message depends of tipe of sublevel
+					// Fail message depends of tipe of sublevel
+					// TODO
 
 					//Change to the last player state
 					this.sceneDown.setPlayerState(this.lastPlayerState);
@@ -125,22 +134,22 @@ let stateConfig = {
 				}
 			},
 			enter: function () {
-				//TODO
 				console.log("-- Check " + this.sublevelType + " sublevel");
 
 				switch(this.sublevelType){
-					//Only have to go to one place
 					case "move":
+						// Check the actual position with the objetive position
 						if(this.sceneDown.andy.posMatrix[0] === this.sublevelObjetive[0][0] &&
 							this.sceneDown.andy.posMatrix[1] === this.sublevelObjetive[0][1]){
 
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
 						} else 
-							this.sceneUp.write("PErro te moviste maaaall");
+							this.sceneUp.write("PErro te moviste maaaall"); // TO CHANGE
 					break;
 
 					case "item":
+						// Like the last one but now check the item in the inventory too
 						if(this.sceneDown.andy.posMatrix[0] === this.sublevelObjetive[0][0] &&
 							this.sceneDown.andy.posMatrix[1] === this.sublevelObjetive[0][1] &&
 							this.sceneDown.inventory.searchItem(this.sublevelObjetive[1])){
@@ -148,19 +157,21 @@ let stateConfig = {
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
 						} else 
-							this.sceneUp.write("PErro te moviste maaaall");
+							this.sceneUp.write("PErro te moviste maaaall"); // TO CHANGE
 					break;
 
 					case "put":
+						// Check if the item has been installed correctly
 						let itemObjectPut = this.sceneDown.itemsObject[this.sublevelObjetive[0]];
 						if(itemObjectPut.comprobarItem(this.sublevelObjetive[1])){
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
 						} else 
-							this.sceneUp.write("PErro te instalaste maaaall");
+							this.sceneUp.write("PErro te instalaste maaaall"); // TO CHANGE
 					break;
 
 					case "temp":
+						// Check if the temp is correct depend if encoder has been installed or not
 						let itemObjectTemp = this.sceneDown.itemsObject[this.sublevelObjetive[0]];
 
 						// When the encoder is not installed
@@ -172,7 +183,7 @@ let stateConfig = {
 								console.log("Sublevel complete");
 							} else {
 								this.sublevelComplete = false;
-								this.sceneUp.write("PErro la temperatura esta maaall");
+								this.sceneUp.write("PErro la temperatura esta maaall"); // TO CHANGE
 							}
 									
 						}
@@ -182,6 +193,7 @@ let stateConfig = {
 				this.next();
 			}
 		},
+		// Go to the next level
 		end: {
 			enter: function () {
 				console.log("End of level");

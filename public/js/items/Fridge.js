@@ -9,13 +9,12 @@ class Fridge extends ItemObject {
         };
         this.temporary = false;
 
-        this.actualTemp = 20;
-        this.tempAfter = -20;
-        //this.temperatureEncoder;
+        this.actualTemp = 20;   //It modify with the encoder
+        this.tempAfter = -20;   //Temp necessary to freeze zombies
     }
 
     leerSensor() {
-        if (this.comprobarItems()) {
+        if (this.comprobarItem("sensor")) {
             // if (this.temporary == false) {
             //     this.temporary = true;
             //     console.log(this._tempBefore);
@@ -25,7 +24,9 @@ class Fridge extends ItemObject {
             //     return -20;
             // }
 
-            this.actualTemp = 20;
+            //this.actualTemp = 20;
+            
+            return this.actualTemp;
         } else
             console.log("ERROR NEVERA -- No se encuentran instalados todos los items necesarios");
     }

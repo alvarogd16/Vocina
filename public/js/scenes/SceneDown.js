@@ -13,15 +13,9 @@ class SceneDown extends Phaser.Scene {
         this.tileSize = 103; //Measured with photoshop
         this.wallSize = 44; //Measured with photoshop
 
-        this.arrivedGoal = false; //This is used for the player (update snippet in which it's checked whether the player reached a target or not) to know how to distinguish between reaching a target (means didn't reach the GOAL) and reaching the GOAL
-        this.arrivedSublevel = false;
-        this.lastSublevelMatrixPositionFirst = 0;
-        this.lastSublevelMatrixPositionSecond = 0;
-        this.lastLevelCompleted = 0;
         this.lightOn = false;
         this.widthD = document.getElementById('gameContainer').clientWidth
         this.heightD = document.getElementById('gameContainer').clientHeight
-
     }
 
     /**
@@ -53,22 +47,24 @@ class SceneDown extends Phaser.Scene {
         this.sceneUp = this.scene.get('SceneUp');
         this.debugMode = this.mainScene.debugMode;
 
+
         /* MAP DATA */
 
         // In case it was necessary
         // this.cache.json.remove();
 
-        this.mapName = this.cache.json.get(this.keyJson).name; //I think that is not usefull
-        this.playerStartPosition = this.cache.json.get(this.keyJson).position;  //[x, y]
-        this.playerStartRotation = this.cache.json.get(this.keyJson).rotation;  //right, up...
-        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           //array with objects
-        this.mapMatrix = this.cache.json.get(this.keyJson).map;
-        this.jsonItems = this.cache.json.get(this.keyJson).items;               //[{name, position}]
-        this.itemObject = this.cache.json.get(this.keyJson).itemObject;         //name
+        this.mapName = this.cache.json.get(this.keyJson).name;                  // Its not usefull
+        this.playerStartPosition = this.cache.json.get(this.keyJson).position;  // [x, y]
+        this.playerStartRotation = this.cache.json.get(this.keyJson).rotation;  // Right, up...
+        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           // Array with sublevels objects
+        this.mapMatrix = this.cache.json.get(this.keyJson).map;                 // Matrix with map info collisions
+        this.jsonItems = this.cache.json.get(this.keyJson).items;               // [{name, position}]
+        this.itemObject = this.cache.json.get(this.keyJson).itemObject;         // Some special objects (lantern, fridge...)
 
-        //Control the sublevels flow
+        // Control the sublevels flow
         this.stateMachine = this.mainScene.stateMachine;
                
+
         /* EDITOR */
         
         this.flask = this.mainScene.flask;
@@ -82,9 +78,11 @@ class SceneDown extends Phaser.Scene {
                 this.disabled = true;*/
         };
 
+
         /* KEYBOARD */
 
-        //To debug camera
+        // To debug camera
+        // (Now NOT used)
         this.key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR);
         this.key6 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX);
         this.key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
@@ -95,7 +93,7 @@ class SceneDown extends Phaser.Scene {
 
         /* MAP AND CAMERAS*/
 
-        //Some constants to the camera and map positions
+        // Some constants to the camera and map positions
         this.zoom = this.widthD / this.mapSize; //Zoom level to adapt the map to the scene
         this.mapNewSize = this.widthD;
         this.mapX = 0;
@@ -107,14 +105,17 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setSize(this.mapNewSize, this.mapNewSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
 
-        /* MAP BOUNDS */
 
-        //X axis
-        this.leftBound = this.wallSize * this.zoom;
-        this.rightBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
-        //Y axis. Towards upper bound, the position becomes smaller
-        this.upperBound = this.wallSize * this.zoom;
-        this.bottomBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
+        /* MAP BOUNDS */
+        // (Now NOT used)
+
+        // //X axis
+        // this.leftBound = this.wallSize * this.zoom;
+        // this.rightBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
+        // //Y axis. Towards upper bound, the position becomes smaller
+        // this.upperBound = this.wallSize * this.zoom;
+        // this.bottomBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
+
 
         /* PHYSICS, PLAYER AND ILLUMINATION */
 
@@ -125,31 +126,35 @@ class SceneDown extends Phaser.Scene {
 
 
         this.andy = new Player(this, 0, 0);
-        //Calculate the map position with the matrix position
-        this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]);
+        this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]);  //Use map coordinates
         this.andy.setPlayerRotation(this.playerStartRotation);
+
 
         this.light = this.add.circle(this.andy.x, this.andy.y, 50, 0xffffff, 0.10);
         this.light.visible = false;
+
 
         /* INVENTORY */
 
         this.inventory = new Inventory();
 
+
         /* LOAD ITEMS */
 
-        //Store all level items object
+        // Store all level items object
         this.mapItems = [];
 
         this.jsonItems.forEach(jsonItem => {
             let mapItem = new Item(this, 0, 0, jsonItem.name);
             mapItem.setItemPosition(jsonItem.position[0], jsonItem.position[1]);
-            mapItem.disableBody(true, true);    //Hide the item
+            mapItem.disableBody(true, true);    // Hide the item
 
             this.mapItems.push(mapItem);
         });
 
+
         /* LOAD ITEMOBJECTS */
+        // (Change the name, is confuse with items)
 
         this.itemsObject = [];
 
@@ -179,23 +184,42 @@ class SceneDown extends Phaser.Scene {
             }
         });
 
-        //At first disallowed this opctions
+
+        // At first disallowed the editor
         this.runButtonAndWriteAllowed(false);
     }
 
+
+    /**
+     * Get sublevel type with the ID
+     * @param {Number} sublevelId 
+     */
     getSublevelType(sublevelId) {
         return this.sublevels[sublevelId].type;
     }
 
+
+    /**
+     * Get sublevel objetive with the ID
+     * @param {Number} sublevelId 
+     */
     getSublevelObjetive(sublevelId) {
         return this.sublevels[sublevelId].objetives;
     }
 
+
+    /**
+     * Get the total number of sublevels minus one in the level
+     */
     getSublevelsNum() {
         return this.sublevels.length - 1;
     }
 
-    initializePlayerState() {
+
+    /**
+     * Update the state object with the player
+     */
+    updatePlayerState() {
         let playerState = {
             position: this.andy.getPlayerPosition(),
             rotation: this.andy.getPlayerRotation(),
@@ -204,11 +228,17 @@ class SceneDown extends Phaser.Scene {
         return playerState;
     }
 
+
+    /**
+     * Update the player with the state object
+     * @param {Object} newState The new state of the player
+     */
     setPlayerState(newState) {
         this.andy.setPlayerPosition(newState.position[0], newState.position[1]);
         this.andy.setPlayerRotation(newState.rotation);
         this.inventory.updateItems(newState.items);
     }
+
 
     /* EJECUTE CODE */
 
@@ -236,7 +266,7 @@ class SceneDown extends Phaser.Scene {
 
         let zombie = this.zombie;
 
-        //TEST
+        // TEST
         let mainScene = this.mainScene;
 
         let args = 'andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie';
@@ -253,11 +283,17 @@ class SceneDown extends Phaser.Scene {
         this.stateMachine.next();
     }
 
-    runButtonAndWriteAllowed(allowed) {
+
+    /**
+     * When the editor is activate you can write and push the RUN button
+     * @param {boolean} allowed True activate the editor
+     */
+    runButtonAndWriteAllowed(allowed) { // TO CHANGE NAME activateEditor() ??
         document.getElementById("run").disabled = !allowed;
-        //this.editor.readOnly = !allowed; Not working
-        //Remove or activate button animation
+        //this.editor.readOnly = !allowed; // TO CHANGE
+        // TO DO Remove or activate button animation
     }
+
 
     /**
      * Set visible the item and activate the collision
@@ -293,6 +329,7 @@ class SceneDown extends Phaser.Scene {
         return enc;
     }
 
+
     /**
      * Checks if a sublevel was completed and then returns true, otherwise returns false
      * 
@@ -312,17 +349,6 @@ class SceneDown extends Phaser.Scene {
 
 
     /**
-     * When zombies reached andy
-     */
-    zombiesReachedAndy() {
-        this.cameras.main.shake(500);
-
-        this.time.delayedCall(500, function () {
-            this.scene.restart();
-        }, [], this);
-    }
-
-    /**
      * Set light on or off
      * @param {boolean} value on is true and off false
      */
@@ -335,11 +361,13 @@ class SceneDown extends Phaser.Scene {
             this.map.setTint(0x000033);
     }
 
+
     /**
      * Update the scene
      */
     update() {
-        //Camera debug
+        // Camera debug
+        // (Now NOT need)
         if (this.debugMode) {
             if (this.keyShift.isDown) {
                 if (this.key4.isDown) this.mapX--;

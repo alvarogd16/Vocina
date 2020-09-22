@@ -15,12 +15,12 @@ class MainScene extends Phaser.Scene {
 
         this.width = document.getElementById('gameContainer').clientWidth;
 
-        //Variables to hide function
+        // Variables to hide function
         this.cm = document.getElementById('codeArea');
     }
 
     preload() {
-        //IMAGE LOAD
+        /* IMAGE LOAD */
 
         // Player sprite.
         this.load.spritesheet({
@@ -50,7 +50,7 @@ class MainScene extends Phaser.Scene {
             }
         });
 
-        // hardware
+        // Hardware sprites
 
         this.load.spritesheet({
             key: 'button',
@@ -117,9 +117,8 @@ class MainScene extends Phaser.Scene {
             }
         });
 
-        // AUDIO LOAD
 
-
+        /* AUDIO LOAD */
 
         this.load.audio('pickUp', [
             'assets/sounds/pickUp.wav'
@@ -161,7 +160,8 @@ class MainScene extends Phaser.Scene {
             'assets/sounds/unlockedBox.mp3'
         ]);
 
-        // PLUGIN LOAD
+
+        /* PLUGIN LOAD */
 
         let path = "../../lib/rexrotatetoplugin.min.js";
         this.load.plugin('rexrotatetoplugin', path, true);
@@ -180,12 +180,12 @@ class MainScene extends Phaser.Scene {
         this.sceneUp   = this.scene.get('SceneUp');
         this.sceneDown = this.scene.get('SceneDown');
 
-        //Background image
+        // Background image
         this.zoomBackground = this.width / 1125; //1125 is the image's width
         this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
 
 
-        //Create code editor
+        // Create code editor with the config object
         this.editorElem = document.getElementById('code');
         this.flask = new CodeFlask(this.editorElem, {
             language: 'js',
@@ -194,17 +194,14 @@ class MainScene extends Phaser.Scene {
         });
 
 
-        //Play levels ambience
+        // Play levels ambience
         let loopMarker = {
             name: 'loop',
             config: {
                 loop: true
             }
         };
-
         this.levelsAmbience = this.sound.add('levelsAmbience');
-        //this.menuTheme.play();
-
         this.levelsAmbience.addMarker(loopMarker);
 
         // Delay option can only be passed in config
@@ -213,24 +210,29 @@ class MainScene extends Phaser.Scene {
         });
 
 
+        // Prepare the FSM
         this.stateMachine = this.plugins.get('rexfsmplugin').add(stateConfig);
         this.stateMachine.mainScene = this;
         this.stateMachine.sceneUp   = this.sceneUp;
         this.stateMachine.sceneDown = this.sceneDown;
 
-        //Call the scenes
+
+        // Call the scenes
         this.scene.launch("SceneUp", this.level);
         this.scene.launch("SceneDown", this.level); //Start with Level1
 
-        //Calculate editor's height
+
+        // Calculate editor's height
         this.cm.style.height = this.sceneUp.editorHeight + "px";
 
-        //Keys        
+        // Keys        
         this.keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         this.key8 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT);
 
+        // Start the FSM
+        // (Wait a few secods for the loading rime of the scenes)
         this.time.delayedCall(500, function () {
-            this.stateMachine.lastPlayerState = this.sceneDown.initializePlayerState();
+            this.stateMachine.lastPlayerState = this.sceneDown.updatePlayerState();
             this.stateMachine.goto("boot");
         }, [], this);
     }
@@ -265,7 +267,7 @@ class MainScene extends Phaser.Scene {
      * When the game ends
      */
     endGame() {
-        this.add.text(10, 10, 'GAME OVER');
+        this.add.text(10, 10, 'GAME OVER'); // TO CHANGE
     }
 
     /**
@@ -291,7 +293,8 @@ class MainScene extends Phaser.Scene {
      * Resume all and adapt de screen for the transition of scenes
      */
     update() {
-        //To enable or disable debugMode 
+        // To enable or disable debugMode 
+        // (Now NOT used)
         if (this.keyShift.isDown && this.key8.isDown && !this.keysForDebugAreDown) {
             this.debugMode = !this.debugMode;
             this.keysForDebugAreDown = true; //This is just to avoid the keys enabling and disabling the debugMode a lot of times, so they'll do it just once

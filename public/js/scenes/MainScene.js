@@ -189,7 +189,8 @@ class MainScene extends Phaser.Scene {
         this.editorElem = document.getElementById('code');
         this.flask = new CodeFlask(this.editorElem, {
             language: 'js',
-            lineNumbers: true
+            lineNumbers: true//,
+            //defaultTheme: false
         });
 
 
@@ -294,13 +295,17 @@ class MainScene extends Phaser.Scene {
                             case "lightOn":
                                 console.log("Luces encendidass");
 
-                                // Wait to raspi button signal
-                                raspiRead("BUT").then(value => {
-                                    if(value) {
-                                        this.sceneDown.lantern.encender();
-                                        this.next();
-                                    }
-                                });
+                                // TEMPORAL
+                                this.sceneDown.lantern.encender(this.sceneDown.inventory);
+                                this.next();
+
+                                // // Wait to raspi button signal
+                                // raspiRead("BUT").then(value => {
+                                //     if(value) {
+                                //         this.sceneDown.lantern.encender();
+                                //         this.next();
+                                //     }
+                                // });
                                 break;
                         }
                     }

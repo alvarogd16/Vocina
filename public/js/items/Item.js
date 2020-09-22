@@ -1,4 +1,4 @@
-class item extends Phaser.Physics.Arcade.Sprite {
+class Item extends Phaser.Physics.Arcade.Sprite {
     
     constructor(scene, x, y, name) {
         super(scene, x, y);

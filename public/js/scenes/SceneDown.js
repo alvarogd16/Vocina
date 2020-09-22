@@ -142,7 +142,7 @@ class SceneDown extends Phaser.Scene {
         this.mapItems = [];
 
         this.jsonItems.forEach(jsonItem => {
-            let mapItem = new item(this, 0, 0, jsonItem.name);
+            let mapItem = new Item(this, 0, 0, jsonItem.name);
             mapItem.setItemPosition(jsonItem.position[0], jsonItem.position[1]);
             mapItem.disableBody(true, true);    //Hide the item
 

@@ -6,7 +6,6 @@ class ItemObject extends Phaser.Physics.Arcade.Sprite {
         super(scene);
         this.scene = scene;
         this.items = {};
-        //this.items = [];
     }
 
     //Install a new item into the dictionary
@@ -41,16 +40,6 @@ class ItemObject extends Phaser.Physics.Arcade.Sprite {
         //console.log(auxBool);
         return auxBool;
     }
-
-    // // Check if the items are in the inventory
-    // comprobarItems() {
-    //     let enc = true;
-    //     this.items.forEach(item => {
-    //         if(!this.scene.inventory.searchItem(item))
-    //             enc = false;
-    //     });
-    //     return enc;
-    // }
 
     //Is item in inventory
     isItemInInventory(item) {

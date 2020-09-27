@@ -13,58 +13,61 @@ const typeTEMPS = 11; //DHT11
 const pinEncA = 5;
 const pinEncB = 6;
 
-if(isPi()){ 
-    const Gpio = require('onoff').Gpio;
 
-    const LEDR = new Gpio(pinLED, 'out');
-    const BUTR = new Gpio(pinBUT, 'in', 'rising');
-    const ENC_A = new Gpio(pinEncA, 'in', 'both');
-    const ENC_B = new Gpio(pinEncB, 'in', 'both');
-
-    //TODO AND TO INSTALL
-    const sensor = require('node-dht-sensor');
-
-    sensor.read(typeTEMPS, pinTEMPS, (err, temperature, humidity) => {
-        if(!err) 
-            valTEMPS = temperature;
-    });
-
-    //END TODO
-
-    //Button funcionality
-    BUTR.watch(function (err, value){
-        if(err){
-            console.error(err);
-            return;
-        }
-        valBUT = !valBUT;   //When push the button change valBUT
-    });
-
-    //Encoder funcionality
-    ENC_A.watch((err, valueA) => {
-        if(err) throw err;
-        encAux = valueA;
-        
-        ENC_B.read((err, valueB) => {
-            if(valueB != encAux) 
-                encCont++;
-            else
-                encCont--;
-                
-            console.log("Value: " + encAux + valueB + "Cont: " + encCont);
+const setupRaspi = (socket) => {
+    if(isPi()){ 
+        const Gpio = require('onoff').Gpio;
+    
+        const LEDR = new Gpio(pinLED, 'out');
+        const BUTR = new Gpio(pinBUT, 'in', 'rising');
+        const ENC_A = new Gpio(pinEncA, 'in', 'both');
+        const ENC_B = new Gpio(pinEncB, 'in', 'both');
+    
+        //TODO AND TO INSTALL
+        const sensor = require('node-dht-sensor');
+    
+        sensor.read(typeTEMPS, pinTEMPS, (err, temperature, humidity) => {
+            if(!err) 
+                valTEMPS = temperature;
         });
-    });
-
-    function unexportOnClose() {
-        LEDR.writeSync(0);
-        LEDR.unexport();
-        BUTR.unexport();
-        ENC_A.unexport();
-        ENC_B.unexport();
-        process.exit();
+    
+        //END TODO
+    
+        //Button funcionality
+        BUTR.watch(function (err, value){
+            if(err){
+                console.error(err);
+                return;
+            }
+            valBUT = !valBUT;   //When push the button change valBUT
+        });
+    
+        //Encoder funcionality
+        ENC_A.watch((err, valueA) => {
+            if(err) throw err;
+            encAux = valueA;
+            
+            ENC_B.read((err, valueB) => {
+                if(valueB != encAux) 
+                    encCont++;
+                else
+                    encCont--;
+                    
+                console.log("Value: " + encAux + valueB + "Cont: " + encCont);
+            });
+        });
+    
+        function unexportOnClose() {
+            LEDR.writeSync(0);
+            LEDR.unexport();
+            BUTR.unexport();
+            ENC_A.unexport();
+            ENC_B.unexport();
+            process.exit();
+        }
+    
+        process.on('SIGINT', unexportOnClose);  //When press ctrl+c 
     }
-
-    process.on('SIGINT', unexportOnClose);  //When press ctrl+c 
 }
 
 /*
@@ -98,4 +101,4 @@ const raspiRead = (component) => {
         return isPi() ? true : false;
 };
 
-module.exports = {raspiWrite, raspiRead, raspiConnect};
+module.exports = {setupRaspi, raspiWrite, raspiRead, raspiConnect};

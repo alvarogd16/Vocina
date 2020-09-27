@@ -1,7 +1,5 @@
 {
 	"name": "Baño",
-	"position": [0,2],
-    "sublevels": [],
 	"map": [-1, -1, -1, -1, -1, -1,  0,  0, -1, -1,
 			 0,  0,  0,  0,  0,  0,  0,  0, -1, -1,
 			 1,  0,  0,  0,  0,  0,  0,  0, -1, -1,
@@ -12,8 +10,18 @@
 			 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
             -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 			 0,  0,  0,  0,  0,  0,  0,  2,  0,  0],
-    "sentences": {
-    },
+
+	"position": [0,2],
+	"rotation": "right",
+    "sublevels": [
+		{
+            "type": "item",
+            "objetives": [[6,1], "soap"],
+            "sentences": [
+                "Recoge el item venga"
+            ]
+		}
+	],
     "items": [
         {"name": "soap", "position": [6, 1]}
     ],

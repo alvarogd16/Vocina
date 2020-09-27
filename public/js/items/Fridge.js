@@ -9,8 +9,8 @@ class Fridge extends ItemObject {
         };
         this.temporary = false;
 
-        this.actualTemp = 20;   //It modify with the encoder
-        this.tempAfter = -20;   //Temp necessary to freeze zombies
+        this.actualTemp = 20;   // It modify with the encoder
+        this.tempAfter = -20;   // Temp necessary to freeze zombies
     }
 
     leerSensor() {

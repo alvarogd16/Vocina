@@ -1,7 +1,7 @@
 
-//Send information to a raspberry
-//component is a string 
-//value is a number
+// Send information to a raspberry
+// component is a string 
+// value is a number
 function raspiWrite(component, value){	
 	const data = {
 		Value: value
@@ -18,8 +18,8 @@ function raspiWrite(component, value){
 	.then(console.log("LED actualizado"));
 }
 
-//Get a promise with the value of the component
-//readRead().then(value => do something with value)
+// Get a promise with the value of the component
+// readRead().then(value => do something with value)
 async function raspiRead(component){
 	let response = await fetch('/raspi/' + component);
 	let json = await response.json();

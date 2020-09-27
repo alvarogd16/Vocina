@@ -1,7 +1,9 @@
-/*SERVER PART*/
+/* SERVER PART */
 
 const express = require('express');
-const app = express();
+const app  = express();
+const http = require('http').createServer(app);
+const io   = require('socket.io')(http);
 const port = 3000;
 
 const raspi = require('./raspi');
@@ -9,24 +11,36 @@ const raspi = require('./raspi');
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 
-//Start the server
-app.listen(port, () => {
-    console.log(`Server listen on port ${port}`);
-    raspi.raspiConnect();
-});
+raspi.setupRaspi(io);
 
-//app.get('/game', (req, res) => res.sendFile(__dirname + '/public/game.html'));
 
+io.on('connection', (socket) => {
+    console.log("a user connected");
+
+    io.emit('hola', "HOLAAA");
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    })
+})
 
 /*RASPI PART*/
 
-//Serve raspi data to the user
+// Serve raspi data to the user
 app.get('/raspi/:component', (req, res) => {
     let valor = raspi.raspiRead(req.params.component);
     res.json(valor);
 });
 
-//Receive data from the user
+// Receive data from the user
 app.post('/raspi/:component', (req, res) => {
     raspi.raspiWrite(req.params.component, req.body.Value);
 });
+
+// Start the server
+http.listen(port, () => {
+    console.log(`Server listen on port ${port}`);
+    raspi.raspiConnect();
+});
+
+//app.get('/game', (req, res) => res.sendFile(__dirname + '/public/game.html'));

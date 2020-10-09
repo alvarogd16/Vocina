@@ -174,12 +174,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                             this.posMatrix[0]--;
                         break;
                 }
-                this.actualPos = this.matrix[this.posMatrix[0] + this.posMatrix[1] * 10];
+                this.actualPos = this.matrix[this.posMatrix[1]][this.posMatrix[0]];
 
                 //console.log(this.posMatrix[0] + "---" + this.posMatrix[1] + "---    " + this.actualPos);
                 //console.log(this.posMatrix);
 
-                if (this.actualPos === -1 || boundCollision) {
+                if (this.actualPos === '#' || boundCollision) {
                     numberOfMovs = i;
                     //this.collision = true;
                     if (numberOfMovs == 0)

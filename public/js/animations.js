@@ -93,3 +93,17 @@ function createAnimationsPlayer(scene) {
     scene.anims.create(config);
     
 }
+
+function createAnimationsFire(scene) {
+    let config = {
+        key: 'fireBurning',
+        frames: scene.anims.generateFrameNumbers('fire', {
+            start: 0,
+            end: 20
+        }),
+        frameRate: 10,
+        repeat: -1
+    };
+    scene.anims.create(config);
+    
+}

@@ -8,9 +8,9 @@ class MainScene extends Phaser.Scene {
     constructor() {
         super("MainScene");
 
-        this.debugMode = false;             //Show information and alllow you to move the camera
+        this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false;
-        this.level = 3;                     //Each level has a .json file
+        this.level = 4; //Each level has a .json file
         this.maxLevels = 4;
 
         this.width = document.getElementById('gameContainer').clientWidth;
@@ -160,6 +160,10 @@ class MainScene extends Phaser.Scene {
             'assets/sounds/unlockedBox.mp3'
         ]);
 
+        this.load.audio('zombiesSound', [
+            'assets/sounds/zombiesSound.mp3'
+        ]);
+
 
         /* PLUGIN LOAD */
 
@@ -177,7 +181,7 @@ class MainScene extends Phaser.Scene {
     create() {
         console.log("Creating game");
 
-        this.sceneUp   = this.scene.get('SceneUp');
+        this.sceneUp = this.scene.get('SceneUp');
         this.sceneDown = this.scene.get('SceneDown');
 
         // Background image
@@ -189,7 +193,7 @@ class MainScene extends Phaser.Scene {
         this.editorElem = document.getElementById('code');
         this.flask = new CodeFlask(this.editorElem, {
             language: 'js',
-            lineNumbers: true//,
+            lineNumbers: true //,
             //defaultTheme: false
         });
 
@@ -209,11 +213,30 @@ class MainScene extends Phaser.Scene {
             delay: 0
         });
 
+        // Play (if level 2) zombie sounds
+        if (this.level >= 2) {
+            let loopMarkerZombies = {
+                name: 'loopZombies',
+                config: {
+                    loop: true,
+                    volume: 0.05
+                }
+            };
+            this.zombiesAmbience = this.sound.add('zombiesSound');
+            this.zombiesAmbience.addMarker(loopMarkerZombies);
+
+            this.zombiesAmbience.play('loopZombies', {
+                delay: 0
+            });
+        }
+
+
+
 
         // Prepare the FSM
         this.stateMachine = this.plugins.get('rexfsmplugin').add(stateConfig);
         this.stateMachine.mainScene = this;
-        this.stateMachine.sceneUp   = this.sceneUp;
+        this.stateMachine.sceneUp = this.sceneUp;
         this.stateMachine.sceneDown = this.sceneDown;
 
 

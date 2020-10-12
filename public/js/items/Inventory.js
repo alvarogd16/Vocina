@@ -42,5 +42,4 @@ class Inventory {
             console.log(this.items[i])
         }
     }
-    
 }

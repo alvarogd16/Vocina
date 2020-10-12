@@ -13,11 +13,12 @@ app.use(express.json());
 
 raspi.setupRaspi(io);
 
-
+let users = []
 io.on('connection', (socket) => {
-    console.log("a user connected");
-
     io.emit('hola', "HOLAAA");
+
+    // users.push(socket.io);
+    // console.log(socket.id + " is connected");
 
     socket.on('disconnect', () => {
         console.log('user disconnected');

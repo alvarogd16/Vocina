@@ -14,7 +14,7 @@ const pinEncA = 5;
 const pinEncB = 6;
 
 
-const setupRaspi = (socket) => {
+const setupRaspi = (io) => {
     if(isPi()){ 
         const Gpio = require('onoff').Gpio;
     
@@ -39,6 +39,7 @@ const setupRaspi = (socket) => {
                 console.error(err);
                 return;
             }
+            io.emit('button');
             valBUT = !valBUT;   //When push the button change valBUT
         });
     

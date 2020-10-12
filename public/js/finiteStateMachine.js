@@ -89,8 +89,12 @@ let stateConfig = {
 						console.log("Luces encendidass");
 
 						// TEMPORAL
-						this.sceneDown.lantern.encender(this.sceneDown.inventory);
-						this.next();
+						//this.sceneDown.lantern.encender(this.sceneDown.inventory);
+						//this.next();
+
+						socket.on('button', () => {
+							console.log("Botoon")
+						});
 
 						// WHEN YOU TRY THE RASPI
 						// // Wait to raspi button signal

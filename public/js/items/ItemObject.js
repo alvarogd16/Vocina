@@ -8,8 +8,8 @@ class ItemObject extends Phaser.Physics.Arcade.Sprite {
         this.items = {};
     }
 
-    //Install a new item into the dictionary
-    instalar(key) {
+    // Install a new item into the dictionary
+    colocar(key) {
         //if (this.isItemInInventory(key)) {
             var keyIsInItems = false;
             for (var keyAux in this.items) {

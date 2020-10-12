@@ -20,6 +20,21 @@
             "sentences": [
                 "Recoge el item venga"
             ]
+		},
+		{
+            "type": "put",
+            "objetives": [0, "soap"],
+            "sentences": []
+		},
+		{
+			"type": "trap",
+			"objetives": [],
+			"sentences": []
+		},
+		{
+			"type": "zombie",
+			"objetives": [],
+			"sentences": []
 		}
 	],
     "items": [

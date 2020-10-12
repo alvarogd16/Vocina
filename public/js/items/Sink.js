@@ -1,6 +1,6 @@
 /** Class representing the sink on the third level
  */
-class Sink extends Phaser.Physics.Arcade.Sprite {
+class Sink extends ItemObject {
 
     constructor(scene) {
         super(scene);
@@ -10,23 +10,23 @@ class Sink extends Phaser.Physics.Arcade.Sprite {
         };
     }
 
-    //Put a new item into the dictionary
-    poner(key) {
-        //if (this.isItemInInventory(key)) {
-        var keyIsInItems = false;
-        for (var keyAux in this.items) {
-            if (key === keyAux)
-                keyIsInItems = true;
-        }
+    // //Put a new item into the dictionary
+    // poner(key) {
+    //     //if (this.isItemInInventory(key)) {
+    //     var keyIsInItems = false;
+    //     for (var keyAux in this.items) {
+    //         if (key === keyAux)
+    //             keyIsInItems = true;
+    //     }
 
-        //To check if the item exists for the corresponding ItemObject
-        if (keyIsInItems) {
-            this.items[key] = 1;
-            console.log("Installed " + key);
-        } else
-            console.log("Error installing a nonexistent item")
-        //} else console.log("Error installing an item that was not collected yet")
-    }
+    //     //To check if the item exists for the corresponding ItemObject
+    //     if (keyIsInItems) {
+    //         this.items[key] = 1;
+    //         console.log("Installed " + key);
+    //     } else
+    //         console.log("Error installing a nonexistent item")
+    //     //} else console.log("Error installing an item that was not collected yet")
+    // }
 
     encender() {
         if (this.comprobarItems()) {

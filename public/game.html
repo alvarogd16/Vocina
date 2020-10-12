@@ -33,7 +33,9 @@
     <!-- TEMPORAL -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        let socket = io();
+        let socket = io.connect();
+        //console.log(socket.id);
+        //socket.emit('id', socket.id);
     </script>
 
     <!-- Game files -->

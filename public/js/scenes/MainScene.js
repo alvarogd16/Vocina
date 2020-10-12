@@ -10,7 +10,7 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false;
-        this.level = 4; //Each level has a .json file
+        this.level = 3; //Each level has a .json file
         this.maxLevels = 4;
 
         this.width = document.getElementById('gameContainer').clientWidth;
@@ -121,7 +121,7 @@ class MainScene extends Phaser.Scene {
         /* AUDIO LOAD */
 
         this.load.audio('pickUp', [
-            'assets/sounds/pickUp.wav'
+            'assets/sounds/pickUp.mp3'
         ]);
 
         this.load.audio('walk', [
@@ -129,15 +129,15 @@ class MainScene extends Phaser.Scene {
         ]);
 
         this.load.audio('sublevelAchieved', [
-            'assets/sounds/sublevelAchieved.wav'
+            'assets/sounds/sublevelAchieved.mp3'
         ]);
 
         this.load.audio('levelAchieved', [
-            'assets/sounds/levelAchieved.wav'
+            'assets/sounds/levelAchieved.mp3'
         ]);
 
         this.load.audio('gameOver', [
-            'assets/sounds/gameOver.wav'
+            'assets/sounds/gameOver.mp3'
         ]);
 
         this.load.audio('levelsAmbience', [
@@ -219,7 +219,7 @@ class MainScene extends Phaser.Scene {
                 name: 'loopZombies',
                 config: {
                     loop: true,
-                    volume: 0.05
+                    volume: 0.2
                 }
             };
             this.zombiesAmbience = this.sound.add('zombiesSound');

@@ -30,6 +30,7 @@ class SceneDown extends Phaser.Scene {
      * Load all map data in cache
      */
     preload() {
+
         /* JSON LOAD */
 
         this.keyJson = "json" + this.numLevel;
@@ -37,6 +38,8 @@ class SceneDown extends Phaser.Scene {
 
         this.load.json(this.keyJson, "json/level" + this.numLevel + ".json");
         this.load.image(this.keyImgMap, "assets/maps/level" + this.numLevel + ".jpg", true);
+
+
     }
 
     /**
@@ -53,20 +56,20 @@ class SceneDown extends Phaser.Scene {
         // In case it was necessary
         // this.cache.json.remove();
 
-        this.mapName = this.cache.json.get(this.keyJson).name;                  // Its not usefull
-        this.playerStartPosition = this.cache.json.get(this.keyJson).position;  // [x, y]
-        this.playerStartRotation = this.cache.json.get(this.keyJson).rotation;  // Right, up...
-        this.sublevels = this.cache.json.get(this.keyJson).sublevels;           // Array with sublevels objects
-        this.mapMatrix = this.cache.json.get(this.keyJson).map;                 // Matrix with map info collisions
-        this.jsonItems = this.cache.json.get(this.keyJson).items;               // [{name, position}]
-        this.itemObject = this.cache.json.get(this.keyJson).itemObject;         // Some special objects (lantern, fridge...)
+        this.mapName = this.cache.json.get(this.keyJson).name; // Its not usefull
+        this.playerStartPosition = this.cache.json.get(this.keyJson).position; // [x, y]
+        this.playerStartRotation = this.cache.json.get(this.keyJson).rotation; // Right, up...
+        this.sublevels = this.cache.json.get(this.keyJson).sublevels; // Array with sublevels objects
+        this.mapMatrix = this.cache.json.get(this.keyJson).map; // Matrix with map info collisions
+        this.jsonItems = this.cache.json.get(this.keyJson).items; // [{name, position}]
+        this.itemObject = this.cache.json.get(this.keyJson).itemObject; // Some special objects (lantern, fridge...)
 
         // Control the sublevels flow
         this.stateMachine = this.mainScene.stateMachine;
-               
+
 
         /* EDITOR */
-        
+
         this.flask = this.mainScene.flask;
 
         //Create the button to run the code
@@ -126,13 +129,17 @@ class SceneDown extends Phaser.Scene {
 
 
         this.andy = new Player(this, 0, 0);
-        this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]);  //Use map coordinates
+        this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]); //Use map coordinates
         this.andy.setPlayerRotation(this.playerStartRotation);
-
 
         this.light = this.add.circle(this.andy.x, this.andy.y, 50, 0xffffff, 0.10);
         this.light.visible = false;
 
+        /* SQUARE TUTORIAL SHAPE */
+
+        this.tutorialSquare = this.add.rectangle(200, 200, this.tileSize * this.zoom, this.tileSize * this.zoom, 0x42ffff, 0.25);
+        this.tutorialSquare.setStrokeStyle(5, 0x42ffff, 0.7);
+        this.tutorialSquare.visible = true;
 
         /* INVENTORY */
 
@@ -147,7 +154,7 @@ class SceneDown extends Phaser.Scene {
         this.jsonItems.forEach(jsonItem => {
             let mapItem = new Item(this, 0, 0, jsonItem.name);
             mapItem.setItemPosition(jsonItem.position[0], jsonItem.position[1]);
-            mapItem.disableBody(true, true);    // Hide the item
+            mapItem.disableBody(true, true); // Hide the item
 
             this.mapItems.push(mapItem);
         });
@@ -159,7 +166,7 @@ class SceneDown extends Phaser.Scene {
         this.itemsObject = [];
 
         this.itemObject.forEach(element => {
-            switch(element.name){
+            switch (element.name) {
                 case "lantern":
                     this.lantern = new Lantern(this);
                     this.itemsObject.push(this.lantern);
@@ -187,6 +194,7 @@ class SceneDown extends Phaser.Scene {
 
         // At first disallowed the editor
         this.runButtonAndWriteAllowed(false);
+   
     }
 
 
@@ -302,10 +310,10 @@ class SceneDown extends Phaser.Scene {
     prepareItem(itemName) {
         let mapItem;
         this.mapItems.forEach(element => {
-            if(itemName === element.name) mapItem = element;
+            if (itemName === element.name) mapItem = element;
         })
 
-        mapItem.enableBody(false, 0, 0, true, true);  //Activate and show the item
+        mapItem.enableBody(false, 0, 0, true, true); //Activate and show the item
         this.physics.add.overlap(this.andy, mapItem, function () {
             mapItem.disableBody(true, true);
             this.inventory.addItem(mapItem.name);
@@ -322,7 +330,8 @@ class SceneDown extends Phaser.Scene {
      */
     allSublevelsCompleted(level) {
         let enc = true;
-        for (let i = 0; (i < this.sublevels.length) && enc; i++) {
+        for (let i = 0;
+            (i < this.sublevels.length) && enc; i++) {
             if (!this.sublevels[i].complete)
                 enc = false;
         }
@@ -355,9 +364,9 @@ class SceneDown extends Phaser.Scene {
     setLight(value) {
         this.lightOn = !value;
         this.light.visible = !value;
-        if(value)
+        if (value)
             this.map.setTint(0xffffff);
-        else 
+        else
             this.map.setTint(0x000033);
     }
 

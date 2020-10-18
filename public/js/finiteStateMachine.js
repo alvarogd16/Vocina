@@ -14,6 +14,12 @@ let stateConfig = {
 				this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
 				this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
 
+				switch (this.sublevelType) {
+					case "box":
+						this.sceneDown.itemsObject[this.moveOption].activate();
+					break;			
+				}
+
 				this.next();
 			}  
 		},
@@ -92,21 +98,26 @@ let stateConfig = {
 						//this.sceneDown.lantern.encender(this.sceneDown.inventory);
 						//this.next();
 
-						socket.on('button', () => {
-							console.log("Botoon")
-						});
 
-						// WHEN YOU TRY THE RASPI
-						// // Wait to raspi button signal
-						// raspiRead("BUT").then(value => {
-						//     if(value) {
-						//         this.sceneDown.lantern.encender();
-						//         this.next();
-						//     }
-						// });
+						// TO CHECK
+						//Only need one time pulsed
+						let buttonPulsed = false;
+
+						socket.on('button', () => {
+							console.log("Botoon");
+							if(!buttonPulsed){
+								this.sceneDown.lantern.encender(this.sceneDown.inventory);
+								this.next();
+								buttonPulsed = true;
+							}
+						});
+						break;
+					case "trap":
+						// The zombie appear and if the trap is not ready kill player
 						break;
 					case "put":
 					case "temp":
+					case "box":
 						this.next();
 				}
 			}
@@ -139,13 +150,22 @@ let stateConfig = {
 			},
 			enter: function () {
 				console.log("-- Check " + this.sublevelType + " sublevel");
+				console.log(this.sublevelComplete);
 
 				switch(this.sublevelType){
 					case "move":
-						// Check the actual position with the objetive position
-						if(this.sceneDown.andy.posMatrix[0] === this.sublevelObjetive[0][0] &&
-							this.sceneDown.andy.posMatrix[1] === this.sublevelObjetive[0][1]){
+						// Check if andy is in one of the posible objetive position
+						// return the index in the objetive array
+						// If not return -1
+						let indexOfMov = this.sublevelObjetive.findIndex(x => 
+							x[0] == this.sceneDown.andy.posMatrix[0] &&
+							x[1] == this.sceneDown.andy.posMatrix[1]
+						);
 
+						// To the box soblevel
+						this.moveOption = indexOfMov;
+
+						if(indexOfMov != -1){
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
 						} else 
@@ -192,6 +212,21 @@ let stateConfig = {
 									
 						}
 					break;
+
+					case "box":
+
+						// Each position is asociated with a box
+						// the index depends of the position in the map
+						let box = this.sceneDown.itemsObject[this.moveOption];
+
+						if(box.open){
+							console.log("Todo ok");
+							box.openSound();
+							this.sublevelComplete = true;
+						} else {
+							box.closeSound();
+						}
+					break;
 				}
 
 				this.next();
@@ -212,6 +247,7 @@ let stateConfig = {
 		sublevelComplete: false,
 		sublevelType: undefined,
 		sublevelObjetive: undefined,
+		moveOption: 0,
 		lastPlayerState: {},
 		codeErrors: false,
 		mainScene: undefined,

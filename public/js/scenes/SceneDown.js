@@ -174,8 +174,8 @@ class SceneDown extends Phaser.Scene {
                     this.zombie = new Zombie(this);
                     break;
                 case "box":
-                    this.box1 = new Box(this, false);
-                    this.box2 = new Box(this, true);
+                    this.box1 = new Box(this, true);
+                    this.box2 = new Box(this, false);
                     this.box3 = new Box(this, false);
                     this.itemsObject.push(this.box1);
                     this.itemsObject.push(this.box2);

@@ -49,11 +49,15 @@ const setupRaspi = (io) => {
             encAux = valueA;
             
             ENC_B.read((err, valueB) => {
-                if(valueB != encAux) 
+                let direction = "DOWN"
+                if(valueB != encAux){
                     encCont++;
+                    direction = "UP";
+                } 
                 else
                     encCont--;
-                    
+                
+                io.emit('encoder', direction);
                 console.log("Value: " + encAux + valueB + "Cont: " + encCont);
             });
         });

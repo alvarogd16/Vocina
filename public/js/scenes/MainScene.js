@@ -8,9 +8,13 @@ class MainScene extends Phaser.Scene {
     constructor() {
         super("MainScene");
 
-        this.debugMode = false;             //Show information and alllow you to move the camera
+        this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false;
+<<<<<<< HEAD
         this.level = 2;                     //Each level has a .json file
+=======
+        this.level = 3; //Each level has a .json file
+>>>>>>> 85c9d1715b0e7611c702eb6fbb27a52a58d2bf10
         this.maxLevels = 4;
 
         this.width = document.getElementById('gameContainer').clientWidth;
@@ -121,7 +125,7 @@ class MainScene extends Phaser.Scene {
         /* AUDIO LOAD */
 
         this.load.audio('pickUp', [
-            'assets/sounds/pickUp.wav'
+            'assets/sounds/pickUp.mp3'
         ]);
 
         this.load.audio('walk', [
@@ -129,15 +133,15 @@ class MainScene extends Phaser.Scene {
         ]);
 
         this.load.audio('sublevelAchieved', [
-            'assets/sounds/sublevelAchieved.wav'
+            'assets/sounds/sublevelAchieved.mp3'
         ]);
 
         this.load.audio('levelAchieved', [
-            'assets/sounds/levelAchieved.wav'
+            'assets/sounds/levelAchieved.mp3'
         ]);
 
         this.load.audio('gameOver', [
-            'assets/sounds/gameOver.wav'
+            'assets/sounds/gameOver.mp3'
         ]);
 
         this.load.audio('levelsAmbience', [
@@ -160,6 +164,10 @@ class MainScene extends Phaser.Scene {
             'assets/sounds/unlockedBox.mp3'
         ]);
 
+        this.load.audio('zombiesSound', [
+            'assets/sounds/zombiesSound.mp3'
+        ]);
+
 
         /* PLUGIN LOAD */
 
@@ -177,7 +185,7 @@ class MainScene extends Phaser.Scene {
     create() {
         console.log("Creating game");
 
-        this.sceneUp   = this.scene.get('SceneUp');
+        this.sceneUp = this.scene.get('SceneUp');
         this.sceneDown = this.scene.get('SceneDown');
 
         // Background image
@@ -189,7 +197,7 @@ class MainScene extends Phaser.Scene {
         this.editorElem = document.getElementById('code');
         this.flask = new CodeFlask(this.editorElem, {
             language: 'js',
-            lineNumbers: true//,
+            lineNumbers: true //,
             //defaultTheme: false
         });
 
@@ -209,11 +217,30 @@ class MainScene extends Phaser.Scene {
             delay: 0
         });
 
+        // Play (if level 2) zombie sounds
+        if (this.level >= 2) {
+            let loopMarkerZombies = {
+                name: 'loopZombies',
+                config: {
+                    loop: true,
+                    volume: 0.2
+                }
+            };
+            this.zombiesAmbience = this.sound.add('zombiesSound');
+            this.zombiesAmbience.addMarker(loopMarkerZombies);
+
+            this.zombiesAmbience.play('loopZombies', {
+                delay: 0
+            });
+        }
+
+
+
 
         // Prepare the FSM
         this.stateMachine = this.plugins.get('rexfsmplugin').add(stateConfig);
         this.stateMachine.mainScene = this;
-        this.stateMachine.sceneUp   = this.sceneUp;
+        this.stateMachine.sceneUp = this.sceneUp;
         this.stateMachine.sceneDown = this.sceneDown;
 
 

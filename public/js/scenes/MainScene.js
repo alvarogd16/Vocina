@@ -9,8 +9,8 @@ class MainScene extends Phaser.Scene {
         super("MainScene");
 
         this.debugMode = false; //Show information and alllow you to move the camera
-        this.keysForDebugAreDown = false;
-        this.level = 2;                     //Each level has a .json file
+        this.keysForDebugAreDown = false
+        this.level = 1; //Each level has a .json file
         this.maxLevels = 4;
 
         this.width = document.getElementById('gameContainer').clientWidth;

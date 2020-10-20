@@ -7,7 +7,7 @@ let encCont = 0;    //Encoder
 let encAux;
 
 const pinLED = 4;
-const pinBUT = 22;
+const pinBUT = 6;
 const pinTEMPS = 27;  
 const typeTEMPS = 11; //DHT11
 const pinEncA = 5;
@@ -19,7 +19,7 @@ const setupRaspi = (io) => {
         const Gpio = require('onoff').Gpio;
     
         const LEDR = new Gpio(pinLED, 'out');
-        const BUTR = new Gpio(pinBUT, 'in', 'rising');
+        const BUTR = new Gpio(pinBUT, 'in', 'falling');
         const ENC_A = new Gpio(pinEncA, 'in', 'both');
         const ENC_B = new Gpio(pinEncB, 'in', 'both');
     
@@ -40,6 +40,7 @@ const setupRaspi = (io) => {
                 return;
             }
             io.emit('button');
+	    console.log("boton");
             valBUT = !valBUT;   //When push the button change valBUT
         });
     

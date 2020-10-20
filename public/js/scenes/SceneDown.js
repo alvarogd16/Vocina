@@ -194,7 +194,8 @@ class SceneDown extends Phaser.Scene {
 
         // At first disallowed the editor
         this.runButtonAndWriteAllowed(false);
-   
+
+        this.console = new ConsoleInfoScene(this);
     }
 
 
@@ -271,17 +272,18 @@ class SceneDown extends Phaser.Scene {
         let caja1 = this.box1;
         let caja2 = this.box2;
         let caja3 = this.box3;
+        let consola = this.console;
 
         let zombie = this.zombie;
 
         // TEST
         let mainScene = this.mainScene;
 
-        let args = 'andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie';
+        let args = 'andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie, consola';
 
         try {
             let executeMe = this.createFunction(args, editorContent);
-            executeMe(andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie);
+            executeMe(andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie, consola);
             this.stateMachine.codeErrors = false;
         } catch (e) {
             console.error(e);

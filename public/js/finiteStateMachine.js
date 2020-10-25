@@ -14,6 +14,8 @@ let stateConfig = {
 				this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
 				this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
 
+				console.log(this.sublevelObjetive);
+
 				switch (this.sublevelType) {
 					case "box":
 						this.sceneDown.itemsObject[this.moveOption].activate();
@@ -150,7 +152,7 @@ let stateConfig = {
 			},
 			enter: function () {
 				console.log("-- Check " + this.sublevelType + " sublevel");
-				console.log(this.sublevelComplete);
+				// console.log(this.sublevelComplete);
 
 				switch(this.sublevelType){
 					case "move":
@@ -162,12 +164,16 @@ let stateConfig = {
 							x[1] == this.sceneDown.andy.posMatrix[1]
 						);
 
-						// To the box soblevel
+						// To more than one movement option
 						this.moveOption = indexOfMov;
 
 						if(indexOfMov != -1){
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
+
+							// When there are many move option delete the 
+							// current one so that you cannot return to one already visited
+							this.sceneDown.deleteSublevelMove(this.sublevelId, this.moveOption);
 						} else 
 							this.sceneUp.write("PErro te moviste maaaall"); // TO CHANGE
 					break;
@@ -219,12 +225,14 @@ let stateConfig = {
 						// the index depends of the position in the map
 						let box = this.sceneDown.itemsObject[this.moveOption];
 
+						this.sublevelComplete = true;
+
 						if(box.open){
 							console.log("Todo ok");
 							box.openSound();
-							this.sublevelComplete = true;
 						} else {
 							box.closeSound();
+							this.sublevelId = -1;
 						}
 					break;
 				}

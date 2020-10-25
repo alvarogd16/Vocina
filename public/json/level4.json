@@ -22,11 +22,6 @@
             "type": "box",
             "objetives": [[]],
             "sentences": []
-		},
-		{
-			"type": "return",
-			"objetives": [],
-			"sentences": []
 		}
 	],
     "items": [

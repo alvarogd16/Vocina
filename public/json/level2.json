@@ -27,7 +27,7 @@
 		},
 		{
             "type": "temp",
-            "objetives": [0, false],
+            "objetives": [0, true],
             "sentences": []
         },
 		{

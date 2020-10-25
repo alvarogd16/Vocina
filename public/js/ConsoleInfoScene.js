@@ -17,6 +17,6 @@ class ConsoleInfoScene{
 		this.text.setVisible(true);
 		this.text.setText(texto);
 		let cnsl = this;
-		setTimeout(() => cnsl.text.setVisible(false), 1000);
+		setTimeout(() => cnsl.text.setVisible(false), 2000);
 	}
 }

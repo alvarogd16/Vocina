@@ -97,7 +97,7 @@ class SceneDown extends Phaser.Scene {
         /* MAP AND CAMERAS*/
 
         // Some constants to the camera and map positions
-        this.zoom = this.widthD / this.mapSize; //Zoom level to adapt the map to the scene
+        this.zoom = this.widthD / this.mapSize; // Zoom level to adapt the map to the scene
         this.mapNewSize = this.widthD;
         this.mapX = 0;
         this.mapY = this.heightD - this.widthD;
@@ -129,17 +129,14 @@ class SceneDown extends Phaser.Scene {
 
 
         this.andy = new Player(this, 0, 0);
-        this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]); //Use map coordinates
+        // Use json data
+        this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]);
         this.andy.setPlayerRotation(this.playerStartRotation);
 
+        // To the lantern sublevel
         this.light = this.add.circle(this.andy.x, this.andy.y, 50, 0xffffff, 0.10);
         this.light.visible = false;
 
-        /* SQUARE TUTORIAL SHAPE */
-
-        this.tutorialSquare = this.add.rectangle(200, 200, this.tileSize * this.zoom, this.tileSize * this.zoom, 0x42ffff, 0.25);
-        this.tutorialSquare.setStrokeStyle(5, 0x42ffff, 0.7);
-        this.tutorialSquare.visible = true;
 
         /* INVENTORY */
 
@@ -217,6 +214,11 @@ class SceneDown extends Phaser.Scene {
     }
 
 
+    deleteSublevelMove(sublevelId, index) {
+        this.sublevels[sublevelId].objetives.splice(index, 1);
+    }
+
+
     /**
      * Get the total number of sublevels minus one in the level
      */
@@ -246,6 +248,13 @@ class SceneDown extends Phaser.Scene {
         this.andy.setPlayerPosition(newState.position[0], newState.position[1]);
         this.andy.setPlayerRotation(newState.rotation);
         this.inventory.updateItems(newState.items);
+    }
+
+    drawMoveOptions() {
+        // TO DO
+        this.tutorialSquare = this.add.rectangle(200, 200, this.tileSize * this.zoom, this.tileSize * this.zoom, 0x42ffff, 0.25);
+        this.tutorialSquare.setStrokeStyle(5, 0x42ffff, 0.7);
+        this.tutorialSquare.visible = true;
     }
 
 

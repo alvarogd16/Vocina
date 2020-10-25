@@ -5,6 +5,7 @@ class Menu extends Phaser.Scene {
     constructor() {
         super("Menu");
 
+        this.textWidth = 1458; // In pixels
     }
 
     preload() {
@@ -40,15 +41,19 @@ class Menu extends Phaser.Scene {
     create() {
         console.log("Creating menu");
         
-        //Set background color
+        // Set background color
         this.cameras.main.backgroundColor.setTo(0, 0, 0); //same that css
 
-        //Add images to the screen
+        // Add images to the screen
         this.fire = new Fire(this, widthD / 2, heightD / 2);
         
         this.fire.anims.play("fireBurning", true);
+
         //this.add.image(0, 0, "maskImg").setOrigin(0);
-        this.add.image(0, 0, "textImg").setOrigin(0);
+
+        let textZoom = widthD / this.textWidth;
+        this.textImage = this.add.image(0, 0, "textImg").setOrigin(0);
+        this.textImage.setScale(textZoom);
         
         //Play menu theme
         var loopMarkerMenu = {

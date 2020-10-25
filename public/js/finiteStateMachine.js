@@ -219,6 +219,13 @@ let stateConfig = {
 						}
 					break;
 
+					case "trap":
+						if(this.sceneDown.zombie.killAndy()){
+							this.sublevelComplete = true;
+						}
+					
+					break;
+
 					case "box":
 
 						// Each position is asociated with a box

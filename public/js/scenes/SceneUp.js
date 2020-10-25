@@ -96,7 +96,7 @@ class SceneUp extends Phaser.Scene {
         // there is to wait to preload in sceeneDown finished
         this.sublevelsData = this.cache.json.get(this.keyJson).sublevels;
         
-        this.sentencesQueue = new Queue();
+        this.sentencesQueue = [];
         
         let bubble = this.add.sprite(this.talkSpriteWidth, this.sceneYstart, 'bubble')
             .setOrigin(0).setScale(this.zoomToAdapt).setInteractive();
@@ -125,16 +125,13 @@ class SceneUp extends Phaser.Scene {
         
         //Initialize crisAlexVoice
         this.crisAlexVoice = this.sound.add('rand');
-         
-        //Play talk voice
-        //this.crisAlexVoice.play();
 
         
         //Stop talk voice
         this.typing.on('complete', (typing, txt) => {
             this.crisAlexVoice.stop();
             //We dont want the last one to be activated 
-            if(!this.sentencesQueue.isEmpty())
+            if(!this.sentencesQueue.length == 0)
                 this.writeAvailable = true;
         }); 
     }
@@ -144,9 +141,7 @@ class SceneUp extends Phaser.Scene {
      * @param {int} sublevelId 
      */
     loadSentences(sublevelId) {
-        this.sublevelsData[sublevelId].sentences.forEach(element => {
-            this.sentencesQueue.enqueue(element);
-        })
+        this.sublevelsData[sublevelId].sentences.forEach(element => this.sentencesQueue.push(element))
     }
 
     /**
@@ -161,8 +156,8 @@ class SceneUp extends Phaser.Scene {
      * Write the next sentence in the queue
      */
     nextSentence() {
-        this.write(this.sentencesQueue.dequeue());
-        if(this.sentencesQueue.isEmpty()){
+        this.write(this.sentencesQueue.shift());
+        if(this.sentencesQueue.length == 0){
             this.mainScene.stateMachine.next();
             this.writeAvailable = false;
         }

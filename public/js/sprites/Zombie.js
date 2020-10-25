@@ -10,27 +10,28 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 	 * @param {number} y - Start location y value.
 	 * @param {number} [frame] -
 	 */
-	constructor(scene, x, y, andy, frame) {
-		super(scene, x, y, andy, frame);
+	constructor(scene, x, y, rotation) {
+		super(scene, x, y);
 
 		this.scene = scene;
-		this.playerToFollow = andy;
+		this.playerToFollow = undefined;
 		this.canMove = true;
-		scene.physics.world.enable(this);
+		//scene.physics.world.enable(this);
 		scene.add.existing(this);
 
-		//Set the skins of the sprite
-		//this.setTexture('zombie');
-		//this.setPosition(x, y);
+		this.setTexture('zombie');
+		this.setPosition(x, y);
+		this.setScale(scene.zoom);
+		this.setAngle(rotation);
 
 		//Set collisions activation of the sprite
-		this.body.setCollideWorldBounds(true);
+		//this.body.setCollideWorldBounds(true);
 		//the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
-		this.body.setSize(scene.tileSize, scene.tileSize, x, y);
+		//this.body.setSize(scene.tileSize, scene.tileSize, x, y);
 		//this.body.setSquare(10);
 
-		this.direction = "down";
-		this.target = new Phaser.Math.Vector2();
+		//this.direction = "down";
+		//this.target = new Phaser.Math.Vector2();
 
 	}
 
@@ -43,26 +44,39 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 		this.scene.physics.moveToObject(this, this.target, 5);
 	}
 
-	/*//Before scene update
+	/**
+     * Set player position in the map with a x and y
+     * @param {number} x X position in the matrix
+     * @param {number} y Y position in the matrix
+     */
+    setZombiePosition(xPos, yPos) {
+        let tileSize = this.scene.tileSize;
+        this.x = (this.scene.wallSize + tileSize / 2 + tileSize * xPos) * this.scene.zoom;
+        this.y = (this.scene.wallSize + tileSize / 2 + tileSize * yPos) * this.scene.zoom;
+    }
+
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 
 		if (this.canMove) {
-			this.movingToAndy();
+			//this.movingToAndy();
 
 			//Distance between andy and this zombie will reach
-			let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
+			// let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
 
-			if (this.body.speed > 0) {
-				if (distance < 15) {
-					//this.body.reset(32, 32);
-					this.scene.zombiesReachedAndy();
-				}
-			}
+			// if (this.body.speed > 0 && distance < 15) {
+			// 	this.scene.zombiesReachedAndy();
+			// }
 		}
-	}*/
+	}
     
     cerca() {
+		// TO DO
         return true;
-    }
+	}
+	
+	killAndy() {
+		// TO DO
+		return true;
+	}
 }

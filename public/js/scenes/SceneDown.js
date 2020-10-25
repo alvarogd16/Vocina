@@ -109,17 +109,6 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.setPosition(this.mapX, this.mapY);
 
 
-        /* MAP BOUNDS */
-        // (Now NOT used)
-
-        // //X axis
-        // this.leftBound = this.wallSize * this.zoom;
-        // this.rightBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
-        // //Y axis. Towards upper bound, the position becomes smaller
-        // this.upperBound = this.wallSize * this.zoom;
-        // this.bottomBound = ((this.wallSize * this.zoom) + ((this.tileSize * this.zoom) * 10) - (this.wallSize * this.zoom));
-
-
         /* PHYSICS, PLAYER AND ILLUMINATION */
 
         // Set physics boundaries from map width and height and create the player
@@ -127,9 +116,8 @@ class SceneDown extends Phaser.Scene {
             this.mapNewSize,
             this.mapNewSize);
 
-
+            
         this.andy = new Player(this, 0, 0);
-        // Use json data
         this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]);
         this.andy.setPlayerRotation(this.playerStartRotation);
 
@@ -158,7 +146,7 @@ class SceneDown extends Phaser.Scene {
 
 
         /* LOAD ITEMOBJECTS */
-        // (Change the name, is confuse with items)
+        // (Change the name, it's confuse with items)
 
         this.itemsObject = [];
 
@@ -175,7 +163,11 @@ class SceneDown extends Phaser.Scene {
                 case "sink":
                     this.sink = new Sink(this);
                     this.itemsObject.push(this.sink);
-                    this.zombie = new Zombie(this);
+
+                    this.zombie = new Zombie(this, 0, 0, direction.RIGHT);
+                    this.zombie.setZombiePosition(0, 2);
+                    this.zombie.setVisible(false);
+
                     break;
                 case "box":
                     this.box1 = new Box(this, true);

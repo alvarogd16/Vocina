@@ -39,10 +39,10 @@ class MainScene extends Phaser.Scene {
         // Zombie sprite.
         this.load.spritesheet({
             key: 'zombie',
-            url: "assets/zombie.png",
+            url: "assets/zombies/ZombiA_1.png",
             frameConfig: {
-                frameWidth: 21,
-                frameHeight: 26,
+                frameWidth: 512,
+                frameHeight: 512,
                 startFrame: 0,
                 endFrame: 0,
                 margin: 0,

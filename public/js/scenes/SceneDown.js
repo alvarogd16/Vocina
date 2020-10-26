@@ -182,7 +182,7 @@ class SceneDown extends Phaser.Scene {
 
 
         // At first disallowed the editor
-        this.runButtonAndWriteAllowed(false);
+        this.activateEditor(false);
 
         this.console = new ConsoleInfoScene(this);
     }
@@ -223,6 +223,7 @@ class SceneDown extends Phaser.Scene {
      * Update the state object with the player
      */
     updatePlayerState() {
+        console.log("Updating state...")
         let playerState = {
             position: this.andy.getPlayerPosition(),
             rotation: this.andy.getPlayerRotation(),
@@ -237,6 +238,7 @@ class SceneDown extends Phaser.Scene {
      * @param {Object} newState The new state of the player
      */
     setPlayerState(newState) {
+        console.log("Seting state...")
         this.andy.setPlayerPosition(newState.position[0], newState.position[1]);
         this.andy.setPlayerRotation(newState.rotation);
         this.inventory.updateItems(newState.items);
@@ -299,7 +301,7 @@ class SceneDown extends Phaser.Scene {
      * When the editor is activate you can write and push the RUN button
      * @param {boolean} allowed True activate the editor
      */
-    runButtonAndWriteAllowed(allowed) { // TO CHANGE NAME activateEditor() ??
+    activateEditor(allowed) { // TO CHANGE NAME activateEditor() ??
         document.getElementById("run").disabled = !allowed;
         //this.editor.readOnly = !allowed; // TO CHANGE
         // TO DO Remove or activate button animation

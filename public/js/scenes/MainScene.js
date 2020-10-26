@@ -10,7 +10,7 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false
-        this.level = 4; //Each level has a .json file
+        this.level = 1; //Each level has a .json file
         this.maxLevels = 4;
 
         this.width = document.getElementById('gameContainer').clientWidth;
@@ -241,8 +241,8 @@ class MainScene extends Phaser.Scene {
 
 
         // Call the scenes
-        this.scene.launch("SceneUp", this.level);
         this.scene.launch("SceneDown", this.level); //Start with Level1
+        this.scene.launch("SceneUp", this.level);
 
 
         // Calculate editor's height
@@ -258,6 +258,10 @@ class MainScene extends Phaser.Scene {
             this.stateMachine.lastPlayerState = this.sceneDown.updatePlayerState();
             this.stateMachine.goto("boot");
         }, [], this);
+    }
+
+    editorClean() {
+        this.flask.updateCode('');
     }
 
     /**

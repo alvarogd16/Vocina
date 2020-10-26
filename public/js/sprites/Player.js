@@ -125,7 +125,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if (this.andyMovesQueue.length == 0) { //If it's empty it's target it's calculated as usually
                 this.targetAux.x = this.x + xOff * this.tileSizeOfTheMovement * numberOfMovs;
                 this.targetAux.y = this.y + yOff * this.tileSizeOfTheMovement * numberOfMovs;
-                //console.log(this.y + "      " + this.targetAux.y)
             } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
                 this.targetAux.x = this.andyMovesQueue.last().x + xOff * this.tileSizeOfTheMovement * numberOfMovs;
                 this.targetAux.y = this.andyMovesQueue.last().y + yOff * this.tileSizeOfTheMovement * numberOfMovs;

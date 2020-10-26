@@ -14,10 +14,11 @@ let stateConfig = {
 				this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
 				this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
 
-				console.log(this.sublevelObjetive);
+				//console.log(this.sublevelObjetive);
 
 				switch (this.sublevelType) {
 					case "box":
+						// Activate the box you're in
 						this.sceneDown.itemsObject[this.moveOption].activate();
 					break;			
 				}
@@ -57,10 +58,11 @@ let stateConfig = {
 				console.log("programming start");
 
 				//activate write and run button
-				this.sceneDown.runButtonAndWriteAllowed(true);
+				this.sceneDown.activateEditor(true);
 			},
 			exit: function () {
-				this.sceneDown.runButtonAndWriteAllowed(false);
+				this.sceneDown.activateEditor(false);
+				this.mainScene.editorClean();
 			}
 		},
 		// Check the syntactic errors of the code
@@ -145,6 +147,7 @@ let stateConfig = {
 					// TODO
 
 					//Change to the last player state
+					console.log(this.lastPlayerState);
 					this.sceneDown.setPlayerState(this.lastPlayerState);
 
 					return 'programming';
@@ -174,8 +177,8 @@ let stateConfig = {
 							// When there are many move option delete the 
 							// current one so that you cannot return to one already visited
 							this.sceneDown.deleteSublevelMove(this.sublevelId, this.moveOption);
-						} else 
-							this.sceneUp.write("PErro te moviste maaaall"); // TO CHANGE
+						} else
+							this.sceneUp.write("Comprueba si te has movido a la posición indicada");
 					break;
 
 					case "item":
@@ -187,7 +190,7 @@ let stateConfig = {
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
 						} else 
-							this.sceneUp.write("PErro te moviste maaaall"); // TO CHANGE
+							this.sceneUp.write("Seguro que está el item en esta posición??");
 					break;
 
 					case "put":
@@ -197,7 +200,7 @@ let stateConfig = {
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
 						} else 
-							this.sceneUp.write("PErro te instalaste maaaall"); // TO CHANGE
+							this.sceneUp.write("Prueba"); // TO CHANGE
 					break;
 
 					case "temp":
@@ -213,7 +216,7 @@ let stateConfig = {
 								console.log("Sublevel complete");
 							} else {
 								this.sublevelComplete = false;
-								this.sceneUp.write("PErro la temperatura esta maaall"); // TO CHANGE
+								this.sceneUp.write("La temperatura sigue siendo muy alta prueba a bajarla más");
 							}
 									
 						}

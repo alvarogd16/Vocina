@@ -17,26 +17,19 @@
             "type": "move",
             "objetives": [[2,8]],
             "sentences": [
-                "Lo primero que debes aprender es a moverte por las habitaciones para llevar a cabo las acciones necesarias"
+                "Tienes que venira a ayudarme",
+                "Vas a ir pasando por la casa evitando a los zombies",
+                "Te voy a enseñar a moverte",
+                "Escribe andy.moverArriba(1) para dar un paso arriba"
             ]
-        },
-        {
-            "type": "item",
-            "objetives": [[2,7], "led"],
-            "sentences": [
-                "Recoge el item venga"
-            ]
-        },
-        {
-            "type": "put",
-            "objetives": [0, "LED"],
-            "sentences": []
         },
         {
             "type": "move",
-            "objetives": [[8,5]],
+            "objetives": [[3,6]],
             "sentences": [
-                "Muy bien andy!"
+                "¡Que bien ya sabes moverte por el mapa!",
+                "También puedes hacer más de un movimiento de una vez",
+                "Prueba andy.moverDerecha(1) y en la siguiente linea andy.moverArriba(2)"
             ]
         },
         {
@@ -46,20 +39,48 @@
         },
         {
             "type": "item",
+            "objetives": [[2,7], "led"],
+            "sentences": [
+                "Ohh nooo, la luz se ha apagado",
+                "Tendrás que construir una linterna",
+                "Coge los componentes e instalalos",
+                "El primero es el LED, lo ves?? Ve a por él"
+            ]
+        },
+        {
+            "type": "put",
+            "objetives": [0, "LED"],
+            "sentences": [
+                "Muy bien ya lo tienes en el inventario",
+                "Ahora tienes que cogerlo físicamente e instalarlo en el KSD",
+                "También tendrás que instalarlo en la linterna",
+                "Para eso tienes que poner linterna.colocar('LED')"
+            ]
+        },
+        {
+            "type": "item",
             "objetives": [[8,4], "button"],
             "sentences": [
-                "Recoge el item venga"
+                "Ahora tienes que hacer lo mismo con el botón",
+                "Primero recógelo"
             ]
         },
         {
             "type": "put",
             "objetives": [0, "button"],
-            "sentences": []
+            "sentences": [
+                "Recogiste el botón",
+                "Ahora lo vas a instalar fisicamente",
+                "Y lo vas a colocar en la linterna",
+                "Te acuerdas del comando?"
+            ]
         },
         {
             "type": "lightOn",
             "objetives": [],
-            "sentences": []
+            "sentences": [
+                "Ahora solo te falta activar la linterna pulsando el botón"
+            ]
         },
         {
             "type": "move",

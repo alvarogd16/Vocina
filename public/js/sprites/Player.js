@@ -27,7 +27,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setScale(this.andyScale);
 
         this.collision = false;
+        /*
         this.collisionWithoutMovement = false;
+        */
         this.scene.physics.world.enable(this);
         this.scene.add.existing(this);
 
@@ -131,9 +133,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
             this.targetAux.dir = direction;
             this.andyMovesQueue.enqueue(this.targetAux);
-        } else {
+        } /*else {
             this.collisionWithoutMovement = true;
-        }
+        }*/
     }
 
     // MATRIX MOVE
@@ -182,8 +184,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 if (this.actualPos === '#' || boundCollision) {
                     numberOfMovs = i;
                     //this.collision = true;
+                    /*
                     if (numberOfMovs == 0)
                         this.collisionWithoutMovement = true;
+                    */
                     break;
                 }
             }
@@ -367,7 +371,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     this.scene.stateMachine.next();
                 }
             }
-        } else if (this.collisionWithoutMovement) { //If andy tries to move towards a wall that's in (Is not going to be moving)
+        } /*else if (this.collisionWithoutMovement) { //If andy tries to move towards a wall that's in (Is not going to be moving)
             console.log("Hola");
             this.gameOver = this.scene.sound.add('gameOver');
             this.gameOver.play();
@@ -375,6 +379,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.collisionWithoutMovement = false;
 
             this.scene.stateMachine.next();
-        }
+        }*/
     }
 }

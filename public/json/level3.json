@@ -1,42 +1,42 @@
 {
-	"name": "Baño",
-	"map": [-1, -1, -1, -1, -1, -1,  0,  0, -1, -1,
-			 0,  0,  0,  0,  0,  0,  0,  0, -1, -1,
-			 1,  0,  0,  0,  0,  0,  0,  0, -1, -1,
-			 0,  0,  0,  0,  0,  0,  0,  0, -1, -1,
-			 0,  0,  0,  0,  0,  0,  0,  0, -1, -1,
-			 0,  0,  0,  0,  0,  0,  0, -1, -1, -1,
-			-1,  0,  0,  0,  0,  0,  0, -1, -1, -1,
-			 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-            -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-			 0,  0,  0,  0,  0,  0,  0,  2,  0,  0],
+        "name": "Baño",
+        "map": ["######  ##",
+                "        ##",
+                ".       ##",
+                "        ##",
+                "        ##",
+                "       ###",
+                "#      ###",
+                "          ",
+                "#         ",
+                "       x  "],
 
-	"position": [0,2],
-	"rotation": "right",
+        "position": [0,2],
+        "rotation": "right",
     "sublevels": [
-		{
+                {
             "type": "item",
             "objetives": [[6,1], "soap"],
             "sentences": [
                 "Recoge el item venga"
             ]
-		},
-		{
+                },
+                {
             "type": "put",
             "objetives": [0, "soap"],
             "sentences": []
-		},
-		{
-			"type": "trap",
-			"objetives": [],
-			"sentences": []
-		},
-		{
-			"type": "zombie",
-			"objetives": [],
-			"sentences": []
-		}
-	],
+                },
+                {
+                        "type": "trap",
+                        "objetives": [],
+                        "sentences": []
+                },
+                {
+                        "type": "zombie",
+                        "objetives": [],
+                        "sentences": []
+                }
+        ],
     "items": [
         {"name": "soap", "position": [6, 1]}
     ],

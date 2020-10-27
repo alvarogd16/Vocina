@@ -248,6 +248,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let tileSize = this.scene.tileSize;
         this.x = (this.scene.wallSize + tileSize / 2 + tileSize * xPos) * this.scene.zoom;
         this.y = (this.scene.wallSize + tileSize / 2 + tileSize * yPos) * this.scene.zoom;
+
+        console.log("player x y", this.x, this.y)
     }
 
     getPlayerPosition() {

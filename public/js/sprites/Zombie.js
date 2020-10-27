@@ -16,7 +16,7 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 		this.playerToFollow = undefined;
 		this.canMove = true;
-		//scene.physics.world.enable(this);
+		scene.physics.world.enable(this);
 		scene.add.existing(this);
 
 		this.setTexture('zombie');
@@ -24,24 +24,33 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 		this.setScale(scene.zoom);
 		this.setAngle(rotation);
 
+		this.direction = "right";
+
+		this.OFFSETS = {
+            'up':    [ 0, -1],
+            'down':  [ 0,  1],
+            'left':  [-1,  0],
+            'right': [ 1,  0],
+		};
+
 		//Set collisions activation of the sprite
 		//this.body.setCollideWorldBounds(true);
 		//the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
 		//this.body.setSize(scene.tileSize, scene.tileSize, x, y);
 		//this.body.setSquare(10);
 
-		//this.direction = "down";
 		//this.target = new Phaser.Math.Vector2();
 
 	}
 
 	/*OTHER FUNCTIONS*/
-	movingToAndy() {
-		this.target.x = this.playerToFollow.x;	//andy's x coordinate
-		this.target.y = this.playerToFollow.y;	//andy's y coordinate
+	movingToPosition(xPos, yPos) {
+		this.target = {};
+		[this.target.x, this.target.y] = this.scene.matrixToCoor({x: xPos, y: yPos});
+		this.canMove = true;
 		
 		//5 pixels per second (Is the value of this.body.speed)
-		this.scene.physics.moveToObject(this, this.target, 5);
+		//this.scene.physics.moveToObject(this, this.target, 20);
 	}
 
 	/**
@@ -50,23 +59,23 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
      * @param {number} y Y position in the matrix
      */
     setZombiePosition(xPos, yPos) {
-        let tileSize = this.scene.tileSize;
-        this.x = (this.scene.wallSize + tileSize / 2 + tileSize * xPos) * this.scene.zoom;
-        this.y = (this.scene.wallSize + tileSize / 2 + tileSize * yPos) * this.scene.zoom;
+		[this.x, this.y] = this.scene.matrixToCoor({x: xPos, y: yPos});
     }
 
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 
 		if (this.canMove) {
-			//this.movingToAndy();
+			if(this.x <= this.target.x && this.y <= this.target.y){
+				let [xOff, yOff] = this.OFFSETS[this.direction];
 
-			//Distance between andy and this zombie will reach
-			// let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
-
-			// if (this.body.speed > 0 && distance < 15) {
-			// 	this.scene.zombiesReachedAndy();
-			// }
+				this.x += 0.5 * xOff;
+				this.y += 0.5 * yOff;
+			} else{
+				// It has arrive
+				console.log("Ha llegado");
+				this.canMove = false;
+			}
 		}
 	}
     

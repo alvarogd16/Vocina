@@ -166,7 +166,8 @@ class SceneDown extends Phaser.Scene {
 
                     this.zombie = new Zombie(this, 0, 0, direction.RIGHT);
                     this.zombie.setZombiePosition(0, 2);
-                    this.zombie.setVisible(false);
+                    this.zombie.movingToPosition(3, 2);
+                    //this.zombie.setVisible(true);
 
                     break;
                 case "box":
@@ -244,11 +245,19 @@ class SceneDown extends Phaser.Scene {
         this.inventory.updateItems(newState.items);
     }
 
-    drawMoveOptions() {
+    drawMoveRect() {
         // TO DO
         this.tutorialSquare = this.add.rectangle(200, 200, this.tileSize * this.zoom, this.tileSize * this.zoom, 0x42ffff, 0.25);
         this.tutorialSquare.setStrokeStyle(5, 0x42ffff, 0.7);
         this.tutorialSquare.visible = true;
+    }
+
+    matrixToCoor(matrixCoor){
+        let xyCoor = [];
+        xyCoor[0] = (this.wallSize + this.tileSize / 2 + this.tileSize * matrixCoor.x) * this.zoom;
+        xyCoor[1] = (this.wallSize + this.tileSize / 2 + this.tileSize * matrixCoor.y) * this.zoom;
+
+        return xyCoor;
     }
 
 

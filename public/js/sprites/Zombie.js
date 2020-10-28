@@ -15,7 +15,7 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 
 		this.scene = scene;
 		this.playerToFollow = undefined;
-		this.canMove = true;
+		this.canMove = false;
 		scene.physics.world.enable(this);
 		scene.add.existing(this);
 
@@ -33,9 +33,15 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
             'right': [ 1,  0],
 		};
 
+		this.zombieMovesQueue = new Queue();
+
 		this.exposed = {
 			cerca: this.cerca,
 		};
+
+		this.posMatrix = [];
+		this.alive = true;
+		this.haLlegado = false;
 
 		//Set collisions activation of the sprite
 		//this.body.setCollideWorldBounds(true);
@@ -78,19 +84,22 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 			} else{
 				// It has arrive
 				console.log("Ha llegado");
+				this.haLlegado = true;
 				this.canMove = false;
 			}
 		}
 	}
     
-    cerca(distance) {
-		let zPos = this.matrixPos;
-		let aPos = this.scene.andy.matrixPos;
+    cerca() {
+        return this.haLlegado;
+	}
 
-		let xDist = abs(zPos[0] - aPos[0]);
-		let yDist = abs(zPos[1] - aPos[1]);
+	cercaAndy() {
+		return this.haLlegado;
+	}
 
-        return xDist + yDist <= distance;
+	vivo() {
+		return this.alive
 	}
 	
 	killAndy() {

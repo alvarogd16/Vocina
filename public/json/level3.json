@@ -14,28 +14,28 @@
         "position": [0,2],
         "rotation": "right",
     "sublevels": [
-                {
+            {
+                "type": "trap",
+                "objetives": [[]],
+                "sentences": []
+            },
+            {
             "type": "item",
             "objetives": [[6,1], "soap"],
             "sentences": [
                 "Recoge el item venga"
             ]
-                },
-                {
+            },
+            {
             "type": "put",
             "objetives": [0, "soap"],
             "sentences": []
-                },
-                {
-                        "type": "trap",
-                        "objetives": [],
-                        "sentences": []
-                },
-                {
-                        "type": "zombie",
-                        "objetives": [],
-                        "sentences": []
-                }
+            },
+            {
+                    "type": "zombie",
+                    "objetives": [],
+                    "sentences": []
+            }
         ],
     "items": [
         {"name": "soap", "position": [6, 1]}

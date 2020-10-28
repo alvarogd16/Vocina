@@ -29,6 +29,7 @@ class Sink extends ItemObject {
     // }
 
     encender() {
+        console.log("Grifo encendido");
         if (this.comprobarItems()) {
             //Playing sink sound
             this.waterTap = this.scene.sound.add('waterTap');

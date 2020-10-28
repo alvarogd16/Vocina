@@ -14,6 +14,8 @@ class SceneDown extends Phaser.Scene {
         this.wallSize = 44; //Measured with photoshop
 
         this.lightOn = false;
+        this.trapActive = false;
+        this.checkCode = true;
         this.widthD = document.getElementById('gameContainer').clientWidth
         this.heightD = document.getElementById('gameContainer').clientHeight
     }
@@ -74,9 +76,22 @@ class SceneDown extends Phaser.Scene {
 
         //Create the button to run the code
         document.getElementById("run").onclick = () => {
-            let editorContent = this.flask.getCode();
-            this.readWritten(editorContent);
-            this.stateMachine.next();
+            // console.log(this.sublevelId);
+            // console.log(this.sublevels);
+            if(this.getSublevelType(this.stateMachine.sublevelId) == "trap") {
+                console.log("Zombie action...")
+				this.zombie.setVisible(true);
+				this.zombie.movingToPosition(4, 2);
+            }
+            this.editorContent = this.flask.getCode();
+            this.readWritten(this.editorContent);
+            if(this.getSublevelType(this.stateMachine.sublevelId) != "trap"){
+                this.stateMachine.next();
+            }
+            else{
+                this.trapActive = true;
+                this.checkCode = false;
+            }
             /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                 this.disabled = true;*/
         };
@@ -166,8 +181,7 @@ class SceneDown extends Phaser.Scene {
 
                     this.zombie = new Zombie(this, 0, 0, direction.RIGHT);
                     this.zombie.setZombiePosition(0, 2);
-                    this.zombie.movingToPosition(3, 2);
-                    //this.zombie.setVisible(true);
+                    this.zombie.setVisible(false);
 
                     break;
                 case "box":
@@ -296,7 +310,7 @@ class SceneDown extends Phaser.Scene {
             ...this.itemsObject,
         };
 
-        this.ast = lex(editorContent)
+        //this.ast = lex(editorContent)
 
         // TEST
         let mainScene = this.mainScene;
@@ -312,7 +326,8 @@ class SceneDown extends Phaser.Scene {
             this.stateMachine.codeErrors = true;
         }
 
-        this.stateMachine.next();
+        if(this.checkCode)
+            this.stateMachine.next();
     }
 
 
@@ -412,6 +427,16 @@ class SceneDown extends Phaser.Scene {
 
             this.cameras.main.setSize(this.size, this.widthD);
             this.cameras.main.setPosition(this.mapX, this.mapY);
+        }
+
+        if(this.trapActive){
+            if(this.zombie.cercaAndy()){
+                console.log("andy ha muerto")
+                this.trapActive = false;
+                this.checkCode = true;
+            } else{
+                this.readWritten(this.editorContent);
+            }
         }
     }
 }

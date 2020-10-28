@@ -33,6 +33,10 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
             'right': [ 1,  0],
 		};
 
+		this.exposed = {
+			cerca: this.cerca,
+		};
+
 		//Set collisions activation of the sprite
 		//this.body.setCollideWorldBounds(true);
 		//the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
@@ -79,9 +83,14 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
     
-    cerca() {
-		// TO DO
-        return true;
+    cerca(distance) {
+		let zPos = this.matrixPos;
+		let aPos = this.scene.andy.matrixPos;
+
+		let xDist = abs(zPos[0] - aPos[0]);
+		let yDist = abs(zPos[1] - aPos[1]);
+
+        return xDist + yDist <= distance;
 	}
 	
 	killAndy() {

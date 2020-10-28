@@ -61,8 +61,8 @@ class SceneUp extends Phaser.Scene {
         let path = "../../lib/rextexttypingplugin.min.js";
         this.load.plugin('rextexttypingplugin', path, true);
 
-        let path = "../../lib/rexbbcodetextplugin.min.js";
-        this.load.plugin('rexbbcodetextplugin', path, true);
+        // let path2 = "../../lib/rexbbcodetextplugin.min.js";
+        // this.load.plugin('rexbbcodetextplugin', path2, true);
 
         // Player sprite.
         this.load.spritesheet({

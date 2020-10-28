@@ -288,6 +288,16 @@ class SceneDown extends Phaser.Scene {
 
         let zombie = this.zombie;
 
+        /* NUEVO PARSER */
+        this.environment = {
+            andy: this.andy.exposed,
+            zombie: this.zombie.exposed,
+            consola: this.console.exposed,
+            ...this.itemsObject,
+        };
+
+        this.ast = lex(editorContent)
+
         // TEST
         let mainScene = this.mainScene;
 

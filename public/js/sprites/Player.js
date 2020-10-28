@@ -65,6 +65,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         });
         console.log(' -- Loaded rotateTo plugin');
 
+        this.exposed = {
+            moverDerecha: this.moverDerecha,
+            moverIzquierda: this.moverIzquierda,
+            moverArriba: this.moverArriba,
+            moverAbajo: this.moverAbajo,
+        };
+
         /*ANIMATIONS*/
 
         createAnimationsPlayer(scene);
@@ -122,20 +129,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         let [xOff, yOff] = OFFSETS[direction];
 
-        if (numberOfMovs != 0) {
+        for (let i = 0; i < numberOfMovs; i++) {
             this.targetAux = new Phaser.Math.Vector2();
-            if (this.andyMovesQueue.length == 0) { //If it's empty it's target it's calculated as usually
-                this.targetAux.x = this.x + xOff * this.tileSizeOfTheMovement * numberOfMovs;
-                this.targetAux.y = this.y + yOff * this.tileSizeOfTheMovement * numberOfMovs;
-            } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
-                this.targetAux.x = this.andyMovesQueue.last().x + xOff * this.tileSizeOfTheMovement * numberOfMovs;
-                this.targetAux.y = this.andyMovesQueue.last().y + yOff * this.tileSizeOfTheMovement * numberOfMovs;
-            }
             this.targetAux.dir = direction;
+            if (this.andyMovesQueue.length == 0) { //If it's empty it's target it's calculated as usually
+                this.targetAux.x = this.x + xOff * this.tileSizeOfTheMovement;
+                this.targetAux.y = this.y + yOff * this.tileSizeOfTheMovement;
+            } else { //If it's with movements inside already it has to take the last target and calculate the next one based on that one
+                this.targetAux.x = this.andyMovesQueue.last().x + xOff * this.tileSizeOfTheMovement;
+                this.targetAux.y = this.andyMovesQueue.last().y + yOff * this.tileSizeOfTheMovement;
+            }
             this.andyMovesQueue.enqueue(this.targetAux);
-        } /*else {
-            this.collisionWithoutMovement = true;
-        }*/
+        }
     }
 
     // MATRIX MOVE
@@ -208,6 +213,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moving(dir) {
         //Take the first target in the queue
         this.targetAux = this.andyMovesQueue.dequeue();
+        console.log("Despacito..");
         this.target.x = this.targetAux.x;
         this.target.y = this.targetAux.y;
 

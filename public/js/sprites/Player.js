@@ -65,12 +65,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         });
         console.log(' -- Loaded rotateTo plugin');
 
-        this.exposed = {
-            moverDerecha: this.moverDerecha,
-            moverIzquierda: this.moverIzquierda,
-            moverArriba: this.moverArriba,
-            moverAbajo: this.moverAbajo,
-        };
+        // this.exposed = {
+        //     moverDerecha: this.moverDerecha,
+        //     moverIzquierda: this.moverIzquierda,
+        //     moverArriba: this.moverArriba,
+        //     moverAbajo: this.moverAbajo,
+        // };
 
         /*ANIMATIONS*/
 
@@ -259,7 +259,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.x = (this.scene.wallSize + tileSize / 2 + tileSize * xPos) * this.scene.zoom;
         this.y = (this.scene.wallSize + tileSize / 2 + tileSize * yPos) * this.scene.zoom;
 
-        console.log("player x y", this.x, this.y)
+        //console.log("player x y", this.x, this.y)
     }
 
     getPlayerPosition() {

@@ -35,13 +35,15 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 
 		this.zombieMovesQueue = new Queue();
 
-		this.exposed = {
-			cerca: this.cerca,
-		};
+		// this.exposed = {
+		// 	cerca: this.cerca,
+		// };
 
 		this.posMatrix = [];
-		this.alive = true;
-		this.haLlegado = false;
+
+		this.arrive = false;
+		this.dead = false;
+		this.animation = false;
 
 		//Set collisions activation of the sprite
 		//this.body.setCollideWorldBounds(true);
@@ -49,18 +51,17 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 		//this.body.setSize(scene.tileSize, scene.tileSize, x, y);
 		//this.body.setSquare(10);
 
-		//this.target = new Phaser.Math.Vector2();
+		this.targetAux = new Phaser.Math.Vector2();
 
 	}
 
 	/*OTHER FUNCTIONS*/
-	movingToPosition(xPos, yPos) {
+	movingToPosition(xPos, yPos, direction) {
+		this.direction = direction;
+
 		this.target = {};
 		[this.target.x, this.target.y] = this.scene.matrixToCoor({x: xPos, y: yPos});
 		this.canMove = true;
-		
-		//5 pixels per second (Is the value of this.body.speed)
-		//this.scene.physics.moveToObject(this, this.target, 20);
 	}
 
 	/**
@@ -75,35 +76,45 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
 
-		if (this.canMove) {
+		if (this.canMove && !this.arrive && !this.dead) {
 			if(this.x <= this.target.x && this.y <= this.target.y){
 				let [xOff, yOff] = this.OFFSETS[this.direction];
 
 				this.x += 0.5 * xOff;
 				this.y += 0.5 * yOff;
 			} else{
-				// It has arrive
 				console.log("Ha llegado");
-				this.haLlegado = true;
+				this.arrive = true;
 				this.canMove = false;
 			}
+		}
+
+		if(this.animation && this.y > 600){
+			this.scene.stateMachine.next();
+			this.animation = false
 		}
 	}
     
     cerca() {
-        return this.haLlegado;
+        let xAux, yAux;
+		[xAux, yAux] = this.scene.matrixToCoor({x: 2, y: 2});
+		console.log("Comprobando...");
+
+		let cerca = this.x >= xAux;
+
+		if(cerca) {
+			this.dead = true;
+			this.canMove = false;
+
+			this.deadAnimation();
+		}
+
+		return cerca;
 	}
 
-	cercaAndy() {
-		return this.haLlegado;
-	}
-
-	vivo() {
-		return this.alive
-	}
-	
-	killAndy() {
-		// TO DO
-		return true;
+	deadAnimation() {
+		this.animation = true;
+		[this.targetAux.x, this.targetAux.y] = this.scene.matrixToCoor({x: 2, y: 9});
+		this.scene.physics.moveToObject(this, this.targetAux, 60);
 	}
 }

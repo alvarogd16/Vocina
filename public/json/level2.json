@@ -1,46 +1,76 @@
 {
-        "name": "Cocina",
-        "map": ["##########",
-                "##########",
-                ".        x",
-                "          ",
-                "   ####   ",
-                "   ####   ",
-                "          ",
-                "o         ",
-                "##########",
-                "##########"],
-        "position": [0,2],
-        "rotation": "right",
+    "name": "Cocina",
+    "map": ["##########",
+            "##########",
+            ".        x",
+            "          ",
+            "   ####   ",
+            "   ####   ",
+            "          ",
+            "o         ",
+            "##########",
+            "##########"],
+    "position": [0,2],
+    "rotation": "right",
     "sublevels": [
-                {
+        {
+            "type": "move",
+            "objetives": [[5,7]],
+            "sentences": []
+        },
+        {
             "type": "item",
-            "objetives": [[2,2], "sensor"],
+            "objetives": [[8,5], "sensor"],
             "sentences": [
                 "Recoge el item venga"
             ]
-                },
-                {
+        },
+        {
+            "type": "move",
+            "objetives": [[5,7]],
+            "sentences": []
+        },
+        {
             "type": "put",
             "objetives": [0, "sensor"],
             "sentences": []
-                },
-                {
+        },
+        {
+            "type": "temp",
+            "objetives": [0, false],
+            "sentences": []
+        },
+        {
+            "type": "item",
+            "objetives": [[2,5], "encoder"],
+            "sentences": [
+                "Recoge el item venga"
+            ]
+        },
+        {
+            "type": "move",
+            "objetives": [[5,7]],
+            "sentences": []
+        },
+        {
+            "type": "put",
+            "objetives": [0, "encoder"],
+            "sentences": []
+        },
+        {
             "type": "temp",
             "objetives": [0, true],
             "sentences": []
         },
-                {
-            "type": "item",
-            "objetives": [[3,3], "encoder"],
-            "sentences": [
-                "Recoge el item venga"
-            ]
-                }
-        ],
+        {
+            "type": "move",
+            "objetives": [[9,2]],
+            "sentences": []
+        }
+    ],
     "items": [
-        {"name": "sensor", "position": [2, 2]},
-        {"name": "encoder", "position": [3, 3]}
+        {"name": "sensor", "position": [8,5]},
+        {"name": "encoder", "position": [2,5]}
     ],
     "itemObject": [
         {"name": "fridge"}

@@ -20,7 +20,7 @@ let stateConfig = {
 					case "box":
 						// Activate the box you're in
 						this.sceneDown.itemsObject[this.moveOption].activate();
-					break;			
+					break;
 				}
 
 				this.next();
@@ -110,14 +110,12 @@ let stateConfig = {
 						socket.on('button', () => {
 							console.log("Botoon");
 							if(!buttonPulsed){
+								raspiWrite("LED", 1);
 								this.sceneDown.lantern.encender(this.sceneDown.inventory);
 								this.next();
 								buttonPulsed = true;
 							}
 						});
-						break;
-					case "trap":
-						// The zombie appear and if the trap is not ready kill player
 						break;
 					case "put":
 					case "temp":
@@ -195,7 +193,7 @@ let stateConfig = {
 
 					case "put":
 						// Check if the item has been installed correctly
-						let itemObjectPut = this.sceneDown.itemsObject[this.sublevelObjetive[0]];
+						let itemObjectPut = this.sceneDown.entitiesObject[this.sublevelObjetive[0]];
 						if(itemObjectPut.comprobarItem(this.sublevelObjetive[1])){
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
@@ -205,7 +203,7 @@ let stateConfig = {
 
 					case "temp":
 						// Check if the temp is correct depend if encoder has been installed or not
-						let itemObjectTemp = this.sceneDown.itemsObject[this.sublevelObjetive[0]];
+						let itemObjectTemp = this.sceneDown.entitiesObject[this.sublevelObjetive[0]];
 
 						// When the encoder is not installed
 						this.sublevelComplete = true;
@@ -223,8 +221,10 @@ let stateConfig = {
 					break;
 
 					case "trap":
-						if(this.sceneDown.zombie.killAndy()){
+						if(this.sceneDown.zombie.dead){
 							this.sublevelComplete = true;
+						} else {
+							this.sceneUp.write("Ohh noo, el zombie te he comido, vuelve a intentarlo");
 						}
 					
 					break;

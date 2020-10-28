@@ -25,11 +25,11 @@ const setupRaspi = (io) => {
     
         //TODO AND TO INSTALL
         const sensor = require('node-dht-sensor');
-    
-        sensor.read(typeTEMPS, pinTEMPS, (err, temperature, humidity) => {
-            if(!err) 
-                valTEMPS = temperature;
-        });
+
+        io.on("sensor", (socket) => {
+            console.log("Sensor");
+            //io.emit("readSensor", readSensor());
+        })
     
         //END TODO
     
@@ -40,7 +40,7 @@ const setupRaspi = (io) => {
                 return;
             }
             io.emit('button');
-	    console.log("boton");
+	        console.log("boton");
             valBUT = !valBUT;   //When push the button change valBUT
         });
     
@@ -62,6 +62,15 @@ const setupRaspi = (io) => {
                 console.log("Value: " + encAux + valueB + "Cont: " + encCont);
             });
         });
+
+        function readSensor() {
+            sensor.read(typeTEMPS, pinTEMPS, (err, temperature, humidity) => {
+                if(!err) 
+                    valTEMPS = temperature;
+            });
+
+            return 10;
+        }
     
         function unexportOnClose() {
             LEDR.writeSync(0);

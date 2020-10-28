@@ -17,6 +17,8 @@ class ItemObject extends Phaser.Physics.Arcade.Sprite {
                     keyIsInItems = true;
             }
 
+            console.log(this.items);
+
             //To check if the item exists for the corresponding ItemObject
             if (keyIsInItems) {
                 this.items[key] = true;

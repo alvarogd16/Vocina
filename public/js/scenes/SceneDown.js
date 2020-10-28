@@ -40,8 +40,6 @@ class SceneDown extends Phaser.Scene {
 
         this.load.json(this.keyJson, "json/level" + this.numLevel + ".json");
         this.load.image(this.keyImgMap, "assets/maps/level" + this.numLevel + ".jpg", true);
-
-
     }
 
     /**
@@ -78,19 +76,24 @@ class SceneDown extends Phaser.Scene {
         document.getElementById("run").onclick = () => {
             // console.log(this.sublevelId);
             // console.log(this.sublevels);
-            if(this.getSublevelType(this.stateMachine.sublevelId) == "trap") {
-                console.log("Zombie action...")
-				this.zombie.setVisible(true);
-				this.zombie.movingToPosition(4, 2);
-            }
+            // if(this.getSublevelType(this.stateMachine.sublevelId) == "trap") {
+            //     console.log("Zombie action...")
+			// 	this.zombie.setVisible(true);
+			// 	this.zombie.movingToPosition(4, 2, "right");
+            // }
             this.editorContent = this.flask.getCode();
             this.readWritten(this.editorContent);
-            if(this.getSublevelType(this.stateMachine.sublevelId) != "trap"){
-                this.stateMachine.next();
-            }
-            else{
+
+            this.stateMachine.next();
+
+            console.log("Sublevel type: ", this.getSublevelType(this.stateMachine.sublevelId));
+            if(this.getSublevelType(this.stateMachine.sublevelId) == "trap" && !this.stateMachine.codeErrors){
                 this.trapActive = true;
                 this.checkCode = false;
+
+                console.log("Zombie action...")
+				this.zombie.setVisible(true);
+				this.zombie.movingToPosition(4, 2, "right");
             }
             /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                 this.disabled = true;*/
@@ -163,34 +166,35 @@ class SceneDown extends Phaser.Scene {
         /* LOAD ITEMOBJECTS */
         // (Change the name, it's confuse with items)
 
-        this.itemsObject = [];
+        this.entitiesObject = [];
 
         this.itemObject.forEach(element => {
             switch (element.name) {
                 case "lantern":
                     this.lantern = new Lantern(this);
-                    this.itemsObject.push(this.lantern);
+                    this.entitiesObject.push(this.lantern);
                     break;
                 case "fridge":
                     this.fridge = new Fridge(this);
-                    this.itemsObject.push(this.fridge);
+                    this.entitiesObject.push(this.fridge);
                     break;
                 case "sink":
                     this.sink = new Sink(this);
-                    this.itemsObject.push(this.sink);
+                    this.entitiesObject.push(this.sink);
 
                     this.zombie = new Zombie(this, 0, 0, direction.RIGHT);
                     this.zombie.setZombiePosition(0, 2);
                     this.zombie.setVisible(false);
+                    this.entitiesObject.push(this.zombie);
 
                     break;
                 case "box":
                     this.box1 = new Box(this, true);
                     this.box2 = new Box(this, false);
                     this.box3 = new Box(this, false);
-                    this.itemsObject.push(this.box1);
-                    this.itemsObject.push(this.box2);
-                    this.itemsObject.push(this.box3);
+                    this.entitiesObject.push(this.box1);
+                    this.entitiesObject.push(this.box2);
+                    this.entitiesObject.push(this.box3);
                     break;
             }
         });
@@ -303,14 +307,14 @@ class SceneDown extends Phaser.Scene {
         let zombie = this.zombie;
 
         /* NUEVO PARSER */
-        this.environment = {
-            andy: this.andy.exposed,
-            zombie: this.zombie.exposed,
-            consola: this.console.exposed,
-            ...this.itemsObject,
-        };
+        // this.entities = {
+        //     andy: this.andy,
+        //     consola: this.console,
+        //     ...this.entitiesObject,
+        // };
 
         //this.ast = lex(editorContent)
+        //console.log(this.ast)
 
         // TEST
         let mainScene = this.mainScene;
@@ -326,8 +330,19 @@ class SceneDown extends Phaser.Scene {
             this.stateMachine.codeErrors = true;
         }
 
+        let sublevelType = this.getSublevelType(this.stateMachine.sublevelId);
+
+        let noMoveInMoveSublevel = (editorContent.search("mover") < 0) && (sublevelType == "move" || sublevelType == "item");
+
+        //console.log(noMoveInMoveSublevel);
+
+        //console.log("Check: ", this.checkCode);
         if(this.checkCode)
             this.stateMachine.next();
+
+        if(noMoveInMoveSublevel) {
+            this.stateMachine.next();
+        }
     }
 
 
@@ -430,13 +445,23 @@ class SceneDown extends Phaser.Scene {
         }
 
         if(this.trapActive){
-            if(this.zombie.cercaAndy()){
-                console.log("andy ha muerto")
+            if(this.zombie.arrive || this.zombie.dead){
+                console.log("Stop ejecution");
+
                 this.trapActive = false;
                 this.checkCode = true;
-            } else{
+
+                // when the zombie dies you have to wait for the animation
+                if(this.zombie.arrive){
+                    console.log("Arrived");
+                    this.stateMachine.next();
+                }
+            }
+            else{
+                console.log("Ejecutando...");
                 this.readWritten(this.editorContent);
             }
+            
         }
     }
 }

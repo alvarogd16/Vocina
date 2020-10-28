@@ -5,7 +5,8 @@ class Fridge extends ItemObject {
     constructor(scene) {
         super(scene);
         this.items = {
-            "sensor": false
+            "sensor": false,
+            "encoder": false
         };
         this.temporary = false;
 
@@ -39,6 +40,12 @@ class Fridge extends ItemObject {
             return this.actualTemp;
         } else
             console.log("ERROR NEVERA -- No se encuentran instalados todos los items necesarios");
+    }
+
+    readTrueSensor() {
+        socket.emit("sensor");
+        socket.on("sensorRead", value => this.actualTemp = value);
+        console.log(this.actualTemp);
     }
 
     checkTemp() {

@@ -2,27 +2,32 @@
         "name": "Garaje",
         "map": ["###### . #",
                 "###      #",
+                "#        #",
+                "#   ##  ##",
+                "#   ##  ##",
                 "#   ##   #",
-                "#  #### ##",
-                "#  #### ##",
-                "#  ####  #",
-                "#  ####  #",
-                "## ####  #",
-                "##  ##  ##",
+                "#   ##   #",
+                "##  ##   #",
+                "##      ##",
                 "#  xxxx ##"],
         "position": [7,0],
         "rotation": "down",
         "sublevels": [
-                {
-            "type": "move",
-            "objetives": [[1, 3], [7,4]],
-            "sentences": []
-                },
-                {
-            "type": "box",
-            "objetives": [[]],
-            "sentences": []
-                }
+            {
+                "type": "move",
+                "objetives": [[2, 9]],
+                "sentences": []
+            },
+            {
+                "type": "move",
+                "objetives": [[1, 3], [7,4]],
+                "sentences": []
+            },
+            {
+                "type": "box",
+                "objetives": [[]],
+                "sentences": []
+            }
         ],
     "items": [
     ],

@@ -30,12 +30,12 @@ class Sink extends ItemObject {
 
     encender() {
         console.log("Grifo encendido");
-        if (this.comprobarItems()) {
+        //if (this.comprobarItems()) {
             //Playing sink sound
             this.waterTap = this.scene.sound.add('waterTap');
             this.waterTap.play();
-        } else
-            console.log("ERROR GRIFO -- No se encuentran instalados todos los items necesarios");
+        /*} else
+            console.log("ERROR GRIFO -- No se encuentran instalados todos los items necesarios");*/
     }
 
     //Through an AND operation to all the items in the dictionary, checks if all the items are installed

@@ -25,7 +25,7 @@
                 "Tienes que venira a ayudarme",
                 "Vas a ir pasando por la casa evitando a los zombies",
                 "Te voy a enseñar a moverte",
-                "Escribe [code]andy.moverArriba(1)[/code] para dar un paso arriba"
+                "Escribe andy.moverArriba(1) para dar un paso arriba"
             ]
         },
         {

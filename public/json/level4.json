@@ -16,17 +16,40 @@
             {
                 "type": "move",
                 "objetives": [[2, 9]],
-                "sentences": []
+                "sentences": [
+                    "Al fin podemos hablar en persona andy",
+                    "Ya sólo queda una tarea que hacer para poder salir de aquí",
+                    "Hay 3 cajas (caja1, caja2 y caja3)",
+                    "Sólo en una de ellas se encuentra la radio",
+                    "Cada caja tiene 1000 posibles números (Combinaciones)",
+                    "y sólo uno de ellos es correcto...",
+                    "Parece que probando uno a uno no terminarás ni en 13 años",
+                    "Para resolverlo, te enseñaré lo que es un bucle:",
+                    "Es algo que se repite el numero de veces que quieras con una condición",
+                    "Puedes decirle lo que se hace en cada repetición del bucle",
+                    "Acercate a mi y te explicaré más"
+                ]
             },
             {
                 "type": "move",
-                "objetives": [[1, 3], [7,4]],
-                "sentences": []
+                "objetives": [[1, 3], [7,4], [8, 7]],
+                "sentences": [
+                    "Tienes que elegir una caja e ir la casila al lado de ella",
+                    "¿Ves las cajas rojas?",
+                    "Muevete a una de ellas"
+                ]
             },
             {
                 "type": "box",
                 "objetives": [[]],
-                "sentences": []
+                "sentences": [
+                    "Para probar las 1000 combinaciones escribirás los siguiente:",
+                    "for(let i = 0; i < 1000; i++){ Aquí va lo que se hace en cada repetición}",
+                    "Por ejemplo, para probar todos los números de la caja1...",
+                    "Tienes que escribir caja1.probar(i) en cada repetición",
+                    "i es una variable que guarda el número de cada repetición",
+                    "Adelante, ya deberías poder probar cada caja"
+                ]
             }
         ],
     "items": [

@@ -16,61 +16,99 @@
         {
             "type": "move",
             "objetives": [[5,7]],
-            "sentences": []
+            "sentences": [
+                "Oh no...",
+                "Creo que se acercan zombies...",
+                "Con el frío los zombies se vuelven más lentos",
+                "Ve hasta la nevera para encenderla y ralentizarlos"
+            ]
         },
         {
             "type": "item",
             "objetives": [[8,5], "sensor"],
             "sentences": [
-                "Recoge el item venga"
+                "Parece que la nevera está rota...",
+                "Busca el sensor para poder ver la temperatura"
             ]
         },
         {
             "type": "move",
             "objetives": [[5,7]],
-            "sentences": []
+            "sentences": [
+                "¡Perfecto!",
+                "Ahora vuelve a la nevera y comprueba su temperatura"
+            ]
         },
         {
             "type": "put",
             "objetives": [0, "sensor"],
-            "sentences": []
+            "sentences": [
+                "Tienes que colocar el sensor escribiendo nevera.colocar(‘sensor’)"
+            ]
         },
         {
             "type": "temp",
             "objetives": [0, false],
-            "sentences": []
+            "sentences": [
+                "Ahora puedes leer la temperatura",
+                "Para ello, primero deberás saber lo que es una variable",
+                "Una variable es una especie de caja virtual donde podrás guardar datos",
+                "Escribe let temperatura = nevera.leerSensor() en la consola",
+                "Con nevera.leerSensor() puedes obtener la temperatura",
+                "Esto te permitirá guardarla en la variable llamada temperatura",
+                "Para mostrar su valor escribe en la siguiente linea consola.escribir(temperatura)",
+                "Ahora prueba a darle al boton RUN"
+            ]
         },
         {
             "type": "item",
-            "objetives": [[2,5], "encoder"],
+            "objetives": [[1,5], "encoder"],
             "sentences": [
-                "Recoge el item venga"
+                "Parece que el valor de la temperatura es 20 grados",
+                "¡Hace demasiado calor para congelar a un zombie",
+                "Ve a buscar un encoder por la habitación",
+                "Te servirá para bajar la temperatura"
             ]
         },
         {
             "type": "move",
             "objetives": [[5,7]],
-            "sentences": []
+            "sentences": [
+                "¡Bien! Vuelve a la nevera para bajar la temperatura"
+            ]
         },
         {
             "type": "put",
             "objetives": [0, "encoder"],
-            "sentences": []
+            "sentences": [
+                "Ahora deberás colocar el encoder en la nevera",
+                "Como hiciste con el sensor"
+            ]
         },
         {
             "type": "temp",
             "objetives": [0, true],
-            "sentences": []
+            "sentences": [
+                "Lee de nuevo la temperatura",
+                "Escribe let temperatura = nevera.leerSensor()",
+                "Y después consola.escribir(temperatura)",
+                "Comprueba que esté por debajo de los -20 grados centígrados"
+            ]
         },
         {
             "type": "move",
             "objetives": [[9,2]],
-            "sentences": []
+            "sentences": [
+                "¡Muy bien andy, has conseguido ralentizar a los zombies!",
+                "Ahora ve a la siguiente habitación",
+                "Espero que llegues pronto…"
+            ]
         }
+
     ],
     "items": [
         {"name": "sensor", "position": [8,5]},
-        {"name": "encoder", "position": [2,5]}
+        {"name": "encoder", "position": [1,5]}
     ],
     "itemObject": [
         {"name": "fridge"}

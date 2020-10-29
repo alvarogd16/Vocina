@@ -97,7 +97,9 @@ class SceneUp extends Phaser.Scene {
 
 
         // there is to wait to preload in sceeneDown finished
-        this.sublevelsData = this.cache.json.get(this.keyJson).sublevels;
+        //this.time.delayedCall(100, function() {
+            this.sublevelsData = this.cache.json.get(this.keyJson).sublevels;
+        //}, [], this)
         
         this.sentencesQueue = [];
         

@@ -14,12 +14,12 @@ let stateConfig = {
 				this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
 				this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
 
-				//console.log(this.sublevelObjetive);
+				console.log(this.sublevelType, this.sublevelObjetive);
 
 				switch (this.sublevelType) {
 					case "box":
 						// Activate the box you're in
-						this.sceneDown.itemsObject[this.moveOption].activate();
+						this.sceneDown.entitiesObject[this.moveOption].activate();
 					break;
 				}
 
@@ -39,6 +39,12 @@ let stateConfig = {
 			enter: function () {
 				console.log("explanation start");
 
+				switch(this.sublevelType){
+					case "box":
+						this.sceneDown.flask.updateCode("for(let i = 0; i < 1000; i++) {\n//Aqui escribes lo que quieras que se repita\n}");
+					break;
+				}
+
 				this.sceneUp.loadSentences(this.sublevelId);
 				this.sceneUp.startWrite();
 			},
@@ -52,6 +58,7 @@ let stateConfig = {
 						let fridge = this.sceneDown.entitiesObject[this.sublevelObjetive[0]];
 						//fridge.readTrueSensor();
 						//setTimeout(fridge.readTrueSensor, 2000);
+						break;
 				}
 			}
 		},
@@ -82,6 +89,12 @@ let stateConfig = {
 				if (this.codeErrors) {
 					// Error message
 					this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien escrito")
+
+					// this.sceneDown.time.delayedCall(3000, function () {
+					// 	console.log(this.lastPlayerState)
+					// 	this.sceneDown.setPlayerState(this.lastPlayerState);
+					// }, [], this);
+
 					return 'programming';
 				} else {
 					return 'action';
@@ -107,11 +120,6 @@ let stateConfig = {
 						break;
 					case "lightOn":
 						console.log("Luces encendidass");
-
-						// TEMPORAL
-						//this.sceneDown.lantern.encender(this.sceneDown.inventory);
-						//this.next();
-
 
 						// TO CHECK
 						//Only need one time pulsed
@@ -164,6 +172,8 @@ let stateConfig = {
 			enter: function () {
 				console.log("-- Check " + this.sublevelType + " sublevel");
 				// console.log(this.sublevelComplete);
+
+				this.sublevelComplete = false;
 
 				switch(this.sublevelType){
 					case "move":
@@ -243,20 +253,22 @@ let stateConfig = {
 
 						// Each position is asociated with a box
 						// the index depends of the position in the map
-						let box = this.sceneDown.itemsObject[this.moveOption];
+						let box = this.sceneDown.entitiesObject[this.moveOption];
 
 						this.sublevelComplete = true;
 
 						if(box.open){
+							this.sceneUp.write("Has abierto la cajaaa");
 							console.log("Todo ok");
 							box.openSound();
 						} else {
 							box.closeSound();
-							this.sublevelId = -1;
+							this.sublevelId = 0;
 						}
 					break;
 				}
 
+				console.log("Saliendo check...");
 				this.next();
 			}
 		},

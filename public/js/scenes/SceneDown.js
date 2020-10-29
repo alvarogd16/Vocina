@@ -67,7 +67,6 @@ class SceneDown extends Phaser.Scene {
         // Control the sublevels flow
         this.stateMachine = this.mainScene.stateMachine;
 
-
         /* EDITOR */
 
         this.flask = this.mainScene.flask;
@@ -84,9 +83,9 @@ class SceneDown extends Phaser.Scene {
             this.editorContent = this.flask.getCode();
             this.readWritten(this.editorContent);
 
-            this.stateMachine.next();
-
             console.log("Sublevel type: ", this.getSublevelType(this.stateMachine.sublevelId));
+            
+
             if(this.getSublevelType(this.stateMachine.sublevelId) == "trap" && !this.stateMachine.codeErrors){
                 this.trapActive = true;
                 this.checkCode = false;
@@ -95,6 +94,9 @@ class SceneDown extends Phaser.Scene {
 				this.zombie.setVisible(true);
 				this.zombie.movingToPosition(4, 2, "right");
             }
+
+            if(!this.stateMachine.codeErrors)
+                this.stateMachine.next();
             /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                 this.disabled = true;*/
         };
@@ -336,7 +338,7 @@ class SceneDown extends Phaser.Scene {
 
         //console.log(noMoveInMoveSublevel);
 
-        //console.log("Check: ", this.checkCode);
+        console.log("Check: ", this.checkCode);
         if(this.checkCode)
             this.stateMachine.next();
 

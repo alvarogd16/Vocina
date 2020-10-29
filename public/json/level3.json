@@ -18,28 +18,57 @@
             "type": "item",
             "objetives": [[5,2], "soap"],
             "sentences": [
-                "Recoge el item venga"
+                "Andy, creo que los zombies se acercan cada vez más…",
+                "Será necesario preparar una trampa a esos zombies",
+                "Seguro que con agua y jabón en el suelo se resbalarán",
+                "Ve a por el jabón primero"
             ]
         },
         {
             "type": "move",
             "objetives": [[2,1], [3, 1]],
-            "sentences": []
+            "sentences": [
+                "¡Lo cogiste!",
+                "Muevete hasta al grifo y prepara la trampa"
+            ]
         },
         {
             "type": "put",
             "objetives": [0, "soap"],
-            "sentences": ["put"]
+            "sentences": [
+                "Para colocar el jabón tendrás que usar grifo.colocar('soap')"
+            ]
+        },
+        {
+            "type": "move",
+            "objetives": [[5,2]],
+            "sentences": [
+                "Alejate un poco para preparar la trampa",
+                "Muevete hasta donde estaba el jabón (el grafiti)"
+            ]
         },
         {
             "type": "trap",
             "objetives": [[]],
-            "sentences": ["eyyyy", "holaa"]
+            "sentences": [
+                "Ahora hay que ver si el zombie está cerca y activar el grifo en ese caso...",
+                "Para ello utilizarás la palabra especial if",
+                "if es una condicional, y lo usamos para comprobar ciertas cosas",
+                "Por ejemplo en la frase, Si(if) estudio, mañana aprobaré",
+                "Entonces para la trampa será algo así:",
+                "Si(if) hay zombies cerca, entonces enciendo el grifo",
+                "Para encender el grifo hay que utilizar la acción grifo.encender()",
+                "El código de la trampa podría ser así:",
+                "if(zombie.cerca()) { Aquí se escribe la acción correspondiente }"
+            ]
         },
         {
             "type": "move",
             "objetives": [[7,9]],
-            "sentences": []
+            "sentences": [
+                "¡Muy bien andy, has conseguido derrotar al zombie!",
+                "Ahora ve al garaje, ¡te estaré esperando!"
+            ]
         }
     ],
     "items": [

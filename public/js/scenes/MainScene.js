@@ -10,8 +10,10 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false
-        this.level = 1; //Each level has a .json file
+        this.level = 3; //Each level has a .json file
         this.maxLevels = 4;
+
+        this.textWidth = 1458; // In pixels
 
         this.width = document.getElementById('gameContainer').clientWidth;
 
@@ -173,6 +175,9 @@ class MainScene extends Phaser.Scene {
         this.load.plugin('rexfsmplugin', '../../lib/rexfsmplugin.min.js', true);
 
         this.load.image("background", "assets/crisDialogs/BackgroundScreen.png");
+
+
+        this.load.image("textImg", "assets/menu/text.png");
     }
 
     /**
@@ -269,9 +274,13 @@ class MainScene extends Phaser.Scene {
      * @param {number} level - The level to change
      */
     nextLevel(level) {
+
         level ? this.level = level : this.level++;
-        if (this.level > this.maxLevels)
+        console.log(this.level, this.maxLevels)
+        if (this.level > this.maxLevels){
             this.endGame();
+            console.log("Se acabó")
+        }
         else {
             this.closeScenes();
         }
@@ -281,7 +290,13 @@ class MainScene extends Phaser.Scene {
      * When the game ends
      */
     endGame() {
-        this.add.text(10, 10, 'GAME OVER'); // TO CHANGE
+        this.scene.stop('SceneUp');
+        this.scene.stop('SceneDown');
+        this.cm.style.display = 'none';
+
+        let textZoom = widthD / this.textWidth;
+        this.textImage = this.add.image(0, 0, "textImg").setOrigin(0);
+        this.textImage.setScale(textZoom);
     }
 
     /**
@@ -298,8 +313,15 @@ class MainScene extends Phaser.Scene {
      * Resume all and adapt de screen for the transition of scenes
      */
     launchScenes() {
-        this.scene.launch("SceneUp");
         this.scene.launch("SceneDown", this.level);
+        this.scene.launch("SceneUp", this.level);
+
+        this.time.delayedCall(1000, function() {
+            this.stateMachine.sublevelId = 0;
+            this.stateMachine.lastPlayerState = this.sceneDown.updatePlayerState();
+            this.stateMachine.goto("boot");
+        }, [], this)
+
         //this.cm.style.display = 'block';
     }
 

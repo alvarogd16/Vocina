@@ -35,12 +35,15 @@ class Box extends Phaser.Physics.Arcade.Sprite {
     // }
 
     probar(boxCode) {
+        let correct = false;
         if(this.activated){
             if(this.correctBox && boxCode == this.correctCode)
-            this.open = true;
+            this.open = correct = true;
         } else {
             console.log("Sorry but your not in the correct box");
         }
+
+        return correct;
     }
 
     openSound() {

@@ -6,16 +6,18 @@ let valTEMPS = 0;   //Temperature sensor
 let encCont = 0;    //Encoder
 let encAux;
 
-const pinLED = 4;
+const pinLED = 20;
 const pinBUT = 6;
-const pinTEMPS = 27;  
+const pinTEMPS = 27;
 const typeTEMPS = 11; //DHT11
-const pinEncA = 5;
-const pinEncB = 6;
+const pinEncA = 3;
+const pinEncB = 27;
 
 
 const setupRaspi = (io) => {
-    if(isPi()){ 
+    if(isPi()){
+	console.log("Config raspi")
+
         const Gpio = require('onoff').Gpio;
     
         const LEDR = new Gpio(pinLED, 'out');
@@ -57,8 +59,8 @@ const setupRaspi = (io) => {
                 } 
                 else
                     encCont--;
-                
-                io.emit('encoder', direction);
+                console.log(direction)
+                io.emit('encoder');
                 console.log("Value: " + encAux + valueB + "Cont: " + encCont);
             });
         });

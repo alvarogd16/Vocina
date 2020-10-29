@@ -14,12 +14,10 @@ class Fridge extends ItemObject {
         this.tempAfter = -20;   // Temp necessary to freeze zombies
 
         // TO CHECK
-        socket.on('encoder', (direction) => {
-            if(this.items[sensor]){
-                if(direction === UP)
-                    this.actualTemp += 1;
-                else
-                    this.actualTemp -= 1;
+        socket.on('encoder', () => {
+		console.log("signal")
+            if(this.items["sensor"]){
+            	this.actualTemp -= 1;
             }
         });
     }
@@ -49,6 +47,6 @@ class Fridge extends ItemObject {
     }
 
     checkTemp() {
-        return this.actualTemp === this.tempAfter;
+        return this.actualTemp <= this.tempAfter;
     }
 }

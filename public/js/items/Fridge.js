@@ -41,13 +41,13 @@ class Fridge extends ItemObject {
 
     readTrueSensor() {
         raspiRead("TEMPS").then(value => {
-		actualTemp = value
+		this.actualTemp = value
 		console.log(value, actualTemp)
 	});
-        console.log(actualTemp);
+        console.log(this.actualTemp);
     }
 
     checkTemp() {
-        return actualTemp <= this.tempAfter;
+        return this.actualTemp <= this.tempAfter;
     }
 }

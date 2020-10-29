@@ -48,6 +48,10 @@ let stateConfig = {
 					case "item":
 						this.sceneDown.prepareItem(this.sublevelObjetive[1]);
 						break;
+					case "temp":
+						let fridge = this.sceneDown.entitiesObject[this.sublevelObjetive[0]];
+						//fridge.readTrueSensor();
+						//setTimeout(fridge.readTrueSensor, 2000);
 				}
 			}
 		},
@@ -63,6 +67,12 @@ let stateConfig = {
 			exit: function () {
 				this.sceneDown.activateEditor(false);
 				this.mainScene.editorClean();
+
+				switch(this.sublevelType){
+					case "temp":
+						let fridge = this.sceneDown.entitiesObject[this.sublevelObjetive[0]];
+						//fridge.readTrueSensor();
+				}
 			}
 		},
 		// Check the syntactic errors of the code
@@ -216,7 +226,7 @@ let stateConfig = {
 								this.sublevelComplete = false;
 								this.sceneUp.write("La temperatura sigue siendo muy alta prueba a bajarla más");
 							}
-									
+
 						}
 					break;
 

@@ -34,19 +34,20 @@ class Fridge extends ItemObject {
             // }
 
             //this.actualTemp = 20;
-            
             return this.actualTemp;
         } else
             console.log("ERROR NEVERA -- No se encuentran instalados todos los items necesarios");
     }
 
     readTrueSensor() {
-        socket.emit("sensor");
-        socket.on("sensorRead", value => this.actualTemp = value);
-        console.log(this.actualTemp);
+        raspiRead("TEMPS").then(value => {
+		actualTemp = value
+		console.log(value, actualTemp)
+	});
+        console.log(actualTemp);
     }
 
     checkTemp() {
-        return this.actualTemp <= this.tempAfter;
+        return actualTemp <= this.tempAfter;
     }
 }

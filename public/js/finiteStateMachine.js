@@ -70,6 +70,11 @@ let stateConfig = {
 
 				//activate write and run button
 				this.sceneDown.activateEditor(true);
+
+				// switch(this.sublevelType){
+				// 	case "lightOff":
+				// 		this.next();
+				// }
 			},
 			exit: function () {
 				this.sceneDown.activateEditor(false);
@@ -266,6 +271,11 @@ let stateConfig = {
 							this.sublevelId = 0;
 						}
 					break;
+
+					case "lightOff":
+					case "lightOn":
+						this.sublevelComplete = true;
+						break;
 				}
 
 				console.log("Saliendo check...");

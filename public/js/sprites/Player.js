@@ -65,6 +65,28 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         });
         console.log(' -- Loaded rotateTo plugin');
 
+        /* Load moveTo plugin from SceneDown */
+        this.moveTo = this.scene.plugins.get('rexmovetoplugin').add(this, {
+            speed: 60 //speed : Moving speed, pixels in second.
+            //rotateToTarget : Set true to change angle towards path.
+        })
+        console.log(' -- Loaded moveTo plugin');
+
+        let thisSprite = this;
+        this.moveTo.on('complete', function (thisSprite) {
+            thisSprite.body.reset(thisSprite.target.x, thisSprite.target.y);
+            thisSprite.stopAnimation();
+
+            //Restart the movement control
+            thisSprite.andyIsMoving = false;
+
+            // When the move stop
+            if (thisSprite.andyMovesQueue.length == 0) {
+                thisSprite.scene.stateMachine.next();
+            }
+        });
+        console.log(' -- Built COMPLETE EVENT moveTo plugin');
+
         // this.exposed = {
         //     moverDerecha: this.moverDerecha,
         //     moverIzquierda: this.moverIzquierda,
@@ -121,10 +143,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         numberOfMovs = this.matrixMovement(numberOfMovs, direction);
 
         let OFFSETS = {
-            'up':    [ 0, -1],
-            'down':  [ 0,  1],
-            'left':  [-1,  0],
-            'right': [ 1,  0],
+            'up': [0, -1],
+            'down': [0, 1],
+            'left': [-1, 0],
+            'right': [1, 0],
         };
 
         let [xOff, yOff] = OFFSETS[direction];
@@ -147,35 +169,35 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     matrixMovement(numberOfMovs, direction) {
 
-        if(numberOfMovs > 0){
+        if (numberOfMovs > 0) {
             // Map bounds collision
             let boundCollision = false;
 
             for (let i = 0; i < numberOfMovs; i++) {
                 switch (direction) {
                     case 'up':
-                        if(this.posMatrix[1] == 0)
+                        if (this.posMatrix[1] == 0)
                             boundCollision = true;
                         else
                             this.posMatrix[1]--;
                         break;
 
                     case 'down':
-                        if(this.posMatrix[1] == 9)
+                        if (this.posMatrix[1] == 9)
                             boundCollision = true;
                         else
                             this.posMatrix[1]++;
                         break;
 
                     case 'right':
-                        if(this.posMatrix[0] == 9)
+                        if (this.posMatrix[0] == 9)
                             boundCollision = true;
                         else
                             this.posMatrix[0]++;
                         break;
 
                     case 'left':
-                        if(this.posMatrix[0] == 0)
+                        if (this.posMatrix[0] == 0)
                             boundCollision = true;
                         else
                             this.posMatrix[0]--;
@@ -198,7 +220,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         } else {
             console.log("Este valor no vale perro");
-            numberOfMovs = 0;   //Provisional
+            numberOfMovs = 0; //Provisional
         }
 
         return numberOfMovs;
@@ -241,7 +263,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.rotateTo.rotateTo(angle);
 
         //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-        this.scene.physics.moveToObject(this, this.targetAux, 60);
+        //this.scene.physics.moveToObject(this, this.targetAux, 60);
+        this.moveTo.moveTo(this.targetAux.x, this.targetAux.y);
     }
 
     /*OTHER FUNCTIONS*/
@@ -270,9 +293,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
      * Set player rotation to a specifies direction
      * @param {string} direction Represent the player direction
      */
-    setPlayerRotation(direction){
+    setPlayerRotation(direction) {
         this.playerRotation = direction;
-        
+
         switch (direction) {
             case 'right':
                 this.setAngle(90);
@@ -340,7 +363,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super.preUpdate(time, delta);
 
         //Light follow the player. Light configuration ONLY in level one to activate the lantern
-        if(this.scene.lightOn)
+        if (this.scene.lightOn)
             this.scene.light.setPosition(this.x, this.y);
 
         // Player movement control, when condition it's true, player is moving and condition can't be trespassed
@@ -358,26 +381,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //account for flipped sprite
         this.animationName = 'stand-' + currentDirection;
 
-        //Distance between andy and the point will reach
-        let distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
-
-        if (this.body.speed > 0) {
-            //If the sprite reaches one point stored in the queue means that didn't reach the goal tile (checked in a
-            //event in the 'SceneDown' class)
-            
-            if (distance < 0.1) {
-                this.body.reset(this.target.x, this.target.y);
-                this.stopAnimation();
-
-                //Restart the movement control
-                this.andyIsMoving = false;
-
-                // When the move stop
-                if (this.andyMovesQueue.length == 0){
-                    this.scene.stateMachine.next();
-                }
-            }
-        } /*else if (this.collisionWithoutMovement) { //If andy tries to move towards a wall that's in (Is not going to be moving)
+        /*if (this.body.speed <= 0 && this.collisionWithoutMovement) { //If andy tries to move towards a wall that's in (Is not going to be moving)
             console.log("Hola");
             this.gameOver = this.scene.sound.add('gameOver');
             this.gameOver.play();

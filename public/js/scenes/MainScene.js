@@ -171,6 +171,9 @@ class MainScene extends Phaser.Scene {
 
         let path = "../../lib/rexrotatetoplugin.min.js";
         this.load.plugin('rexrotatetoplugin', path, true);
+        
+        path = "../../lib/rexmovetoplugin.min.js";
+        this.load.plugin('rexmovetoplugin', path, true);
 
         this.load.plugin('rexfsmplugin', '../../lib/rexfsmplugin.min.js', true);
 

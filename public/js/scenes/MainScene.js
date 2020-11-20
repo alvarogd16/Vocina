@@ -10,7 +10,7 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false
-        this.level = 2; //Each level has a .json file
+        this.level = 1; //Each level has a .json file
         this.maxLevels = 4;
 
         this.textWidth = 1458; // In pixels
@@ -171,7 +171,7 @@ class MainScene extends Phaser.Scene {
 
         let path = "../../lib/rexrotatetoplugin.min.js";
         this.load.plugin('rexrotatetoplugin', path, true);
-        
+
         path = "../../lib/rexmovetoplugin.min.js";
         this.load.plugin('rexmovetoplugin', path, true);
 
@@ -204,7 +204,6 @@ class MainScene extends Phaser.Scene {
             lineNumbers: true //,
             //defaultTheme: false
         });
-
 
         // Play levels ambience
         let loopMarker = {
@@ -280,11 +279,10 @@ class MainScene extends Phaser.Scene {
 
         level ? this.level = level : this.level++;
         console.log(this.level, this.maxLevels)
-        if (this.level > this.maxLevels){
+        if (this.level > this.maxLevels) {
             this.endGame();
             console.log("Se acabó")
-        }
-        else {
+        } else {
             this.closeScenes();
         }
     }
@@ -319,7 +317,7 @@ class MainScene extends Phaser.Scene {
         this.scene.launch("SceneDown", this.level);
         this.scene.launch("SceneUp", this.level);
 
-        this.time.delayedCall(1000, function() {
+        this.time.delayedCall(1000, function () {
             this.stateMachine.sublevelId = 0;
             this.stateMachine.lastPlayerState = this.sceneDown.updatePlayerState();
             this.stateMachine.goto("boot");

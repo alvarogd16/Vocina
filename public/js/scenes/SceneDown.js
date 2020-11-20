@@ -77,28 +77,30 @@ class SceneDown extends Phaser.Scene {
             // console.log(this.sublevels);
             // if(this.getSublevelType(this.stateMachine.sublevelId) == "trap") {
             //     console.log("Zombie action...")
-			// 	this.zombie.setVisible(true);
-			// 	this.zombie.movingToPosition(4, 2, "right");
+            // 	this.zombie.setVisible(true);
+            // 	this.zombie.movingToPosition(4, 2, "right");
             // }
             this.editorContent = this.flask.getCode();
             this.readWritten(this.editorContent);
 
             console.log("Sublevel type: ", this.getSublevelType(this.stateMachine.sublevelId));
-            
 
-            if(this.getSublevelType(this.stateMachine.sublevelId) == "trap" && !this.stateMachine.codeErrors){
+
+            if (this.getSublevelType(this.stateMachine.sublevelId) == "trap" && !this.stateMachine.codeErrors) {
                 this.trapActive = true;
                 this.checkCode = false;
 
                 console.log("Zombie action...")
-				this.zombie.setVisible(true);
-				this.zombie.movingToPosition(4, 2, "right");
+                this.zombie.setVisible(true);
+                this.zombie.movingToPosition(4, 2, "right");
             }
 
-            if(!this.stateMachine.codeErrors)
-                this.stateMachine.next();
+            //if(!this.stateMachine.codeErrors){
+            console.log('next run')
+            this.stateMachine.next();
             /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                 this.disabled = true;*/
+            //}
         };
 
 
@@ -136,7 +138,7 @@ class SceneDown extends Phaser.Scene {
             this.mapNewSize,
             this.mapNewSize);
 
-            
+
         this.andy = new Player(this, 0, 0);
         this.andy.setPlayerPosition(this.playerStartPosition[0], this.playerStartPosition[1]);
         this.andy.setPlayerRotation(this.playerStartRotation);
@@ -272,7 +274,7 @@ class SceneDown extends Phaser.Scene {
         this.tutorialSquare.visible = true;
     }
 
-    matrixToCoor(matrixCoor){
+    matrixToCoor(matrixCoor) {
         let xyCoor = [];
         xyCoor[0] = (this.wallSize + this.tileSize / 2 + this.tileSize * matrixCoor.x) * this.zoom;
         xyCoor[1] = (this.wallSize + this.tileSize / 2 + this.tileSize * matrixCoor.y) * this.zoom;
@@ -331,6 +333,7 @@ class SceneDown extends Phaser.Scene {
             console.error(e);
             this.stateMachine.codeErrors = true;
         }
+        console.log(this.stateMachine.codeErrors);
 
         let sublevelType = this.getSublevelType(this.stateMachine.sublevelId);
 
@@ -339,12 +342,15 @@ class SceneDown extends Phaser.Scene {
         //console.log(noMoveInMoveSublevel);
 
         console.log("Check: ", this.checkCode);
-        if(this.checkCode)
-            this.stateMachine.next();
-
-        if(noMoveInMoveSublevel) {
+        if (this.checkCode) {
+            console.log('next check');
             this.stateMachine.next();
         }
+
+        if (noMoveInMoveSublevel) {
+            this.stateMachine.next();
+        }
+
     }
 
 
@@ -446,24 +452,23 @@ class SceneDown extends Phaser.Scene {
             this.cameras.main.setPosition(this.mapX, this.mapY);
         }
 
-        if(this.trapActive){
-            if(this.zombie.arrive || this.zombie.dead){
+        if (this.trapActive) {
+            if (this.zombie.arrive || this.zombie.dead) {
                 console.log("Stop ejecution");
 
                 this.trapActive = false;
                 this.checkCode = true;
 
                 // when the zombie dies you have to wait for the animation
-                if(this.zombie.arrive){
+                if (this.zombie.arrive) {
                     console.log("Arrived");
                     this.stateMachine.next();
                 }
-            }
-            else{
+            } else {
                 console.log("Ejecutando...");
                 this.readWritten(this.editorContent);
             }
-            
+
         }
     }
 }

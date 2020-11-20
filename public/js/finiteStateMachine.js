@@ -29,7 +29,7 @@ let stateConfig = {
 		// Load and write all the sentences of the sublevel
 		explanation: {
 			next: function () {
-				// When there arent objetives in th sublevel 
+				// If it's a subvlevel without objetives
 				if(this.sublevelObjetive.length === 0) {
 					this.sublevelComplete = true;
 					return 'action';
@@ -92,6 +92,8 @@ let stateConfig = {
 		checkCode: {
 			next: function () {
 				if (this.codeErrors) {
+                    console.log("con errores");
+
 					// Error message
 					this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien escrito")
 
@@ -102,11 +104,12 @@ let stateConfig = {
 
 					return 'programming';
 				} else {
+                    console.log("sin errores");
 					return 'action';
 				}
 			},
 			enter: function () {
-				console.log("check start");
+				console.log("check start"); 
 			}
 		},
 		// Some sublevels need specific actions

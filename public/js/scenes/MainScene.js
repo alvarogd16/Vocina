@@ -10,7 +10,7 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false
-        this.level = 1; //Each level has a .json file
+        this.level = 3; //Each level has a .json file
         this.maxLevels = 4;
 
         this.textWidth = 1458; // In pixels
@@ -236,9 +236,6 @@ class MainScene extends Phaser.Scene {
                 delay: 0
             });
         }
-
-
-
 
         // Prepare the FSM
         this.stateMachine = this.plugins.get('rexfsmplugin').add(stateConfig);

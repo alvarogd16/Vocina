@@ -81,8 +81,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             thisSprite.andyIsMoving = false;
 
             // When the move stop
-            if (thisSprite.andyMovesQueue.length == 0) {
+            if (thisSprite.andyMovesQueue.length == 0 && !thisSprite.scene.stateMachine.codeErrors) {
                 thisSprite.scene.stateMachine.next();
+            }
+            else if (thisSprite.andyMovesQueue.length == 0 && thisSprite.scene.stateMachine.codeErrors){
+                let lastState = thisSprite.scene.stateMachine.lastPlayerState;
+                console.log(lastState);
+				thisSprite.scene.setPlayerState(lastState);
             }
         });
         console.log(' -- Built COMPLETE EVENT moveTo plugin');

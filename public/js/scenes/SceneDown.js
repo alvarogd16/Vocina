@@ -347,7 +347,7 @@ class SceneDown extends Phaser.Scene {
             this.stateMachine.next();
         }
 
-        if (noMoveInMoveSublevel) {
+        if (noMoveInMoveSublevel && !this.stateMachine.codeErrors) {
             this.stateMachine.next();
         }
 

@@ -260,11 +260,14 @@ class SceneDown extends Phaser.Scene {
      * Update the player with the state object
      * @param {Object} newState The new state of the player
      */
-    setPlayerState(newState) {
+    setPlayerState(newState, itemName) {
         console.log("Seting state...")
         this.andy.setPlayerPosition(newState.position[0], newState.position[1]);
         this.andy.setPlayerRotation(newState.rotation);
         this.inventory.updateItems(newState.items);
+        //If it's an item sublevel and, there's an error or didn't reach the item properly
+        if(this.stateMachine.sublevelType == 'item' && (this.stateMachine.codeErrors || this.stateMachine.itemSublevelNotCompleted)) 
+            this.prepareItem(itemName);
     }
 
     drawMoveRect() {

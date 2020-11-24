@@ -87,7 +87,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             else if (thisSprite.andyMovesQueue.length == 0 && thisSprite.scene.stateMachine.codeErrors){
                 let lastState = thisSprite.scene.stateMachine.lastPlayerState;
                 console.log(lastState);
-				thisSprite.scene.setPlayerState(lastState);
+				thisSprite.scene.setPlayerState(lastState, thisSprite.scene.sublevelObjetive[1]);
             }
         });
         console.log(' -- Built COMPLETE EVENT moveTo plugin');

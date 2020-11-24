@@ -172,7 +172,7 @@ let stateConfig = {
 
 					//Change to the last player state
 					console.log(this.lastPlayerState);
-					this.sceneDown.setPlayerState(this.lastPlayerState);
+					this.sceneDown.setPlayerState(this.lastPlayerState, this.sublevelObjetive[1]);
 
 					return 'programming';
 				}
@@ -215,8 +215,13 @@ let stateConfig = {
 
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
-						} else 
+                            
+                            this.itemSublevelNotCompleted = false;
+						} else {
 							this.sceneUp.write("Seguro que está el item en esta posición??");
+                            
+                            this.itemSublevelNotCompleted = true;
+                        }
 					break;
 
 					case "put":
@@ -305,6 +310,7 @@ let stateConfig = {
 		codeErrors: false,
 		mainScene: undefined,
 		sceneUp: undefined,
-		sceneDown: undefined
+		sceneDown: undefined,
+        itemSublevelNotCompleted: false
 	}
 }

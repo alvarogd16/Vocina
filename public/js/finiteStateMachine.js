@@ -10,6 +10,8 @@ let stateConfig = {
 			next: 'explanation',
 			enter: function () {
 				console.log("boot start");
+                
+                document.getElementById("run").style.opacity = "0.2";
 
 				this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
 				this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
@@ -67,6 +69,8 @@ let stateConfig = {
 			next: 'checkCode',
 			enter: function () {
 				console.log("programming start");
+                
+                document.getElementById("run").style.opacity = "1";
 
 				//activate write and run button
 				this.sceneDown.activateEditor(true);
@@ -77,6 +81,8 @@ let stateConfig = {
 				// }
 			},
 			exit: function () {
+                document.getElementById("run").style.opacity = "0.2";
+                
 				this.sceneDown.activateEditor(false);
 				this.mainScene.editorClean();
 

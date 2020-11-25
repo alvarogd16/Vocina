@@ -80,6 +80,7 @@ class SceneDown extends Phaser.Scene {
             // 	this.zombie.setVisible(true);
             // 	this.zombie.movingToPosition(4, 2, "right");
             // }
+            
             this.editorContent = this.flask.getCode();
             this.readWritten(this.editorContent);
 

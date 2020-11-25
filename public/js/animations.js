@@ -77,6 +77,7 @@ function createAnimationsSceneUp(scene) {
         frameRate: 10,
         repeat: -1
     };
+    scene.anims.create(config);
 }
 
 

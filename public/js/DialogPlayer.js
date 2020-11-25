@@ -24,8 +24,7 @@
      
         this.setScale(zoom);
 
-        //createAnimationsSceneUp(scene);
-        //this.anims.play('talk', true);
+        createAnimationsSceneUp(scene);
 	}
 
 }

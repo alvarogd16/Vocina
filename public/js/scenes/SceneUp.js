@@ -135,6 +135,7 @@ class SceneUp extends Phaser.Scene {
         //Stop talk voice
         this.typing.on('complete', (typing, txt) => {
             this.crisAlexVoice.stop();
+            this.dialogPlayer.anims.stop();
             //We dont want the last one to be activated 
             if(!this.sentencesQueue.length == 0)
                 this.writeAvailable = true;
@@ -162,6 +163,7 @@ class SceneUp extends Phaser.Scene {
      */
     nextSentence() {
         this.write(this.sentencesQueue.shift());
+        this.dialogPlayer.anims.play('talk', true);
         if(this.sentencesQueue.length == 0){
             this.mainScene.stateMachine.next();
             this.writeAvailable = false;

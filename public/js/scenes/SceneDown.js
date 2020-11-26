@@ -80,6 +80,7 @@ class SceneDown extends Phaser.Scene {
             // 	this.zombie.setVisible(true);
             // 	this.zombie.movingToPosition(4, 2, "right");
             // }
+
             this.editorContent = this.flask.getCode();
             this.readWritten(this.editorContent);
 
@@ -208,6 +209,9 @@ class SceneDown extends Phaser.Scene {
         this.activateEditor(false);
 
         this.console = new ConsoleInfoScene(this);
+
+        createAnimationsBathroom(this);
+
     }
 
 
@@ -266,7 +270,7 @@ class SceneDown extends Phaser.Scene {
         this.andy.setPlayerRotation(newState.rotation);
         this.inventory.updateItems(newState.items);
         //If it's an item sublevel and, there's an error or didn't reach the item properly
-        if(this.stateMachine.sublevelType == 'item' && (this.stateMachine.codeErrors || this.stateMachine.itemSublevelNotCompleted)) 
+        if (this.stateMachine.sublevelType == 'item' && (this.stateMachine.codeErrors || this.stateMachine.itemSublevelNotCompleted))
             this.prepareItem(itemName);
     }
 
@@ -326,8 +330,8 @@ class SceneDown extends Phaser.Scene {
         // TEST
         let mainScene = this.mainScene;
 
-        let args = 'andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie, consola';     
-             
+        let args = 'andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie, consola';
+
         try {
             let executeMe = this.createFunction(args, editorContent);
             executeMe(andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie, consola);

@@ -10,7 +10,7 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false
-        this.level = 2; //Each level has a .json file
+        this.level = 1; //Each level has a .json file
         this.maxLevels = 4;
 
         this.textWidth = 1458; // In pixels
@@ -114,6 +114,32 @@ class MainScene extends Phaser.Scene {
                 frameHeight: 207,
                 startFrame: 0,
                 endFrame: 0,
+                margin: 0,
+                spacing: 0
+            }
+        });
+        
+        this.load.spritesheet({
+            key: 'espuma',
+            url: "assets/bathroom/espumaSpriteSheet.png",
+            frameConfig: {
+                frameWidth: 354,
+                frameHeight: 234    ,
+                startFrame: 0,
+                endFrame: 2,
+                margin: 0,
+                spacing: 0
+            }
+        });
+        
+        this.load.spritesheet({
+            key: 'water',
+            url: "assets/bathroom/waterSpriteSheet.png",
+            frameConfig: {
+                frameWidth: 38,
+                frameHeight: 31,
+                startFrame: 0,
+                endFrame: 2,
                 margin: 0,
                 spacing: 0
             }

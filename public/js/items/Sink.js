@@ -31,9 +31,18 @@ class Sink extends ItemObject {
     encender() {
         console.log("Grifo encendido");
         //if (this.comprobarItems()) {
-            //Playing sink sound
-            this.waterTap = this.scene.sound.add('waterTap');
-            this.waterTap.play();
+        //Playing sink sound
+        this.scene.espuma = new AnimatedEntity(this.scene, this.scene.wallSize + (this.scene.tileSize * 1), this.scene.wallSize, 1, 'espuma');
+
+        this.scene.water = new AnimatedEntity(this.scene, this.scene.wallSize + 6 + (this.scene.tileSize * 1), (this.scene.wallSize / 2) - 2, 0.5, 'water');
+
+        this.scene.water.anims.play('waterAnim', true);
+
+        this.waterTap = this.scene.sound.add('waterTap');
+        this.waterTap.play();
+
+        this.scene.espuma.anims.play('espumaAnim', true);
+
         /*} else
             console.log("ERROR GRIFO -- No se encuentran instalados todos los items necesarios");*/
     }

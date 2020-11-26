@@ -82,12 +82,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             // When the move stop
             if (thisSprite.andyMovesQueue.length == 0 && !thisSprite.scene.stateMachine.codeErrors) {
+                console.log('next player')
                 thisSprite.scene.stateMachine.next();
             }
             else if (thisSprite.andyMovesQueue.length == 0 && thisSprite.scene.stateMachine.codeErrors){
                 let lastState = thisSprite.scene.stateMachine.lastPlayerState;
                 console.log(lastState);
-				thisSprite.scene.setPlayerState(lastState, thisSprite.scene.sublevelObjetive[1]);
+				thisSprite.scene.setPlayerState(lastState, thisSprite.scene.stateMachine.sublevelObjetive[1]);
             }
         });
         console.log(' -- Built COMPLETE EVENT moveTo plugin');
@@ -215,7 +216,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                 if (this.actualPos === '#' || boundCollision) {
                     numberOfMovs = i;
-                    //this.collision = true;
+                    this.collision = true;
+                    console.log('Player')
                     /*
                     if (numberOfMovs == 0)
                         this.collisionWithoutMovement = true;

@@ -335,7 +335,14 @@ class SceneDown extends Phaser.Scene {
         try {
             let executeMe = this.createFunction(args, editorContent);
             executeMe(andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie, consola);
-            this.stateMachine.codeErrors = false;
+            if (andy.collision){
+                this.stateMachine.codeErrors = true;
+                andy.collision = false;
+            }
+            else {
+                this.stateMachine.codeErrors = false;
+            }
+            console.log('scene down')
         } catch (e) {
             console.error(e);
             this.stateMachine.codeErrors = true;

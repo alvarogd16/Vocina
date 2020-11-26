@@ -83,9 +83,9 @@ const setupRaspi = (io) => {
 }
 
 function readSensor() {
-            SENSOR.read(typeTEMPS, pinTEMPS, (err, temperature, humidity) => {
-                if(!err)
-                    valTEMPS = temperature;
+        SENSOR.read(typeTEMPS, pinTEMPS, (err, temperature, humidity) => {
+            if(!err)
+                valTEMPS = temperature;
 
 		console.log("Read value...", valTEMPS);
             });
@@ -117,7 +117,7 @@ const raspiRead = (component) => {
     else if (component === 'BUT')
         return valBUT;
     else if (component === 'TEMPS')
-        return readSensor();
+        return isPi() ? readSensor() : -30;
     else if (component === 'ENC')
         return encCont;
     else if(component === "CONNECTED")

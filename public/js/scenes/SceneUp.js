@@ -93,7 +93,9 @@ class SceneUp extends Phaser.Scene {
      * Make the scene
      */
     create() {
-        this.dialogPlayer = new DialogPlayer(this, this.talkSpriteWidth/2, this.sceneYstart+this.sceneHeight/2, this.zoomToAdapt);
+        this.dialogPlayer = new AnimatedEntity(this, this.talkSpriteWidth/2, this.sceneYstart+this.sceneHeight/2, this.zoomToAdapt, 'talkSprite');
+        
+        createAnimationsSceneUp(this);
 
 
         // there is to wait to preload in sceeneDown finished

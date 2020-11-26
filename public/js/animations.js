@@ -92,7 +92,7 @@ function createAnimationsPlayer(scene) {
         repeat: -1
     };
     scene.anims.create(config);
-    
+ 
 }
 
 function createAnimationsFire(scene) {
@@ -103,6 +103,31 @@ function createAnimationsFire(scene) {
             end: 20
         }),
         frameRate: 10,
+        repeat: -1
+    };
+    scene.anims.create(config);
+    
+}
+
+function createAnimationsBathroom(scene) {
+    let config = {
+        key: 'espumaAnim',
+        frames: scene.anims.generateFrameNumbers('espuma', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 7,
+        repeat: 0
+    };
+    scene.anims.create(config);
+    
+    config = {
+        key: 'waterAnim',
+        frames: scene.anims.generateFrameNumbers('water', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 4,
         repeat: -1
     };
     scene.anims.create(config);

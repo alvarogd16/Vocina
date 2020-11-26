@@ -23,6 +23,10 @@ let stateConfig = {
 						// Activate the box you're in
 						this.sceneDown.entitiesObject[this.moveOption].activate();
 					break;
+
+					case "temp":
+						this.sceneDown.fridge.read = this.sublevelObjetive[1];
+					break;
 				}
 
 				this.next();
@@ -150,7 +154,6 @@ let stateConfig = {
 						});
 						break;
 					case "put":
-					case "temp":
 					case "box":
 						this.next();
 				}

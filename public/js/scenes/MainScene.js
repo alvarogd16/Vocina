@@ -10,7 +10,7 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false
-        this.level = 1; //Each level has a .json file
+        this.level = 4; //Each level has a .json file
         this.maxLevels = 4;
 
         this.textWidth = 1458; // In pixels
@@ -118,26 +118,39 @@ class MainScene extends Phaser.Scene {
                 spacing: 0
             }
         });
-        
+
         this.load.spritesheet({
             key: 'espuma',
             url: "assets/bathroom/espumaSpriteSheet.png",
             frameConfig: {
                 frameWidth: 354,
-                frameHeight: 234    ,
+                frameHeight: 234,
                 startFrame: 0,
                 endFrame: 2,
                 margin: 0,
                 spacing: 0
             }
         });
-        
+
         this.load.spritesheet({
             key: 'water',
             url: "assets/bathroom/waterSpriteSheet.png",
             frameConfig: {
                 frameWidth: 38,
                 frameHeight: 31,
+                startFrame: 0,
+                endFrame: 2,
+                margin: 0,
+                spacing: 0
+            }
+        });
+
+        this.load.spritesheet({
+            key: 'endingSpriteSheet',
+            url: "assets/maps/garageSpriteSheet.jpg",
+            frameConfig: {
+                frameWidth: 1125,
+                frameHeight: 1125,
                 startFrame: 0,
                 endFrame: 2,
                 margin: 0,
@@ -192,6 +205,11 @@ class MainScene extends Phaser.Scene {
             'assets/sounds/zombiesSound.mp3'
         ]);
 
+        this.load.audio('endingSound', [
+            'assets/sounds/ending_music.mp3'
+        ]);
+
+
 
         /* PLUGIN LOAD */
 
@@ -202,11 +220,13 @@ class MainScene extends Phaser.Scene {
         this.load.plugin('rexmovetoplugin', path, true);
 
         this.load.plugin('rexfsmplugin', '../../lib/rexfsmplugin.min.js', true);
-
+        
         this.load.image("background", "assets/crisDialogs/BackgroundScreen.png");
 
 
         this.load.image("textImg", "assets/menu/text.png");
+        
+        this.load.image("endText", "assets/menu/end.png");
     }
 
     /**
@@ -245,6 +265,9 @@ class MainScene extends Phaser.Scene {
         this.levelsAmbience.play('loop', {
             delay: 0
         });
+
+        //Ending music
+        this.endingMusic = this.sound.add('endingSound');
 
         // Play (if level 2) zombie sounds
         if (this.level >= 2) {
@@ -314,6 +337,15 @@ class MainScene extends Phaser.Scene {
      * When the game ends
      */
     endGame() {
+        this.levelsAmbience.stop();
+        this.zombiesAmbience.stop();
+
+        this.endingMusic.play();
+ /*       
+        this.engdingAnim = new AnimatedEntity(this.sceneDown, (1125/2) * this.sceneDown.zoom, (1125/2) * this.sceneDown.zoom, this.sceneDown.zoom, 'endingSpriteSheet');
+        createAnimationsFireEnding(this.sceneDown);
+        this.engdingAnim.anims.play('garageEnding', true);
+*/
         this.scene.stop('SceneUp');
         this.scene.stop('SceneDown');
         this.cm.style.display = 'none';
@@ -321,6 +353,9 @@ class MainScene extends Phaser.Scene {
         let textZoom = widthD / this.textWidth;
         this.textImage = this.add.image(0, 0, "textImg").setOrigin(0);
         this.textImage.setScale(textZoom);
+        
+        this.endText = this.add.image(0, 400, "endText").setOrigin(0);
+        this.endText.setScale(textZoom);
     }
 
     /**

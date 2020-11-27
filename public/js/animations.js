@@ -133,3 +133,17 @@ function createAnimationsBathroom(scene) {
     scene.anims.create(config);
     
 }
+
+function createAnimationsFireEnding(scene) {
+    let config = {
+        key: 'garageEnding',
+        frames: scene.anims.generateFrameNumbers('endingSpriteSheet', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 0.5,
+        repeat: 0
+    };
+    scene.anims.create(config);
+    
+}

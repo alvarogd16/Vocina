@@ -220,12 +220,11 @@ class MainScene extends Phaser.Scene {
         this.load.plugin('rexmovetoplugin', path, true);
 
         this.load.plugin('rexfsmplugin', '../../lib/rexfsmplugin.min.js', true);
-        
+
         this.load.image("background", "assets/crisDialogs/BackgroundScreen.png");
 
-
         this.load.image("textImg", "assets/menu/text.png");
-        
+
         this.load.image("endText", "assets/menu/end.png");
     }
 
@@ -341,21 +340,37 @@ class MainScene extends Phaser.Scene {
         this.zombiesAmbience.stop();
 
         this.endingMusic.play();
- /*       
-        this.engdingAnim = new AnimatedEntity(this.sceneDown, (1125/2) * this.sceneDown.zoom, (1125/2) * this.sceneDown.zoom, this.sceneDown.zoom, 'endingSpriteSheet');
+
+        this.engdingAnim = new AnimatedEntity(this.sceneDown, (1125 / 2) * this.sceneDown.zoom, (1125 / 2) * this.sceneDown.zoom, this.sceneDown.zoom, 'endingSpriteSheet');
         createAnimationsFireEnding(this.sceneDown);
         this.engdingAnim.anims.play('garageEnding', true);
-*/
-        this.scene.stop('SceneUp');
-        this.scene.stop('SceneDown');
-        this.cm.style.display = 'none';
 
-        let textZoom = widthD / this.textWidth;
-        this.textImage = this.add.image(0, 0, "textImg").setOrigin(0);
-        this.textImage.setScale(textZoom);
-        
-        this.endText = this.add.image(0, 400, "endText").setOrigin(0);
-        this.endText.setScale(textZoom);
+        this.time.delayedCall(5000, function () {
+            // Background image
+            this.zoomBackground = this.width / 1125; //1125 is the image's width
+            this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
+
+            this.sceneDown.cameras.main.fadeOut(5000);
+            this.sceneUp.cameras.main.fadeOut(5000);
+
+            let codeArea = document.getElementById('codeArea');
+            codeArea.style.opacity = '0';
+            setTimeout(function () {
+                codeArea.parentNode.removeChild(codeArea);
+            }, 5000);
+
+            this.time.delayedCall(5000, function () {
+                this.scene.stop('SceneUp');
+                this.scene.stop('SceneDown');
+                this.cm.style.display = 'none';
+
+                //this.endScene = this.scene.get('EndScene');
+
+                this.scene.launch("EndScene");
+            }, [], this);
+
+        }, [], this);
+
     }
 
     /**

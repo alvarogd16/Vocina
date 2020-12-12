@@ -65,6 +65,10 @@ html {
 	z-index: 2;
 	/*padding: 10px;*/
 	box-sizing: border-box;
+    
+    opacity: 1;
+    -webkit-transition: opacity 5000ms linear;
+    transition: opacity 5000ms linear;
 }
 
 #gameContainer {

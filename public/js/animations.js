@@ -141,7 +141,7 @@ function createAnimationsFireEnding(scene) {
             start: 0,
             end: 2
         }),
-        frameRate: 0.5,
+        frameRate: 1.5,
         repeat: 0
     };
     scene.anims.create(config);

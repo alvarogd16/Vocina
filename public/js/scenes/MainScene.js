@@ -239,7 +239,7 @@ class MainScene extends Phaser.Scene {
 
         // Background image
         this.zoomBackground = this.width / 1125; //1125 is the image's width
-        this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
+        this.backgroundImage = this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
 
 
         // Create code editor with the config object
@@ -336,6 +336,7 @@ class MainScene extends Phaser.Scene {
      * When the game ends
      */
     endGame() {
+        
         this.levelsAmbience.stop();
         this.zombiesAmbience.stop();
 
@@ -344,28 +345,30 @@ class MainScene extends Phaser.Scene {
         this.engdingAnim = new AnimatedEntity(this.sceneDown, (1125 / 2) * this.sceneDown.zoom, (1125 / 2) * this.sceneDown.zoom, this.sceneDown.zoom, 'endingSpriteSheet');
         createAnimationsFireEnding(this.sceneDown);
         this.engdingAnim.anims.play('garageEnding', true);
+        
+        this.sceneUp.write("¡Hurraaaa, se abre la puerta del garaje!");
 
-        this.time.delayedCall(5000, function () {
+        this.time.delayedCall(3000, function () {
             // Background image
-            this.zoomBackground = this.width / 1125; //1125 is the image's width
-            this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
+            //this.zoomBackground = this.width / 1125; //1125 is the image's width
+            //this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
 
-            this.sceneDown.cameras.main.fadeOut(5000);
-            this.sceneUp.cameras.main.fadeOut(5000);
+            this.sceneUp.write("Espero que nos podamos salvar del apocalipsis...");
+            
+            this.sceneDown.cameras.main.fadeOut(6000);
+            this.sceneUp.cameras.main.fadeOut(6000);
 
             let codeArea = document.getElementById('codeArea');
             codeArea.style.opacity = '0';
             setTimeout(function () {
                 codeArea.parentNode.removeChild(codeArea);
-            }, 5000);
+            }, 6000);
 
-            this.time.delayedCall(5000, function () {
+            this.time.delayedCall(6000, function () {
                 this.scene.stop('SceneUp');
                 this.scene.stop('SceneDown');
-                this.cm.style.display = 'none';
-
-                //this.endScene = this.scene.get('EndScene');
-
+                this.cm.style.display = 'none'; 
+                
                 this.scene.launch("EndScene");
             }, [], this);
 

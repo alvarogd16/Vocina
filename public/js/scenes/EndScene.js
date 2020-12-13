@@ -13,32 +13,39 @@ class EndScene extends Phaser.Scene {
         this.heightGame = document.getElementById('principal').clientHeight;
 
         this.textWidth = 1458; // In pixels
+
     }
 
-    /**
-     * Load all assets in cache
-     */
-    preload() {
-        //this.load.image("background", "assets/crisDialogs/BackgroundScreen.png");
-    }
     /**
      * Make the scene
      */
     create() {
-        //this.zoomBackground = this.width / 1125; //1125 is the image's width
-        //this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
+        this.scene.get('MainScene').backgroundImage.destroy();
 
         this.cameras.main.setSize(this.widthGame, this.heightGame);
         this.cameras.main.setPosition(0, 0);
-        
-        this.cameras.main.fadeIn(5000);
+
+        this.cameras.main.fadeIn(4000);
 
         let textZoom = this.widthGame / this.textWidth;
         this.textImage = this.add.image(0, 0, "textImg").setOrigin(0);
         this.textImage.setScale(textZoom);
 
-        this.endText = this.add.image(0, 400, "endText").setOrigin(0);
+        this.endText = this.add.image(0, 450, "endText").setOrigin(0);
         this.endText.setScale(textZoom);
+
+        this.time.delayedCall(4000, function () {
+            this.recursiveCall(0.2); //Credits scrollin main camera
+        }, [], this);
+
     }
 
+    recursiveCall(i) {
+        this.cameras.main.setScroll(0, i);
+        if (i < 400) {
+            this.time.delayedCall(20, function () {
+                this.recursiveCall(i + 4);
+            }, [], this);
+        }
+    }
 }

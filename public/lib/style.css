@@ -67,8 +67,8 @@ html {
 	box-sizing: border-box;
     
     opacity: 1;
-    -webkit-transition: opacity 5000ms linear;
-    transition: opacity 5000ms linear;
+    -webkit-transition: opacity 6000ms linear;
+    transition: opacity 6000ms linear;
 }
 
 #gameContainer {

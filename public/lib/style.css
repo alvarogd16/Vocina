@@ -36,6 +36,26 @@ html {
     transition: opacity 4000ms linear;
 }
 
+#skip {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    margin-left: -10px;
+    transform: translate(-50%);
+
+    background-color: #0a084ec9;
+    color: #1D2683;
+    padding: 10px 20px;
+    font-family: monospace;
+    font-size: 2.5em;
+
+    text-decoration: none;
+
+    opacity: 0;
+    -webkit-transition: opacity 3000ms linear;
+    transition: opacity 3000ms linear;
+}
+
 /* .mask {
     width: 60%;
     height: 45%;

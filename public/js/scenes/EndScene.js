@@ -53,7 +53,7 @@ class EndScene extends Phaser.Scene {
                 this.cameras.main.fadeOut(7000);
             }
         } else {
-            window.location.href = "index.html";
+            window.location.href = "menu.html";
         }
     }
 }

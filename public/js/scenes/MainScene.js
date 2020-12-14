@@ -420,7 +420,7 @@ class MainScene extends Phaser.Scene {
                 delay: 0
             });
         }
-        
+
         this.time.delayedCall(1000, function () {
             this.stateMachine.sublevelId = 0;
             this.stateMachine.lastPlayerState = this.sceneDown.updatePlayerState();

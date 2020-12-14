@@ -1,35 +1,39 @@
 body {
-	margin: 0;
-	padding: 0;
-	background-color: rgb(10, 33, 53);
-	height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(10, 33, 53);
+    height: 100%;
 }
 
 html {
-	height: 100%;
+    height: 100%;
 }
 
 #principal {
-	position: relative;
-	max-width: 500px; 
-	height: 100%;
-	margin: auto;
+    position: relative;
+    max-width: 500px;
+    height: 100%;
+    margin: auto;
 }
 
-.play {
-  	position: absolute;
-  	top: 90%;
-	left: 50%;
-	margin-left: -10px;
-	transform: translate(-50%);
+#play {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    margin-left: -10px;
+    transform: translate(-50%);
 
     background-color: #0a084ec9;
     color: #1D2683;
     padding: 10px 20px;
     font-family: monospace;
-	font-size: 2.5em; 
-	
-	text-decoration: none;
+    font-size: 2.5em;
+
+    text-decoration: none;
+
+    opacity: 0;
+    -webkit-transition: opacity 4000ms linear;
+    transition: opacity 4000ms linear;
 }
 
 /* .mask {
@@ -55,47 +59,47 @@ html {
 } */
 
 #code {
-	height: 25%; 
+    height: 25%;
 }
 
 #codeArea {
-	position: absolute;
-	height: 25%;
-	width: 100%;
-	z-index: 2;
-	/*padding: 10px;*/
-	box-sizing: border-box;
-    
-    opacity: 1;
-    -webkit-transition: opacity 6000ms linear;
-    transition: opacity 6000ms linear;
+    position: absolute;
+    height: 25%;
+    width: 100%;
+    z-index: 2;
+    /*padding: 10px;*/
+    box-sizing: border-box;
+
+    opacity: 0;
+    -webkit-transition: opacity 3000ms linear;
+    transition: opacity 3000ms linear;
 }
 
 #gameContainer {
-	height: 100%;
-	width: 100%;
-	z-index: 1;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
 }
 
 .but {
-	position: absolute;
-	right: 40px;
-	bottom: 20px;
-	width: 80px;
-	height: 30px;
-	border: none;
-	border-radius: 4px;
-    
+    position: absolute;
+    right: 40px;
+    bottom: 20px;
+    width: 80px;
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+
     z-index: 2;
 
-	font-family: monospace;
-	font-size: 17px;
+    font-family: monospace;
+    font-size: 17px;
 
-	background-color: #200808e1;
+    background-color: #200808e1;
     color: rgb(255, 255, 255);
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .but:active {
-	transform: translateY(4px);
+    transform: translateY(4px);
 }

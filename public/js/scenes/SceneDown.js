@@ -46,6 +46,8 @@ class SceneDown extends Phaser.Scene {
      * Make the scene 
      */
     create() {
+        this.cameras.main.fadeIn(3000);
+        
         this.mainScene = this.scene.get('MainScene');
         this.sceneUp = this.scene.get('SceneUp');
         this.debugMode = this.mainScene.debugMode;
@@ -130,7 +132,6 @@ class SceneDown extends Phaser.Scene {
 
         this.cameras.main.setSize(this.mapNewSize, this.mapNewSize);
         this.cameras.main.setPosition(this.mapX, this.mapY);
-
 
         /* PHYSICS, PLAYER AND ILLUMINATION */
 

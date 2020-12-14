@@ -10,7 +10,7 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false
-        this.level = 4; //Each level has a .json file
+        this.level = 1; //Each level has a .json file
         this.maxLevels = 4;
 
         this.textWidth = 1458; // In pixels
@@ -226,6 +226,8 @@ class MainScene extends Phaser.Scene {
         this.load.image("textImg", "assets/menu/text.png");
 
         this.load.image("endText", "assets/menu/end.png");
+
+        this.load.image("creditsText", "assets/menu/creditos.png");
     }
 
     /**
@@ -269,21 +271,15 @@ class MainScene extends Phaser.Scene {
         this.endingMusic = this.sound.add('endingSound');
 
         // Play (if level 2) zombie sounds
-        if (this.level >= 2) {
-            let loopMarkerZombies = {
-                name: 'loopZombies',
-                config: {
-                    loop: true,
-                    volume: 0.2
-                }
-            };
-            this.zombiesAmbience = this.sound.add('zombiesSound');
-            this.zombiesAmbience.addMarker(loopMarkerZombies);
-
-            this.zombiesAmbience.play('loopZombies', {
-                delay: 0
-            });
-        }
+        let loopMarkerZombies = {
+            name: 'loopZombies',
+            config: {
+                loop: true,
+                volume: 0.2
+            }
+        };
+        this.zombiesAmbience = this.sound.add('zombiesSound');
+        this.zombiesAmbience.addMarker(loopMarkerZombies);
 
         // Prepare the FSM
         this.stateMachine = this.plugins.get('rexfsmplugin').add(stateConfig);
@@ -296,6 +292,7 @@ class MainScene extends Phaser.Scene {
         this.scene.launch("SceneDown", this.level); //Start with Level1
         this.scene.launch("SceneUp", this.level);
 
+        this.startSceneTransition();
 
         // Calculate editor's height
         this.cm.style.height = this.sceneUp.editorHeight + "px";
@@ -310,6 +307,21 @@ class MainScene extends Phaser.Scene {
             this.stateMachine.lastPlayerState = this.sceneDown.updatePlayerState();
             this.stateMachine.goto("boot");
         }, [], this);
+    }
+
+    startSceneTransition() {
+        this.cameras.main.fadeIn(3000);
+
+        let codeArea = document.getElementById('codeArea');
+        codeArea.style.opacity = '1';
+    }
+
+    endSceneTransition() {
+        this.sceneDown.cameras.main.fadeOut(3000);
+        this.sceneUp.cameras.main.fadeOut(3000);
+
+        let codeArea = document.getElementById('codeArea');
+        codeArea.style.opacity = '0';
     }
 
     editorClean() {
@@ -328,7 +340,11 @@ class MainScene extends Phaser.Scene {
             this.endGame();
             console.log("Se acabó")
         } else {
-            this.closeScenes();
+            this.endSceneTransition();
+            this.time.delayedCall(3000, function () {
+                this.closeScenes();
+            }, [], this)
+
         }
     }
 
@@ -336,7 +352,7 @@ class MainScene extends Phaser.Scene {
      * When the game ends
      */
     endGame() {
-        
+
         this.levelsAmbience.stop();
         this.zombiesAmbience.stop();
 
@@ -345,7 +361,7 @@ class MainScene extends Phaser.Scene {
         this.engdingAnim = new AnimatedEntity(this.sceneDown, (1125 / 2) * this.sceneDown.zoom, (1125 / 2) * this.sceneDown.zoom, this.sceneDown.zoom, 'endingSpriteSheet');
         createAnimationsFireEnding(this.sceneDown);
         this.engdingAnim.anims.play('garageEnding', true);
-        
+
         this.sceneUp.write("¡Hurraaaa, se abre la puerta del garaje!");
 
         this.time.delayedCall(3000, function () {
@@ -354,12 +370,14 @@ class MainScene extends Phaser.Scene {
             //this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
 
             this.sceneUp.write("Espero que nos podamos salvar del apocalipsis...");
-            
+
             this.sceneDown.cameras.main.fadeOut(6000);
             this.sceneUp.cameras.main.fadeOut(6000);
 
             let codeArea = document.getElementById('codeArea');
             codeArea.style.opacity = '0';
+            codeArea.style.setProperty("-webkit-transition", "opacity 6000ms linear");
+            codeArea.style.setProperty("transition", "opacity 6000ms linear");
             setTimeout(function () {
                 codeArea.parentNode.removeChild(codeArea);
             }, 6000);
@@ -367,8 +385,8 @@ class MainScene extends Phaser.Scene {
             this.time.delayedCall(6000, function () {
                 this.scene.stop('SceneUp');
                 this.scene.stop('SceneDown');
-                this.cm.style.display = 'none'; 
-                
+                this.cm.style.display = 'none';
+
                 this.scene.launch("EndScene");
             }, [], this);
 
@@ -383,16 +401,26 @@ class MainScene extends Phaser.Scene {
         this.scene.stop('SceneUp');
         this.scene.stop('SceneDown');
         //this.cm.style.display = 'none';
+
         this.launchScenes();
+
     }
 
     /**
      * Resume all and adapt de screen for the transition of scenes
      */
     launchScenes() {
+
         this.scene.launch("SceneDown", this.level);
         this.scene.launch("SceneUp", this.level);
 
+        this.startSceneTransition();
+        if (this.level >= 2) {
+            this.zombiesAmbience.play('loopZombies', {
+                delay: 0
+            });
+        }
+        
         this.time.delayedCall(1000, function () {
             this.stateMachine.sublevelId = 0;
             this.stateMachine.lastPlayerState = this.sceneDown.updatePlayerState();

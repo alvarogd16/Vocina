@@ -93,6 +93,8 @@ class SceneUp extends Phaser.Scene {
      * Make the scene
      */
     create() {
+        this.cameras.main.fadeIn(3000);
+        
         this.dialogPlayer = new AnimatedEntity(this, this.talkSpriteWidth/2, this.sceneYstart+this.sceneHeight/2, this.zoomToAdapt, 'talkSprite');
         
         createAnimationsSceneUp(this);

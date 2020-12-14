@@ -34,18 +34,26 @@ class EndScene extends Phaser.Scene {
         this.endText = this.add.image(0, 450, "endText").setOrigin(0);
         this.endText.setScale(textZoom);
 
+        this.creditsText = this.add.image(0, this.heightGame, "creditsText").setOrigin(0);
+        this.creditsText.setScale(textZoom);
+
         this.time.delayedCall(4000, function () {
-            this.recursiveCall(0.2); //Credits scrollin main camera
+            this.recursiveCall(0); //Credits scrollin main camera
         }, [], this);
 
     }
 
     recursiveCall(i) {
         this.cameras.main.setScroll(0, i);
-        if (i < 400) {
-            this.time.delayedCall(20, function () {
+        if (i < 2100) {
+            this.time.delayedCall(40, function () {
                 this.recursiveCall(i + 4);
             }, [], this);
+            if (i == 1400) {
+                this.cameras.main.fadeOut(7000);
+            }
+        } else {
+            window.location.href = "index.html";
         }
     }
 }

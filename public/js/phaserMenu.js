@@ -13,7 +13,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('menuTheme', [
             'assets/sounds/menuTheme.mp3'
         ])
-        
+
         this.load.audio('fireCrackling', [
             'assets/sounds/fireCrackling.mp3'
         ])
@@ -40,13 +40,18 @@ class Menu extends Phaser.Scene {
 
     create() {
         console.log("Creating menu");
-        
+
         // Set background color
         this.cameras.main.backgroundColor.setTo(0, 0, 0); //same that css
 
+        //Fade in menu
+        this.cameras.main.fadeIn(4000);
+        let playButton = document.getElementById('play');
+        playButton.style.opacity = '1';
+
         // Add images to the screen
         this.fire = new Fire(this, widthD / 2, heightD / 2);
-        
+
         this.fire.anims.play("fireBurning", true);
 
         //this.add.image(0, 0, "maskImg").setOrigin(0);
@@ -54,7 +59,7 @@ class Menu extends Phaser.Scene {
         let textZoom = widthD / this.textWidth;
         this.textImage = this.add.image(0, 0, "textImg").setOrigin(0);
         this.textImage.setScale(textZoom);
-        
+
         //Play menu theme
         var loopMarkerMenu = {
             name: 'loopMenu',
@@ -62,7 +67,7 @@ class Menu extends Phaser.Scene {
                 loop: true
             }
         };
-        
+
         //Play fire sound
         var loopMarkerFire = {
             name: 'loopFire',

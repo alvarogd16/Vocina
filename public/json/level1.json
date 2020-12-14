@@ -17,7 +17,7 @@
             "type": "move",
             "objetives": [[2,8]],
             "sentences": [
-                "Tienes que venira a ayudarme",
+                "Tienes que venir a ayudarme",
                 "Vas a ir pasando por la casa evitando a los zombies",
                 "Te voy a enseñar a moverte",
                 "Escribe andy.moverArriba(1) para dar un paso arriba"

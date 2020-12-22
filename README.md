@@ -54,15 +54,16 @@ Ahora ya puedes disfrutar de él 😄
 
 ## Patrocinadores
 
-<img src="https://github.com/SmartOpenLab/Escudo-SmartOpenLab/blob/master/to%20use%20(final_exports)/logo_y_letras_fondo_transparente.png"
-     alt="SOL"
-     height="30%"
-     width="30%" />
-<img src="https://www.unex.es/conoce-la-uex/centros/plasencia/temporal/especialista-universitario-en-patologia-ungueal/Logo%20UEx.jpg"
-     alt="UEX"
-     height="20%"
-     width="17%" />
 <img src="https://www.convocatoria.fecyt.es/Publico/Logotipos/__Recursos/ministerio-fecyt-impreso_JPG.jpg"
      alt="FECYT"
-     height="50%"
-     width="40%" />
+     height="70%"
+     width="70%" />
+<img src="https://github.com/SmartOpenLab/Escudo-SmartOpenLab/blob/master/to%20use%20(final_exports)/logo_y_letras_fondo_transparente.png"
+     alt="SOL"
+     height="15%"
+     width="15%" />
+<img src="https://www.unex.es/conoce-la-uex/centros/plasencia/temporal/especialista-universitario-en-patologia-ungueal/Logo%20UEx.jpg"
+     alt="UEX"
+     height="7%"
+     width="7%" />
+

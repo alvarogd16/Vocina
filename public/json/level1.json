@@ -59,10 +59,10 @@
         },
         {
             "type": "item",
-            "objetives": [[8,4], "button"],
+            "objetives": [[6,7], "button"],
             "sentences": [
-                "Ahora tienes que hacer lo mismo con el botón",
-                "Primero recógelo"
+                "Ya tienes el LED colocado",
+                "Ahora tienes que recoger el botón"
             ]
         },
         {
@@ -88,13 +88,13 @@
             "objetives": [[9,2]],
             "sentences": [
                 "Muy bien andy, ya puedes pasar a la siguiente habitación!",
-                "Avanza hasta la puerta"
+                "Avanza hasta la casilla de la puerta"
             ]
         }
     ],
     "items": [
         {"name": "led", "position": [2,7]},
-        {"name": "button", "position": [8,4]}
+        {"name": "button", "position": [6,7]}
     ],
     "itemObject": [
         {"name": "lantern"}

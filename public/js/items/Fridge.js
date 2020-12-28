@@ -15,7 +15,6 @@ class Fridge extends ItemObject {
         this.actualTemp = 20;   // It modify with the encoder
         this.tempAfter = -20;   // Temp necessary to freeze zombies
 
-        // TO CHECK
         socket.on('encoder', () => {
 		    console.log("signal")
             if(this.items["sensor"]){
@@ -34,21 +33,20 @@ class Fridge extends ItemObject {
             this.scene.console.escribir(this.actualTemp);
             this.scene.stateMachine.next();
             
-            //return this.actualTemp;
         } else
             console.log("ERROR NEVERA -- No se encuentran instalados todos los items necesarios");
     }
 
-    readTrueSensor() {
-        raspiRead("TEMPS")
-            .then(value => {
-                return value;
-            })
-            .catch(() => {
-                console.log("Lectura fallida");
-                return 20;
-            })
-    }
+    // readTrueSensor() {
+    //     raspiRead("TEMPS")
+    //         .then(value => {
+    //             return value;
+    //         })
+    //         .catch(() => {
+    //             console.log("Lectura fallida");
+    //             return 20;
+    //         })
+    // }
 
     checkTemp() {
         return this.actualTemp <= this.tempAfter;

@@ -195,12 +195,8 @@ class SceneDown extends Phaser.Scene {
 
                     break;
                 case "box":
-                    this.box1 = new Box(this, true);
-                    this.box2 = new Box(this, false);
-                    this.box3 = new Box(this, false);
-                    this.entitiesObject.push(this.box1);
-                    this.entitiesObject.push(this.box2);
-                    this.entitiesObject.push(this.box3);
+                    this.box = new Box(this);
+                    this.entitiesObject.push(this.box);
                     break;
             }
         });
@@ -311,31 +307,18 @@ class SceneDown extends Phaser.Scene {
         let linterna = this.lantern;
         let nevera = this.fridge;
         let grifo = this.sink;
-        let caja1 = this.box1;
-        let caja2 = this.box2;
-        let caja3 = this.box3;
+        let caja = this.box;
         let consola = this.console;
 
         let zombie = this.zombie;
 
-        /* NUEVO PARSER */
-        // this.entities = {
-        //     andy: this.andy,
-        //     consola: this.console,
-        //     ...this.entitiesObject,
-        // };
-
-        //this.ast = lex(editorContent)
-        //console.log(this.ast)
-
-        // TEST
         let mainScene = this.mainScene;
 
-        let args = 'andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie, consola';
+        let args = 'andy, linterna, nevera, grifo, caja, mainScene, zombie, consola';
 
         try {
             let executeMe = this.createFunction(args, editorContent);
-            executeMe(andy, linterna, nevera, grifo, caja1, caja2, caja3, mainScene, zombie, consola);
+            executeMe(andy, linterna, nevera, grifo, caja, mainScene, zombie, consola);
             if (andy.collision){
                 this.stateMachine.codeErrors = true;
                 andy.collision = false;
@@ -343,12 +326,12 @@ class SceneDown extends Phaser.Scene {
             else {
                 this.stateMachine.codeErrors = false;
             }
-            console.log('scene down')
+            //console.log('scene down')
         } catch (e) {
             console.error(e);
             this.stateMachine.codeErrors = true;
         }
-        console.log(this.stateMachine.codeErrors);
+        //console.log(this.stateMachine.codeErrors);
 
         let sublevelType = this.getSublevelType(this.stateMachine.sublevelId);
 
@@ -356,7 +339,7 @@ class SceneDown extends Phaser.Scene {
 
         //console.log(noMoveInMoveSublevel);
 
-        console.log("Check: ", this.checkCode);
+        //console.log("Check: ", this.checkCode);
         if (this.checkCode) {
             console.log('next check');
             this.stateMachine.next();

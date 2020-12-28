@@ -48,24 +48,18 @@
         },
         {
             "type": "temp",
-            "objetives": [0, false],
+            "objetives": [0, true],
             "sentences": [
                 "Ahora puedes leer la temperatura",
-                "Para ello, primero deberás saber lo que es una variable",
-                "Una variable es una especie de caja virtual donde podrás guardar datos",
-                "Escribe let temperatura = nevera.leerSensor() en la consola",
-                "Con nevera.leerSensor() puedes obtener la temperatura",
-                "Esto te permitirá guardarla en la variable llamada temperatura",
-                "Para mostrar su valor escribe en la siguiente linea consola.escribir(temperatura)",
-                "Ahora prueba a darle al boton RUN"
+		        "Prueba a usar nevera.leerSensor()"
             ]
         },
         {
             "type": "item",
             "objetives": [[1,5], "encoder"],
             "sentences": [
-                "Parece que el valor de la temperatura es 20 grados",
-                "¡Hace demasiado calor para congelar a un zombie",
+                "Muy bien Andy, estás hecho un manitas",
+                "¡Hace demasiado calor para congelar a un zombie!",
                 "Ve a buscar un encoder por la habitación",
                 "Te servirá para bajar la temperatura"
             ]
@@ -87,11 +81,9 @@
         },
         {
             "type": "temp",
-            "objetives": [0, true],
+            "objetives": [0, false],
             "sentences": [
                 "Lee de nuevo la temperatura",
-                "Escribe let temperatura = nevera.leerSensor()",
-                "Y después consola.escribir(temperatura)",
                 "Comprueba que esté por debajo de los -20 grados centígrados"
             ]
         },

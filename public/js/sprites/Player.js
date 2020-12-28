@@ -67,7 +67,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         /* Load moveTo plugin from SceneDown */
         this.moveTo = this.scene.plugins.get('rexmovetoplugin').add(this, {
-            speed: 60 //speed : Moving speed, pixels in second.
+            speed: 120 //speed : Moving speed, pixels in second.
             //rotateToTarget : Set true to change angle towards path.
         })
         console.log(' -- Loaded moveTo plugin');
@@ -226,7 +226,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
         } else {
-            console.log("Este valor no vale perro");
+            console.log("Valor incorrecto");
             numberOfMovs = 0; //Provisional
         }
 

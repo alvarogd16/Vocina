@@ -1,57 +1,62 @@
 {
-        "name": "Garaje",
-        "map": ["###### . #",
-                "###      #",
-                "#        #",
-                "#   ##  ##",
-                "#   ##  ##",
-                "#   ##   #",
-                "#   ##   #",
-                "##  ##   #",
-                "##      ##",
-                "#  xxxx ##"],
-        "position": [7,0],
-        "rotation": "down",
-        "sublevels": [
-            {
-                "type": "move",
-                "objetives": [[2, 9]],
-                "sentences": [
-                    "Al fin podemos hablar en persona andy",
-                    "Ya sólo queda una tarea que hacer para poder salir de aquí",
-                    "Hay 3 cajas (caja1, caja2 y caja3)",
-                    "Sólo en una de ellas se encuentra la radio",
-                    "Cada caja tiene 1000 posibles números (Combinaciones)",
-                    "y sólo uno de ellos es correcto...",
-                    "Parece que probando uno a uno no terminarás ni en 13 años",
-                    "Para resolverlo, te enseñaré lo que es un bucle:",
-                    "Es algo que se repite el numero de veces que quieras con una condición",
-                    "Puedes decirle lo que se hace en cada repetición del bucle",
-                    "Acercate a mi y te explicaré más"
-                ]
-            },
-            {
-                "type": "move",
-                "objetives": [[1, 3], [7,4], [8, 7]],
-                "sentences": [
-                    "Tienes que elegir una caja e ir la casila al lado de ella",
-                    "¿Ves las cajas rojas?",
-                    "Muevete a una de ellas"
-                ]
-            },
-            {
-                "type": "box",
-                "objetives": [[]],
-                "sentences": [
-                    "Para probar las 1000 combinaciones escribirás los siguiente:",
-                    "for(let i = 0; i < 1000; i++){ Aquí va lo que se hace en cada repetición}",
-                    "Por ejemplo, para probar todos los números de la caja1...",
-                    "Tienes que escribir caja1.probar(i) en cada repetición",
-                    "i es una variable que guarda el número de cada repetición",
-                    "Adelante, ya deberías poder probar cada caja"
-                ]
-            }
-        ],
+    "name": "Garaje",
+    "map": ["###### . #",
+            "###      #",
+            "#        #",
+            "#   ##  ##",
+            "#   ##  ##",
+            "#   ##   #",
+            "#   ##   #",
+            "##  ##   #",
+            "##      ##",
+            "## xxxx ##"],
+    "position": [7,0],
+    "rotation": "down",
+    "sublevels": [
+        {
+            "type": "move",
+            "objetives": [[2, 9]],
+            "sentences": [
+                "Al fin podemos hablar en persona andy",
+                "Ya sólo queda una tarea que hacer para poder salir de aquí",
+                "En la caja roja arriba a la izquierda creo que hay una radio",
+                "Cada caja tiene 1000 posibles números (Combinaciones)",
+                "y sólo uno de ellos es correcto...",
+                "Parece que probando uno a uno no terminarás ni en 13 años",
+                "Para resolverlo, te enseñaré lo que es un bucle",
+                "Acercate a mi y te explicaré más"
+            ]
+        },
+        {
+            "type": "move",
+            "objetives": [[1, 3]],
+            "sentences": [
+                "Hola andy, por fin juntos de nuevo",
+                "Vamos a pedir ayuda y a salir de aqui",
+                "A lo que iba un bucle es algo que se repite",
+                "Que se repite, que se repite...",
+                "Bueno creo que lo pillas",
+                "En programacion usamos los bucles para automatizar tareas pesadas",
+                "Ve a la caja arriba a la izquierda y te indico como abrirla"
+            ]
+        },
+        {
+            "type": "box",
+            "objetives": [[]],
+            "sentences": [
+                "Esta caja tiene como contraseña un numero del 0 al 999",
+                "Nosotros usaremos esto",
+                "for(let i = 0; i < 1000; i++){ Aquí va lo que se hace en cada repetición}",
+                "El for indica que es un bucle",
+                "El let i = 0 indica que empieza en el 0 la cuenta",
+                "i < 1000 indica que se seguira ejecutando hasta que la i valga menos que 1000",
+                "i++ indica que va incrementando de uno en uno",
+                "Para probar una las combinaciones de la caja...",
+                "Escribirias caja.probar(numero) dentro del bucle donde 'numero' es el numero que quieras",
+                "Prueba abrir la caja escribiendo caja.probar(i), asi se probaran todas las combinaciones"
+            ]
+        }
+    ],
     "items": [
     ],
     "itemObject": [

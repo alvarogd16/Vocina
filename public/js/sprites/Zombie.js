@@ -71,7 +71,44 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
      */
     setZombiePosition(xPos, yPos) {
 		[this.x, this.y] = this.scene.matrixToCoor({x: xPos, y: yPos});
-    }
+	}
+	    
+    cerca() {
+        let xAux, yAux;
+		[xAux, yAux] = this.scene.matrixToCoor({x: 2, y: 2});
+		console.log("Comprobando...");
+
+		this.near = this.x >= xAux;
+
+		if(this.near && this.scene.sink.checkSink()) {
+			this.dead = true;
+			this.canMove = false;
+
+			this.deadAnimation();
+		}
+
+		return this.near;
+	}
+
+	resetZombie() {
+		this.arrive = false;
+		this.dead = false;
+		this.animation = false;
+		this.near = false;
+		this.setZombiePosition(0, 2);
+        this.setVisible(false);
+	}
+
+	deadAnimation() {
+		if(this.near){
+			this.dead = true;
+			this.canMove = false;
+
+			this.animation = true;
+			[this.targetAux.x, this.targetAux.y] = this.scene.matrixToCoor({x: 2, y: 9});
+			this.scene.physics.moveToObject(this, this.targetAux, 60);
+		}
+	}
 
 	preUpdate(time, delta) {
 		super.preUpdate(time, delta);
@@ -93,28 +130,5 @@ class Zombie extends Phaser.Physics.Arcade.Sprite {
 			this.scene.stateMachine.next();
 			this.animation = false
 		}
-	}
-    
-    cerca() {
-        let xAux, yAux;
-		[xAux, yAux] = this.scene.matrixToCoor({x: 2, y: 2});
-		console.log("Comprobando...");
-
-		let cerca = this.x >= xAux;
-
-		if(cerca) {
-			this.dead = true;
-			this.canMove = false;
-
-			this.deadAnimation();
-		}
-
-		return cerca;
-	}
-
-	deadAnimation() {
-		this.animation = true;
-		[this.targetAux.x, this.targetAux.y] = this.scene.matrixToCoor({x: 2, y: 9});
-		this.scene.physics.moveToObject(this, this.targetAux, 60);
 	}
 }

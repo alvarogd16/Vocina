@@ -47,7 +47,7 @@ let stateConfig = {
 
 				switch(this.sublevelType){
 					case "box":
-						this.sceneDown.flask.updateCode("for(let i = 0; i < 1000; i++) {\n//Aqui escribes lo que quieras que se repita\n}");
+						this.sceneDown.flask.updateCode("for(let i = ; i < ; i++) {\n//Aqui escribes lo que quieras que se repita\n}");
 					break;
 				}
 
@@ -62,8 +62,6 @@ let stateConfig = {
 						break;
 					case "temp":
 						let fridge = this.sceneDown.entitiesObject[this.sublevelObjetive[0]];
-						//fridge.readTrueSensor();
-						//setTimeout(fridge.readTrueSensor, 2000);
 						break;
 				}
 			}
@@ -93,7 +91,6 @@ let stateConfig = {
 				switch(this.sublevelType){
 					case "temp":
 						let fridge = this.sceneDown.entitiesObject[this.sublevelObjetive[0]];
-						//fridge.readTrueSensor();
 				}
 			}
 		},
@@ -139,7 +136,6 @@ let stateConfig = {
 					case "lightOn":
 						console.log("Luces encendidass");
 
-						// TO CHECK
 						//Only need one time pulsed
 						let buttonPulsed = false;
 
@@ -176,9 +172,6 @@ let stateConfig = {
 
 					return 'boot';
 				} else {
-					// Fail message depends of tipe of sublevel
-					// TODO
-
 					//Change to the last player state
 					console.log(this.lastPlayerState);
 					this.sceneDown.setPlayerState(this.lastPlayerState, this.sublevelObjetive[1]);
@@ -188,7 +181,6 @@ let stateConfig = {
 			},
 			enter: function () {
 				console.log("-- Check " + this.sublevelType + " sublevel");
-				// console.log(this.sublevelComplete);
 
 				this.sublevelComplete = false;
 
@@ -240,7 +232,7 @@ let stateConfig = {
 							console.log("Sublevel complete");
 							this.sublevelComplete = true;
 						} else 
-							this.sceneUp.write("Prueba"); // TO CHANGE
+							this.sceneUp.write("Prueba a colocar de nuevo el item");
 					break;
 
 					case "temp":
@@ -251,7 +243,7 @@ let stateConfig = {
 						this.sublevelComplete = true;
 
 						// After encoder instalation
-						if(this.sublevelObjetive[1]){
+						if(!this.sublevelObjetive[1]){
 							if(itemObjectTemp.checkTemp()){
 								console.log("Sublevel complete");
 							} else {
@@ -263,10 +255,11 @@ let stateConfig = {
 					break;
 
 					case "trap":
-						if(this.sceneDown.zombie.dead){
+						if(this.sceneDown.zombie.dead && this.sceneDown.sink.checkSink())
 							this.sublevelComplete = true;
-						} else {
+						else {
 							this.sceneUp.write("Ohh noo, el zombie te he comido, vuelve a intentarlo");
+							this.sceneDown.zombie.resetZombie();
 						}
 					
 					break;
@@ -277,15 +270,14 @@ let stateConfig = {
 						// the index depends of the position in the map
 						let box = this.sceneDown.entitiesObject[this.moveOption];
 
-						this.sublevelComplete = true;
-
 						if(box.open){
+							this.sublevelComplete = true;
 							this.sceneUp.write("Has abierto la cajaaa");
 							console.log("Todo ok");
 							box.openSound();
 						} else {
+							this.sceneUp.write("Ohh noo, el código es incorrecto");
 							box.closeSound();
-							this.sublevelId = 0;
 						}
 					break;
 

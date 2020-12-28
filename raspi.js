@@ -2,7 +2,6 @@ const isPi = require('detect-rpi');
 
 let valLED = 0;     //LED
 let valBUT = 0;     //Button
-let valTEMPS = 0;   //Temperature sensor
 let encCont = 0;    //Encoder
 let encAux;
 
@@ -27,15 +26,8 @@ const setupRaspi = (io) => {
         const ENC_A = new Gpio(pinEncA, 'in', 'both');
         const ENC_B = new Gpio(pinEncB, 'in', 'both');
 
-        //TODO AND TO INSTALL
         SENSOR = require('node-dht-sensor');
 
-        io.on("sensor", (socket) => {
-            console.log("Sensor");
-            //io.emit("readSensor", readSensor());
-        })
-
-        //END TODO
 
         //Button funcionality
         BUTR.watch(function (err, value){
@@ -45,7 +37,7 @@ const setupRaspi = (io) => {
             }
             io.emit('button');
 	        console.log("boton");
-            valBUT = !valBUT;   //When push the button change valBUT
+            valBUT = !valBUT;   // When push the button, change valBUT
         });
 
         //Encoder funcionality
@@ -78,30 +70,17 @@ const setupRaspi = (io) => {
             process.exit();
         }
 
-        process.on('SIGINT', unexportOnClose);  //When press ctrl+c
+        process.on('SIGINT', unexportOnClose);  // When press ctrl+c
     }
-}
-
-function readSensor() {
-        SENSOR.read(typeTEMPS, pinTEMPS, (err, temperature, humidity) => {
-            if(!err)
-                valTEMPS = temperature;
-
-		console.log("Read value...", valTEMPS);
-            });
-
-	return valTEMPS;
 }
 
 /*
     If raspi is connect turn on LED 3 sec
 */
 const raspiConnect = () => {
-    if(isPi()) {
-        //LEDR.writeSync(1);
-        //setTimeout(() => LEDR.writeSync(0), 3000);
+    if(isPi())
         console.log("Raspi connect");
-    } else
+    else
         console.log("Raspi is NOT connect");
 }
 
@@ -111,17 +90,36 @@ const raspiWrite = (component, value) => {
         isPi() ? LEDR.writeSync(value) : valLED = value;
 };
 
-const raspiRead = (component) => {
+const raspiRead = (component, res) => {
+	let data;
+
     if(component === 'LED')
-        return isPi() ? LEDR.readSync() : valLED;
+        data = isPi() ? LEDR.readSync() : valLED;
     else if (component === 'BUT')
-        return valBUT;
-    else if (component === 'TEMPS')
-        return isPi() ? readSensor() : -30;
+        data = valBUT;
+    else if (component === 'TEMPS'){
+        if(isPi()){
+            SENSOR.read(typeTEMPS, pinTEMPS, (err, temp, hum) => {
+                if(!err){
+                    console.log(temp);
+                    res.json(temp);
+                } else {
+                    console.log(err);
+                    res.json(20);
+                }
+            })
+            return;
+
+        } else
+                data = -30;
+    }
     else if (component === 'ENC')
-        return encCont;
+        data = encCont;
     else if(component === "CONNECTED")
-        return isPi() ? true : false;
+        data = isPi() ? true : false;
+
+
+	res.json(data);
 };
 
 module.exports = {setupRaspi, raspiWrite, raspiRead, raspiConnect};

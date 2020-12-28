@@ -17,9 +17,6 @@ let users = []
 io.on('connection', (socket) => {
     io.emit('hola', "HOLAAA");
 
-    // users.push(socket.io);
-    // console.log(socket.id + " is connected");
-
     socket.on('disconnect', () => {
         console.log('user disconnected');
     })
@@ -30,7 +27,6 @@ io.on('connection', (socket) => {
 // Serve raspi data to the user
 app.get('/raspi/:component', (req, res) => {
     let valor = raspi.raspiRead(req.params.component);
-    res.json(valor);
 });
 
 // Receive data from the user
@@ -43,5 +39,3 @@ http.listen(port, () => {
     console.log(`Server listen on port ${port}`);
     raspi.raspiConnect();
 });
-
-//app.get('/game', (req, res) => res.sendFile(__dirname + '/public/game.html'));

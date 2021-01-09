@@ -40,11 +40,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //Set collisions activation of the sprite
         this.body.setCollideWorldBounds(true);
 
-        //On world bounds 
-        this.body.onWorldBounds = true;
-        this.scene.physics.world.on('worldbounds', this.onWorldBounds, this);
-        this.collidingWorldBounds = false;
-
         //the hitbox is (height=tileHeight, width=tileWidth, x=andyX, y=andyY) (andyX & andyY both calculated in SceneDown)
         this.body.setSize(this.scene.tileSize, this.scene.tileSize);
 
@@ -59,46 +54,41 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.andyIsMoving = false;
         this.numberMov = 0;
 
+
         /* Load rotateTo plugin from SceneDown */
         this.rotateTo = this.scene.plugins.get('rexrotatetoplugin').add(this, {
             speed: 360
         });
-        console.log(' -- Loaded rotateTo plugin');
+        //console.log(' -- Loaded rotateTo plugin');
 
         /* Load moveTo plugin from SceneDown */
         this.moveTo = this.scene.plugins.get('rexmovetoplugin').add(this, {
             speed: 120 //speed : Moving speed, pixels in second.
             //rotateToTarget : Set true to change angle towards path.
         })
-        console.log(' -- Loaded moveTo plugin');
+        //console.log(' -- Loaded moveTo plugin');
 
-        let thisSprite = this;
-        this.moveTo.on('complete', function (thisSprite) {
-            thisSprite.body.reset(thisSprite.target.x, thisSprite.target.y);
-            thisSprite.stopAnimation();
+
+        //let thisSprite = this;
+        this.moveTo.on('complete', (thisSprite) => {
+            this.body.reset(this.target.x, this.target.y);
+            this.stopAnimation();
 
             //Restart the movement control
-            thisSprite.andyIsMoving = false;
+            this.andyIsMoving = false;
 
             // When the move stop
-            if (thisSprite.andyMovesQueue.length == 0 && !thisSprite.scene.stateMachine.codeErrors) {
+            if (this.andyMovesQueue.length == 0 ) { //&& !thisSprite.scene.stateMachine.codeErrors
                 console.log('next player')
-                thisSprite.scene.stateMachine.next();
-            }
+                this.scene.stateMachine.next();
+            }/*
             else if (thisSprite.andyMovesQueue.length == 0 && thisSprite.scene.stateMachine.codeErrors){
                 let lastState = thisSprite.scene.stateMachine.lastPlayerState;
                 console.log(lastState);
 				thisSprite.scene.setPlayerState(lastState, thisSprite.scene.stateMachine.sublevelObjetive[1]);
-            }
+            }*/
         });
-        console.log(' -- Built COMPLETE EVENT moveTo plugin');
-
-        // this.exposed = {
-        //     moverDerecha: this.moverDerecha,
-        //     moverIzquierda: this.moverIzquierda,
-        //     moverArriba: this.moverArriba,
-        //     moverAbajo: this.moverAbajo,
-        // };
+        //console.log(' -- Built COMPLETE EVENT moveTo plugin');
 
         /*ANIMATIONS*/
 
@@ -107,8 +97,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //Queue to stock moves
         this.andyMovesQueue = new Queue();
 
-        // this.x = x;
-        // this.y = y;
     }
 
     /*FUNCTIONS TO USE BY USER*/
@@ -157,9 +145,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         let [xOff, yOff] = OFFSETS[direction];
 
+        this.targetAux = new Phaser.Math.Vector2();
+        this.targetAux.dir = direction;
+
+        if(numberOfMovs == 0){
+            this.targetAux.x = this.x;
+            this.targetAux.y = this.y;
+            this.targetAux.dir = this.direction;
+
+            this.andyMovesQueue.enqueue(this.targetAux);
+        }
+
         for (let i = 0; i < numberOfMovs; i++) {
-            this.targetAux = new Phaser.Math.Vector2();
-            this.targetAux.dir = direction;
             if (this.andyMovesQueue.length == 0) { //If it's empty it's target it's calculated as usually
                 this.targetAux.x = this.x + xOff * this.tileSizeOfTheMovement;
                 this.targetAux.y = this.y + yOff * this.tileSizeOfTheMovement;
@@ -214,22 +211,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 //console.log(this.posMatrix[0] + "---" + this.posMatrix[1] + "---    " + this.actualPos);
                 //console.log(this.posMatrix);
 
+                // Collision with obstacle or map bounds
                 if (this.actualPos === '#' || boundCollision) {
                     numberOfMovs = i;
                     this.collision = true;
                     console.log('Player')
-                    /*
-                    if (numberOfMovs == 0)
-                        this.collisionWithoutMovement = true;
-                    */
                     break;
                 }
             }
+
         } else {
             console.log("Valor incorrecto");
-            numberOfMovs = 0; //Provisional
+            numberOfMovs = 0;
         }
 
+        //console.log("Number of movs: ", numberOfMovs)
         return numberOfMovs;
     }
 
@@ -242,7 +238,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moving(dir) {
         //Take the first target in the queue
         this.targetAux = this.andyMovesQueue.dequeue();
-        console.log("Despacito..");
+
         this.target.x = this.targetAux.x;
         this.target.y = this.targetAux.y;
 
@@ -269,8 +265,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         this.rotateTo.rotateTo(angle);
 
-        //30 means that the sprite goes as fast as 30pixels per second (Is the value of this.body.speed)
-        //this.scene.physics.moveToObject(this, this.targetAux, 60);
         this.moveTo.moveTo(this.targetAux.x, this.targetAux.y);
     }
 
@@ -354,12 +348,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.walk.stop();
     }
 
-    /**
-     * TODO
-     */
-    onWorldBounds() {
-        this.collidingWorldBounds = true;
-    }
 
     /**
      * Before scene update. All player logic

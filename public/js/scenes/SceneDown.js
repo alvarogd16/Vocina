@@ -75,13 +75,6 @@ class SceneDown extends Phaser.Scene {
 
         //Create the button to run the code
         document.getElementById("run").onclick = () => {
-            // console.log(this.sublevelId);
-            // console.log(this.sublevels);
-            // if(this.getSublevelType(this.stateMachine.sublevelId) == "trap") {
-            //     console.log("Zombie action...")
-            // 	this.zombie.setVisible(true);
-            // 	this.zombie.movingToPosition(4, 2, "right");
-            // }
 
             this.editorContent = this.flask.getCode();
             this.readWritten(this.editorContent);
@@ -99,7 +92,7 @@ class SceneDown extends Phaser.Scene {
             }
 
             //if(!this.stateMachine.codeErrors){
-            console.log('next run')
+            //console.log('next run')
             this.stateMachine.next();
             /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
                 this.disabled = true;*/
@@ -205,10 +198,10 @@ class SceneDown extends Phaser.Scene {
         // At first disallowed the editor
         this.activateEditor(false);
 
+        // To comunicate with the user. For example temperature in the bathroom
         this.console = new ConsoleInfoScene(this);
 
         createAnimationsBathroom(this);
-
     }
 
 
@@ -244,7 +237,7 @@ class SceneDown extends Phaser.Scene {
 
 
     /**
-     * Update the state object with the player
+     * Update the state object with the player new info
      */
     updatePlayerState() {
         console.log("Updating state...")
@@ -271,6 +264,7 @@ class SceneDown extends Phaser.Scene {
             this.prepareItem(itemName);
     }
 
+    // Not implemented
     drawMoveRect() {
         // TO DO
         this.tutorialSquare = this.add.rectangle(200, 200, this.tileSize * this.zoom, this.tileSize * this.zoom, 0x42ffff, 0.25);
@@ -278,6 +272,10 @@ class SceneDown extends Phaser.Scene {
         this.tutorialSquare.visible = true;
     }
 
+    /**
+     * Translate matrix coordinates to map's pixels coordinates
+     * @param {Object} matrixCoor Matrix x and y position
+     */
     matrixToCoor(matrixCoor) {
         let xyCoor = [];
         xyCoor[0] = (this.wallSize + this.tileSize / 2 + this.tileSize * matrixCoor.x) * this.zoom;
@@ -303,45 +301,42 @@ class SceneDown extends Phaser.Scene {
      * @param {string} editorContent 
      */
     readWritten(editorContent) {
-        let andy = this.andy;
-        let linterna = this.lantern;
-        let nevera = this.fridge;
-        let grifo = this.sink;
-        let caja = this.box;
-        let consola = this.console;
-
-        let zombie = this.zombie;
-
-        let mainScene = this.mainScene;
+        // Arguments to the user
+        let andy        = this.andy;
+        let linterna    = this.lantern;
+        let nevera      = this.fridge;
+        let grifo       = this.sink;
+        let caja        = this.box;
+        let consola     = this.console;
+        let zombie      = this.zombie;
+        let mainScene   = this.mainScene;
 
         let args = 'andy, linterna, nevera, grifo, caja, mainScene, zombie, consola';
 
         try {
             let executeMe = this.createFunction(args, editorContent);
             executeMe(andy, linterna, nevera, grifo, caja, mainScene, zombie, consola);
+
+            // TO CHECK collision in code errors??
+            /*
             if (andy.collision){
                 this.stateMachine.codeErrors = true;
                 andy.collision = false;
             }
             else {
                 this.stateMachine.codeErrors = false;
-            }
-            //console.log('scene down')
+            }*/
         } catch (e) {
             console.error(e);
             this.stateMachine.codeErrors = true;
         }
-        //console.log(this.stateMachine.codeErrors);
 
         let sublevelType = this.getSublevelType(this.stateMachine.sublevelId);
-
         let noMoveInMoveSublevel = (editorContent.search("mover") < 0) && (sublevelType == "move" || sublevelType == "item");
 
-        //console.log(noMoveInMoveSublevel);
 
-        //console.log("Check: ", this.checkCode);
         if (this.checkCode) {
-            console.log('next check');
+            //console.log('next check');
             this.stateMachine.next();
         }
 
@@ -356,10 +351,8 @@ class SceneDown extends Phaser.Scene {
      * When the editor is activate you can write and push the RUN button
      * @param {boolean} allowed True activate the editor
      */
-    activateEditor(allowed) { // TO CHANGE NAME activateEditor() ??
+    activateEditor(allowed) {
         document.getElementById("run").disabled = !allowed;
-        //this.editor.readOnly = !allowed; // TO CHANGE
-        // TO DO Remove or activate button animation
     }
 
 

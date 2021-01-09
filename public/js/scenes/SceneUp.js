@@ -130,7 +130,7 @@ class SceneUp extends Phaser.Scene {
             }, // callback before set-text
             setTextCallbackScope: null,
         });
-        console.log(' -- Loaded typing plugin');
+        //console.log(' -- Loaded typing plugin');
         
         //Initialize crisAlexVoice
         this.crisAlexVoice = this.sound.add('rand');

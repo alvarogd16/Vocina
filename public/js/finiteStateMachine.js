@@ -16,7 +16,7 @@ let stateConfig = {
 				this.sublevelType = this.sceneDown.getSublevelType(this.sublevelId);
 				this.sublevelObjetive = this.sceneDown.getSublevelObjetive(this.sublevelId);
 
-				console.log(this.sublevelType, this.sublevelObjetive);
+				//console.log(this.sublevelType, this.sublevelObjetive);
 
 				switch (this.sublevelType) {
 					case "box":
@@ -99,7 +99,7 @@ let stateConfig = {
 		checkCode: {
 			next: function () {
 				if (this.codeErrors) {
-                    console.log("con errores");
+                    console.log("CheckCode: con errores");
 
 					// Error message
 					this.sceneUp.write("Oh no, hay un error en el codigo, comprueba que este bien escrito")
@@ -111,7 +111,7 @@ let stateConfig = {
 
 					return 'programming';
 				} else {
-                    console.log("sin errores");
+                    console.log("CheckCode: sin errores");
 					return 'action';
 				}
 			},
@@ -173,7 +173,7 @@ let stateConfig = {
 					return 'boot';
 				} else {
 					//Change to the last player state
-					console.log(this.lastPlayerState);
+					//console.log(this.lastPlayerState);
 					this.sceneDown.setPlayerState(this.lastPlayerState, this.sublevelObjetive[1]);
 
 					return 'programming';

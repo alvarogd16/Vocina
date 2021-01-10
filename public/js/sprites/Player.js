@@ -27,9 +27,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setScale(this.andyScale);
 
         this.collision = false;
-        /*
-        this.collisionWithoutMovement = false;
-        */
         this.scene.physics.world.enable(this);
         this.scene.add.existing(this);
 
@@ -59,17 +56,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.rotateTo = this.scene.plugins.get('rexrotatetoplugin').add(this, {
             speed: 360
         });
-        //console.log(' -- Loaded rotateTo plugin');
 
         /* Load moveTo plugin from SceneDown */
         this.moveTo = this.scene.plugins.get('rexmovetoplugin').add(this, {
-            speed: 120 //speed : Moving speed, pixels in second.
-            //rotateToTarget : Set true to change angle towards path.
+            speed: 60 //speed : Moving speed, pixels in second.
         })
-        //console.log(' -- Loaded moveTo plugin');
 
 
-        //let thisSprite = this;
         this.moveTo.on('complete', (thisSprite) => {
             this.body.reset(this.target.x, this.target.y);
             this.stopAnimation();
@@ -78,17 +71,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.andyIsMoving = false;
 
             // When the move stop
-            if (this.andyMovesQueue.length == 0 ) { //&& !thisSprite.scene.stateMachine.codeErrors
+            if (this.andyMovesQueue.length == 0 ) {
                 console.log('next player')
                 this.scene.stateMachine.next();
-            }/*
-            else if (thisSprite.andyMovesQueue.length == 0 && thisSprite.scene.stateMachine.codeErrors){
-                let lastState = thisSprite.scene.stateMachine.lastPlayerState;
-                console.log(lastState);
-				thisSprite.scene.setPlayerState(lastState, thisSprite.scene.stateMachine.sublevelObjetive[1]);
-            }*/
+            }
         });
-        //console.log(' -- Built COMPLETE EVENT moveTo plugin');
 
         /*ANIMATIONS*/
 
@@ -208,9 +195,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
                 this.actualPos = this.matrix[this.posMatrix[1]][this.posMatrix[0]];
 
-                //console.log(this.posMatrix[0] + "---" + this.posMatrix[1] + "---    " + this.actualPos);
-                //console.log(this.posMatrix);
-
                 // Collision with obstacle or map bounds
                 if (this.actualPos === '#' || boundCollision) {
                     numberOfMovs = i;
@@ -225,7 +209,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             numberOfMovs = 0;
         }
 
-        //console.log("Number of movs: ", numberOfMovs)
         return numberOfMovs;
     }
 
@@ -282,8 +265,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let tileSize = this.scene.tileSize;
         this.x = (this.scene.wallSize + tileSize / 2 + tileSize * xPos) * this.scene.zoom;
         this.y = (this.scene.wallSize + tileSize / 2 + tileSize * yPos) * this.scene.zoom;
-
-        //console.log("player x y", this.x, this.y)
     }
 
     getPlayerPosition() {
@@ -375,15 +356,5 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             currentDirection = 'right';
         //account for flipped sprite
         this.animationName = 'stand-' + currentDirection;
-
-        /*if (this.body.speed <= 0 && this.collisionWithoutMovement) { //If andy tries to move towards a wall that's in (Is not going to be moving)
-            console.log("Hola");
-            this.gameOver = this.scene.sound.add('gameOver');
-            this.gameOver.play();
-
-            this.collisionWithoutMovement = false;
-
-            this.scene.stateMachine.next();
-        }*/
     }
 }

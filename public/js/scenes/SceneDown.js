@@ -91,25 +91,8 @@ class SceneDown extends Phaser.Scene {
                 this.zombie.movingToPosition(4, 2, "right");
             }
 
-            //if(!this.stateMachine.codeErrors){
-            //console.log('next run')
             this.stateMachine.next();
-            /*if (!sceneThis.mainScene.debugMode) //Only if debugMode of the mainScene is not activated
-                this.disabled = true;*/
-            //}
         };
-
-
-        /* KEYBOARD */
-
-        // To debug camera
-        // (Now NOT used)
-        this.key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR);
-        this.key6 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX);
-        this.key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
-        this.key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE);
-        this.keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
-        this.key5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FIVE);
 
 
         /* MAP AND CAMERAS*/
@@ -317,15 +300,6 @@ class SceneDown extends Phaser.Scene {
             let executeMe = this.createFunction(args, editorContent);
             executeMe(andy, linterna, nevera, grifo, caja, mainScene, zombie, consola);
 
-            // TO CHECK collision in code errors??
-            /*
-            if (andy.collision){
-                this.stateMachine.codeErrors = true;
-                andy.collision = false;
-            }
-            else {
-                this.stateMachine.codeErrors = false;
-            }*/
         } catch (e) {
             console.error(e);
             this.stateMachine.codeErrors = true;
@@ -336,7 +310,6 @@ class SceneDown extends Phaser.Scene {
 
 
         if (this.checkCode) {
-            //console.log('next check');
             this.stateMachine.next();
         }
 
@@ -370,7 +343,6 @@ class SceneDown extends Phaser.Scene {
         this.physics.add.overlap(this.andy, mapItem, function () {
             mapItem.disableBody(true, true);
             this.inventory.addItem(mapItem.name);
-            //console.log(this.inventory);
 
             this.pickUp = this.sound.add('pickUp');
             this.pickUp.play();
@@ -397,7 +369,7 @@ class SceneDown extends Phaser.Scene {
      * 
      * ¡¡¡ NO NEED NOW !!!
      */
-    searchSublevel(sublevel) {
+    /*searchSublevel(sublevel) {
         let enc = false;
         for (let i = 0;
             (i < this.sublevels.length) && !enc; i++) {
@@ -407,7 +379,7 @@ class SceneDown extends Phaser.Scene {
             }
         }
         return enc;
-    }
+    }*/
 
 
     /**
@@ -428,21 +400,6 @@ class SceneDown extends Phaser.Scene {
      * Update the scene
      */
     update() {
-        // Camera debug
-        // (Now NOT need)
-        if (this.debugMode) {
-            if (this.keyShift.isDown) {
-                if (this.key4.isDown) this.mapX--;
-                if (this.key6.isDown) this.mapX++;
-                if (this.key1.isDown) this.zoom -= 0.05;
-                if (this.key3.isDown) this.zoom += 0.05;
-                if (this.key5.isDown) this.mainScene.nextLevel();
-            }
-
-            this.cameras.main.setSize(this.size, this.widthD);
-            this.cameras.main.setPosition(this.mapX, this.mapY);
-        }
-
         if (this.trapActive) {
             if (this.zombie.arrive || this.zombie.dead) {
                 console.log("Stop ejecution");

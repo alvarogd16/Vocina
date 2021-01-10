@@ -18,7 +18,6 @@ class Box extends Phaser.Physics.Arcade.Sprite {
         if(this.activated){
             if(boxCode == this.correctCode){
                 this.open = correct = true;
-                this.scene.console.escribir(boxCode);
             }
         } else {
             console.log("Sorry but your not in the correct box");

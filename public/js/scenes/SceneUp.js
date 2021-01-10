@@ -123,7 +123,7 @@ class SceneUp extends Phaser.Scene {
         });
 
         this.typing = this.plugins.get('rextexttypingplugin').add(textGameObject, {
-            speed: 10, // typing speed in ms
+            speed: 30, // typing speed in ms
             typeMode: 0, //0|'left-to-right'|1|'right-to-left'|2|'middle-to-sides'|3|'sides-to-middle'
             setTextCallback: function (text, isLastChar, insertIdx) {
                 return text;

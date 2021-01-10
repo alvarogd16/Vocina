@@ -10,7 +10,7 @@ class MainScene extends Phaser.Scene {
 
         this.debugMode = false; //Show information and alllow you to move the camera
         this.keysForDebugAreDown = false
-        this.level = 3; //Each level has a .json file
+        this.level = 1; //Each level has a .json file
         this.maxLevels = 4;
 
         this.textWidth = 1458; // In pixels
@@ -248,8 +248,7 @@ class MainScene extends Phaser.Scene {
         this.editorElem = document.getElementById('code');
         this.flask = new CodeFlask(this.editorElem, {
             language: 'js',
-            lineNumbers: true //,
-            //defaultTheme: false
+            lineNumbers: true
         });
 
         // Play levels ambience
@@ -365,9 +364,6 @@ class MainScene extends Phaser.Scene {
         this.sceneUp.write("¡Hurraaaa, se abre la puerta del garaje!");
 
         this.time.delayedCall(3000, function () {
-            // Background image
-            //this.zoomBackground = this.width / 1125; //1125 is the image's width
-            //this.add.image(0, 0, 'background').setOrigin(0).setScale(this.zoomBackground);
 
             this.sceneUp.write("Espero que nos podamos salvar del apocalipsis...");
 

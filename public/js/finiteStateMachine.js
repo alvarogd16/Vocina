@@ -273,6 +273,7 @@ let stateConfig = {
 						if(box.open){
 							this.sublevelComplete = true;
 							this.sceneUp.write("Has abierto la cajaaa");
+							this.sceneDown.console.escribir(box.correctCode);
 							console.log("Todo ok");
 							box.openSound();
 						} else {
@@ -297,7 +298,9 @@ let stateConfig = {
 				console.log("End of level");
 
 				this.sublevelId = 0;
-				this.mainScene.nextLevel();
+				this.mainScene.time.delayedCall(2000, function () {
+					this.mainScene.nextLevel();
+				}, [], this)
 			}
 		}
 	},

@@ -6,6 +6,38 @@ Si no tienes uno de los KSD puedes construirlo tú mismo. Para ello ve a la part
 
 También puedes contribuir mejorando el código 😁
 
+# Actualización 🆕
+Se ha subido una nueva release con la nueva imagen para la Raspberry Pi.
+
+Para poder configurarla hay que seguir los siguientes pasos:
+* Descarga el fichero comprimido en la sección de Release de este repositorio.
+* Una vez descargado, descomprime el archivo.
+* Introduce la tarjeta microSD en tu ordenador y descarga el programa [Win32](https://sourceforge.net/projects/win32diskimager/)
+* Selecciona la imagen y escribelá en tu microSD con el botón _Write_
+
+Ahora tienes que configurar el wifi porque la imagen viene con el SSID y la contraseña por defecto (_raspi1_ y _es1134pm_)
+
+Para cambiar esto tendrás que editar el fichero _/etc/hostapd/hostapd.conf_ y cambiar las lineas de _ssid_ y _wpa_passphrase_ 
+con el SSID y la contraseña de cada kit.
+
+Por ejemplo para el kit con SSID _raspi02_ el fichero quedaría así:
+<pre>
+country_code=ES
+interface=wlan0
+ssid=raspi02
+hw_mode=g
+channel=7
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=es0024am
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+</pre>
+
+
 # Uso del KSD 🧟
 Para poder usar tu KSD necesitarás un dispositivo móvil o un ordenador con WiFi.
 

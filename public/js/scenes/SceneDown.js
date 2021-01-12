@@ -49,6 +49,7 @@ class SceneDown extends Phaser.Scene {
         this.cameras.main.fadeIn(3000);
         
         this.mainScene = this.scene.get('MainScene');
+        this.scene.launch("SceneUp", this.numLevel);
         this.sceneUp = this.scene.get('SceneUp');
         this.debugMode = this.mainScene.debugMode;
 

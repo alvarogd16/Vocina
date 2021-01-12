@@ -289,7 +289,6 @@ class MainScene extends Phaser.Scene {
 
         // Call the scenes
         this.scene.launch("SceneDown", this.level); //Start with Level1
-        this.scene.launch("SceneUp", this.level);
 
         this.startSceneTransition();
 

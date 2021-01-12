@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
 
 // Serve raspi data to the user
 app.get('/raspi/:component', (req, res) => {
-    let valor = raspi.raspiRead(req.params.component);
+    let valor = raspi.raspiRead(req.params.component, res);
 });
 
 // Receive data from the user

@@ -304,6 +304,7 @@ class SceneDown extends Phaser.Scene {
         } catch (e) {
             console.error(e);
             this.stateMachine.codeErrors = true;
+            this.andy.codeError = true;
         }
 
         let sublevelType = this.getSublevelType(this.stateMachine.sublevelId);

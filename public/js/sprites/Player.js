@@ -48,6 +48,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.target = new Phaser.Math.Vector2();
 
         // Boolean to control if the player cant move
+        this.codeError = false;
         this.andyIsMoving = false;
         this.numberMov = 0;
 
@@ -71,9 +72,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.andyIsMoving = false;
 
             // When the move stop
-            if (this.andyMovesQueue.length == 0 ) {
-                console.log('next player')
-                this.scene.stateMachine.next();
+            if (this.andyMovesQueue.length == 0) {
+                if(!this.codeError){
+                    console.log('next player')
+                    this.scene.stateMachine.next();
+                } else {
+                    let lastState = this.scene.stateMachine.lastPlayerState;
+                    //console.log(lastState);
+				    this.scene.setPlayerState(lastState, this.scene.stateMachine.sublevelObjetive[1]);
+                    this.codeError = false;
+                }
             }
         });
 

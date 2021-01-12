@@ -109,6 +109,8 @@ let stateConfig = {
 					// 	this.sceneDown.setPlayerState(this.lastPlayerState);
 					// }, [], this);
 
+					this.codeErrors = false;
+
 					return 'programming';
 				} else {
                     console.log("CheckCode: sin errores");

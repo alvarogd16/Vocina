@@ -24,7 +24,7 @@ class Fridge extends ItemObject {
     }
 
     async leerSensor() {
-        if (!this.comprobarItem("sensor")) {
+        if (this.comprobarItem("sensor")) {
             if(this.read){
                 console.log("Reading...")
                 this.actualTemp = await raspiRead("TEMPS");
